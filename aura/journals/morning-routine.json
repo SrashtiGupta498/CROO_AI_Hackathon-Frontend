@@ -1,0 +1,52 @@
+{
+  "id": "morning-routine",
+  "label": "Morning Routine",
+  "emoji": "☀️",
+  "tag": "Rise & Glow",
+  "title": "The Morning Glow-Up",
+  "subtitle": "A 5-minute ritual to wake up your skin (and your vibe).",
+  "description": "Mornings hit different when your skin is glowing. This routine is lowkey the easiest way to start your day — quick, clean ingredients, zero stress. Think of it as your daily reset button before the chaos begins.",
+  "theme": {
+    "name": "morning",
+    "mode": "light",
+    "primary": "#E0975B",
+    "primarySoft": "rgba(224, 151, 91, 0.12)",
+    "bg": "#FFF8F0",
+    "surface": "#FFFFFF",
+    "heading": "#4A2E1A",
+    "body": "#6a5a49",
+    "muted": "#A8927C",
+    "border": "rgba(74, 46, 26, 0.08)"
+  },
+  "heroImage": "Img10",
+  "benefits": [
+    { "title": "Instant Wake-Up Glow", "desc": "Cold water + vitamin C basically tells your face it's go-time. Puffiness? Gone." },
+    { "title": "All-Day Hydration Lock", "desc": "Layering on damp skin traps moisture so you're dewy, not greasy, by lunch." },
+    { "title": "SPF = Anti-Aging Cheat Code", "desc": "The #1 thing that keeps skin young. No SPF, no glow-up. It's that deep." },
+    { "title": "Less Breakouts, More Confidence", "desc": "A clean, consistent AM routine keeps oil balanced so your skin stops acting up." },
+    { "title": "5 Minutes, Zero Excuses", "desc": "Short enough to do before your alarm guilt kicks in. Built for busy mornings." }
+  ],
+  "steps": [
+    "Splash your face with cool water — skip harsh cleanser in the AM, your skin self-cleans overnight.",
+    "Pat (don't rub) until skin is just damp, not dry.",
+    "Press a few drops of vitamin C serum into your face for that lit-from-within glow.",
+    "Lock it in with a lightweight gel moisturizer while skin is still damp.",
+    "Finish with SPF 30+. Non-negotiable. This is the main character step."
+  ],
+  "shortVideos": [
+    { "video": "vid1", "title": "60-sec AM routine" },
+    { "video": "vid2", "title": "Vitamin C, explained" },
+    { "video": "vid3", "title": "How to apply SPF right" }
+  ],
+  "info": [
+    { "heading": "Best time to do it", "body": "Within 10 minutes of waking up, before your skin dries out. Bonus points if you do it right after a shower." },
+    { "heading": "Skip if you're acne-prone?", "body": "Nope — just swap the gel moisturizer for an oil-free one and you're set." }
+  ],
+  "faqs": [
+    { "q": "Do I really need to wash my face in the morning?", "a": "Not always! If you cleansed well at night, a cool water rinse is enough for most people. Oily skin? A gentle gel cleanser won't hurt." },
+    { "q": "Is vitamin C worth the hype?", "a": "Yeah, genuinely. It brightens, fades dark spots, and protects against pollution. Start with a low % so your skin doesn't freak out." },
+    { "q": "Can I skip SPF on cloudy days?", "a": "Absolutely not. UV rays go through clouds and windows. SPF every single day is the cheat code to ageless skin." },
+    { "q": "How long until I see results?", "a": "Glow shows up in days, real changes (dark spots, texture) take 4-6 weeks. Consistency > intensity, always." }
+  ],
+  "proTip": "Keep your serum in the fridge. The cold de-puffs your face instantly and the routine feels like a mini spa moment before 8am."
+}

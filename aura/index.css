@@ -1,0 +1,234 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   AURA & EARTH — DESIGN SYSTEM TOKENS
+   Single source of truth for color, radius, shadow & type.
+   Use these everywhere instead of ad-hoc hex values.
+   ============================================================ */
+:root {
+  /* Brand palette */
+  --ae-ink: #1a2e25;          /* deep forest — primary text & dark surfaces */
+  --ae-ink-soft: #2d4a3e;     /* softer forest — gradients, secondary dark  */
+  --ae-sage: #6b8e7a;         /* primary brand sage — buttons, accents      */
+  --ae-sage-dark: #4a7060;    /* sage hover / gradient end                  */
+  --ae-sage-light: #a8c5ab;   /* light sage — labels on dark, soft accents  */
+
+  /* Neutrals */
+  --ae-paper: #f7f3ec;        /* warm page background (canonical cream)      */
+  --ae-paper-2: #fbf9f4;      /* lighter cream — alternating sections        */
+  --ae-surface: #ffffff;      /* cards on cream                              */
+  --ae-muted: #6a6157;        /* muted body text                            */
+  --ae-line: rgba(26, 46, 37, 0.10); /* hairline borders                    */
+
+  /* Radius scale */
+  --ae-r-sm: 14px;
+  --ae-r-md: 20px;
+  --ae-r-lg: 28px;
+  --ae-r-xl: 40px;
+  --ae-r-pill: 999px;
+
+  /* Shadow scale */
+  --ae-shadow-sm: 0 4px 20px rgba(26, 46, 37, 0.06);
+  --ae-shadow-md: 0 12px 34px rgba(26, 46, 37, 0.10);
+  --ae-shadow-lg: 0 24px 60px rgba(26, 46, 37, 0.16);
+
+  /* Type */
+  --ae-font-display: "Playfair Display", serif;
+  --ae-font-serif: "Newsreader", serif;
+  --ae-font-sans: "Plus Jakarta Sans", "Inter", sans-serif;
+}
+
+/* ---------- Utilities ---------- */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.pinterest-grid {
+  column-count: 2;
+  column-gap: 1rem;
+}
+.pinterest-item {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+}
+
+button,
+a,
+.pinterest-item {
+  transition: transform 0.2s cubic-bezier(0.33, 1, 0.68, 1);
+}
+button:active,
+a:active {
+  transform: scale(0.96);
+}
+
+.card-shadow {
+  box-shadow: var(--ae-shadow-sm);
+}
+
+/* ============================================================
+   REUSABLE COMPONENT CLASSES
+   ============================================================ */
+
+/* Layout */
+.ae-container {
+  max-width: 80rem; /* 1280px / max-w-7xl */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+.ae-section {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+.ae-bg-paper { background: var(--ae-paper); }
+.ae-bg-paper-2 { background: var(--ae-paper-2); }
+.ae-bg-ink { background: var(--ae-ink); }
+
+/* Eyebrow label (uppercase tracked sage) */
+.ae-eyebrow {
+  display: inline-block;
+  font-family: var(--ae-font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ae-sage);
+}
+
+/* Headings */
+.ae-h2 {
+  font-family: var(--ae-font-display);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ae-ink);
+  font-size: clamp(2.25rem, 5vw, 3.4rem);
+}
+.ae-h3 {
+  font-family: var(--ae-font-display);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--ae-ink);
+}
+
+/* Buttons — one shared base, four variants */
+.ae-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--ae-font-sans);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  padding: 0.95rem 2.1rem;
+  border-radius: var(--ae-r-pill);
+  cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s, background 0.25s, color 0.25s;
+  white-space: nowrap;
+}
+.ae-btn-primary {
+  background: linear-gradient(135deg, var(--ae-sage) 0%, var(--ae-sage-dark) 100%);
+  color: #fff;
+  box-shadow: var(--ae-shadow-sm);
+}
+.ae-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 40px rgba(107, 142, 122, 0.45);
+}
+.ae-btn-dark {
+  background: var(--ae-ink);
+  color: #fff;
+}
+.ae-btn-dark:hover {
+  transform: translateY(-2px);
+  background: var(--ae-ink-soft);
+}
+.ae-btn-outline {
+  background: transparent;
+  color: var(--ae-ink);
+  border: 1px solid var(--ae-line);
+}
+.ae-btn-outline:hover {
+  transform: translateY(-2px);
+  border-color: var(--ae-sage);
+  color: var(--ae-sage);
+}
+.ae-btn-ghost {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+.ae-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Pills / filter chips */
+.ae-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--ae-font-sans);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--ae-r-pill);
+  background: var(--ae-surface);
+  color: rgba(26, 46, 37, 0.6);
+  border: 1px solid var(--ae-line);
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.ae-pill:hover {
+  color: var(--ae-ink);
+  border-color: var(--ae-sage);
+}
+.ae-pill-active {
+  background: var(--ae-sage);
+  color: #fff;
+  border-color: var(--ae-sage);
+  box-shadow: var(--ae-shadow-sm);
+}
+
+/* Cards */
+.ae-card {
+  background: var(--ae-surface);
+  border-radius: var(--ae-r-lg);
+  box-shadow: var(--ae-shadow-sm);
+  border: 1px solid var(--ae-line);
+  overflow: hidden;
+  transition: box-shadow 0.4s, transform 0.4s;
+}
+.ae-card:hover {
+  box-shadow: var(--ae-shadow-md);
+}
+
+/* Inputs */
+.ae-input {
+  width: 100%;
+  font-family: var(--ae-font-sans);
+  font-size: 14px;
+  color: var(--ae-ink);
+  padding: 0.9rem 1.25rem;
+  border-radius: var(--ae-r-md);
+  background: var(--ae-surface);
+  border: 1px solid var(--ae-line);
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+.ae-input::placeholder { color: rgba(26, 46, 37, 0.4); }
+.ae-input:focus {
+  border-color: var(--ae-sage);
+  box-shadow: 0 0 0 3px rgba(107, 142, 122, 0.15);
+}

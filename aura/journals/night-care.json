@@ -1,0 +1,52 @@
+{
+  "id": "night-care",
+  "label": "Night Care",
+  "emoji": "🌙",
+  "tag": "Wind Down & Repair",
+  "title": "The Overnight Reset",
+  "subtitle": "Where the real skin magic happens — while you sleep.",
+  "description": "Nighttime is when your skin goes into repair mode, so your PM routine is basically free real estate. Wash off the day, feed your skin the good stuff, and wake up looking like you got 8 hours (even if you didn't).",
+  "theme": {
+    "name": "night",
+    "mode": "dark",
+    "primary": "#9B8CE0",
+    "primarySoft": "rgba(155, 140, 224, 0.18)",
+    "bg": "#15131F",
+    "surface": "#211D30",
+    "heading": "#F2EEFF",
+    "body": "#C9C2E0",
+    "muted": "#8E86A8",
+    "border": "rgba(255, 255, 255, 0.08)"
+  },
+  "heroImage": "Img2",
+  "benefits": [
+    { "title": "Repair Mode: Activated", "desc": "Skin cells regenerate fastest at night. Your products work overtime while you're knocked out." },
+    { "title": "Bye-Bye Clogged Pores", "desc": "Double cleansing removes SPF, makeup, and city grime so nothing suffocates your skin overnight." },
+    { "title": "Retinol = Glass Skin Loading", "desc": "PM is the only time to use retinol (it's sun-sensitive). Smooths texture and fades spots over time." },
+    { "title": "Deep Hydration Overnight", "desc": "A richer night cream seals everything in so you wake up plump and dewy, not tight." },
+    { "title": "Better Sleep, Better Skin", "desc": "A calming routine signals your brain it's wind-down time. Skin glow + mental reset, two-in-one." }
+  ],
+  "steps": [
+    "Double cleanse: oil-based cleanser first to melt off SPF/makeup, then a gentle gel cleanser.",
+    "Pat dry and apply a hydrating toner or essence on damp skin.",
+    "Use treatment serum — retinol 2-3x a week (start slow), or niacinamide on off-nights.",
+    "Layer a richer night cream or sleeping mask to seal in moisture.",
+    "Dab a little extra balm on dry patches and lips. Lights out, glow on."
+  ],
+  "shortVideos": [
+    { "video": "vid4", "title": "Double cleanse 101" },
+    { "video": "vid5", "title": "Retinol without the flakes" },
+    { "video": "vid1", "title": "PM routine in 90 sec" }
+  ],
+  "info": [
+    { "heading": "When to start retinol", "body": "Begin with one night a week, lowest strength. Buffer it with moisturizer if you flake. Slow and steady wins." },
+    { "heading": "Don't mix these", "body": "Avoid retinol + vitamin C or strong acids in the same routine. Save the C for mornings instead." }
+  ],
+  "faqs": [
+    { "q": "Is double cleansing too much?", "a": "Only if you wear SPF or makeup (which you should). Oil cleanser breaks down the day, water cleanser does the deep clean. Skip the oil step if your skin is bare." },
+    { "q": "Why does retinol make me peel?", "a": "Your skin is adjusting — it's called retinization. Go slower, moisturize more, and never skip SPF the next day. It calms down in a few weeks." },
+    { "q": "Can I just sleep in my makeup once?", "a": "Pls don't. One night clogs pores, ages skin, and causes breakouts. 60 seconds of cleansing saves you a week of regret." },
+    { "q": "Do I need an eye cream?", "a": "Optional, but a hydrating one helps if you're up late on your phone (we all are). Pat gently with your ring finger — no tugging." }
+  ],
+  "proTip": "Apply products to slightly damp skin and wait 60 seconds between layers. It boosts absorption way more than slapping everything on at once."
+}

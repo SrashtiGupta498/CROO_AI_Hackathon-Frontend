@@ -1,0 +1,52 @@
+{
+  "id": "weekly-ritual",
+  "label": "Weekly Ritual",
+  "emoji": "🧖",
+  "tag": "Deep Reset Day",
+  "title": "The Weekly Self-Care Reset",
+  "subtitle": "Once a week, give your skin the full spa treatment it deserves.",
+  "description": "Daily routines keep you maintained, but the weekly ritual is where you go all out. Exfoliate, mask, hydrate, repeat. It's part skincare, part therapy — your designated 'me time' to slow down and glow up.",
+  "theme": {
+    "name": "weekly",
+    "mode": "light",
+    "primary": "#6B8E7A",
+    "primarySoft": "rgba(107, 142, 122, 0.12)",
+    "bg": "#F2F5F1",
+    "surface": "#FFFFFF",
+    "heading": "#1a2e25",
+    "body": "#4a5a52",
+    "muted": "#8a9a92",
+    "border": "rgba(26, 46, 37, 0.08)"
+  },
+  "heroImage": "Img5",
+  "benefits": [
+    { "title": "Exfoliation = Instant Smoothness", "desc": "Sloughing off dead skin once a week reveals the fresh, glowy layer hiding underneath." },
+    { "title": "Masks That Actually Work", "desc": "A targeted mask delivers a concentrated hit your daily routine just can't match." },
+    { "title": "Products Absorb Way Better", "desc": "Clear skin = your serums sink in deeper. Everything you use after just works harder." },
+    { "title": "Stress Relief Built In", "desc": "Slowing down for 30 mins lowers cortisol — which literally shows up as calmer, clearer skin." },
+    { "title": "Resets Your Whole Week", "desc": "It's a ritual, not a chore. One reset day keeps your skin (and mind) on track all week." }
+  ],
+  "steps": [
+    "Cleanse, then exfoliate gently — chemical (AHA/BHA) over harsh scrubs to avoid micro-tears.",
+    "Steam your face or use a warm towel for 2-3 mins to open everything up.",
+    "Apply a mask matched to your goal: clay for oil, hydrating for dryness, brightening for dullness.",
+    "Rinse, then layer a hydrating toner and a nourishing serum on damp skin.",
+    "Seal with a rich moisturizer and a few drops of facial oil. Light a candle. You earned it."
+  ],
+  "shortVideos": [
+    { "video": "vid2", "title": "Exfoliate without overdoing it" },
+    { "video": "vid3", "title": "Which mask for your skin?" },
+    { "video": "vid4", "title": "DIY at-home facial" }
+  ],
+  "info": [
+    { "heading": "How often, really?", "body": "Once a week is the sweet spot for most. Sensitive skin? Every 10 days. Don't exfoliate daily — it wrecks your barrier." },
+    { "heading": "Make it a vibe", "body": "Phone away, playlist on, warm tea nearby. The ritual works best when you actually slow down for it." }
+  ],
+  "faqs": [
+    { "q": "Scrub or chemical exfoliant — which is better?", "a": "Chemical (AHA/BHA) is gentler and more even. Physical scrubs feel satisfying but can cause tiny tears. If you scrub, go super soft." },
+    { "q": "Can I use multiple masks at once?", "a": "Yes! It's called multi-masking — clay on your T-zone, hydrating on dry cheeks. Customize it to whatever your skin needs that day." },
+    { "q": "My skin gets red after exfoliating, normal?", "a": "A little flush is okay, but stinging or lasting redness means you overdid it. Dial back the frequency and always follow with hydration." },
+    { "q": "Is a weekly ritual really necessary?", "a": "Not life-or-death, but it makes a visible difference and feels amazing. Think of it as the difference between surviving and actually thriving." }
+  ],
+  "proTip": "Do your weekly ritual on a Sunday night. You'll head into the week with reset skin and a calmer headspace — the ultimate soft-life flex."
+}

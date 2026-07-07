@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Completing Google Sign-in…</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #1a2e25;
+        font-family: sans-serif;
+        color: rgba(255,255,255,0.5);
+        font-size: 13px;
+        letter-spacing: 0.1em;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Completing sign-in…</p>
+    <script>
+      // Google redirects here with ?code=... after the user grants access.
+      // We bridge to the HashRouter app at /#/auth/callback?code=...
+      var params = new URLSearchParams(window.location.search);
+      var code  = params.get('code');
+      var error = params.get('error');
+
+      if (code) {
+        window.location.replace('/#/auth/callback?code=' + encodeURIComponent(code));
+      } else if (error) {
+        window.location.replace('/#/Login?google_error=' + encodeURIComponent(error));
+      } else {
+        window.location.replace('/#/Login');
+      }
+    </script>
+  </body>
+</html>
+`

@@ -1,0 +1,19 @@
+{
+  "name": "aura-cap-provider",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "CAP edge for the Aura skin-analysis agent: registers no code (service is created in the CROO Dashboard), listens for orders over @croo-network/sdk, runs the Python mesh, and delivers on-chain.",
+  "scripts": {
+    "provider": "tsx src/provider.ts",
+    "requester": "tsx src/requester.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@croo-network/sdk": "^0.2.1"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.0"
+  }
+}
