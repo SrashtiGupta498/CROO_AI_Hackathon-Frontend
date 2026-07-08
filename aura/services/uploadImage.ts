@@ -1,8 +1,10 @@
 import API from "./api";
+import { API_ORIGIN } from "./config";
 
 /* Backend origin — uploaded images come back as relative "/uploads/..." paths,
-   which must be served from the API host, not the frontend dev server. */
-export const API_ORIGIN = "http://localhost:3002";
+   which must be served from the API host, not the frontend dev server.
+   Re-exported for existing importers; sourced from services/config.ts. */
+export { API_ORIGIN };
 
 /** Turn a stored value into something an <img src> can load. Absolute URLs and
  *  data-URLs pass through; relative "/uploads/..." paths get the API origin. */

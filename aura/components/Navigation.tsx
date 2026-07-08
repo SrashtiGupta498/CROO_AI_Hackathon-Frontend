@@ -10,6 +10,7 @@ const Navigation: React.FC = () => {
     { label: 'Home', icon: 'home', path: '/' },
     { label: 'Explore', icon: 'explore', path: '/explore' },
     { label: 'AI Guide', icon: 'auto_awesome', path: '/ai', special: true },
+    { label: 'Agents', icon: 'hub', path: '/ai/agents' },
     { label: 'Daily', icon: 'event_available', path: '/daily' },
     { label: 'Journal', icon: 'menu_book', path: '/journal' },
   ];

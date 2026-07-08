@@ -33,6 +33,7 @@ import CategoryManager from "./pages/CategoryManager";
 import StoryEditorPage from "./story-editor/StoryEditorPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import AgentMesh from "./pages/AgentMesh";
 
 
 const AppContent: React.FC = () => {
@@ -51,6 +52,7 @@ const AppContent: React.FC = () => {
           <Route path="/explore" element={<Explore />} />
           <Route path="/ai" element={<SkincareAI />} />
           <Route path="/ai/analysis" element={<SkinAnalysis />} />
+          <Route path="/ai/agents" element={<AgentMesh />} />
           <Route path="/article/:id" element={<ArticleView />} />
           <Route path="/reels" element={<Reels />} />
           <Route path="/reels/:id" element={<Reels />} />

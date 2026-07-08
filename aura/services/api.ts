@@ -1,7 +1,9 @@
 import axios from "axios";
 
+import { API_BASE } from "./config";
+
 const API = axios.create({
-  baseURL: "http://localhost:3002/v1",
+  baseURL: API_BASE,
 });
 
 // Add a request interceptor to attach the access token
