@@ -1,0 +1,12 @@
+/* ============================================================
+   AURA & EARTH — STYLE ENTRY POINT
+   Imported once from src/main.tsx.
+   Order matters: Tailwind first, then tokens, then layers.
+   ============================================================ */
+@import "tailwindcss";
+
+@import "./theme.css";
+@import "./base.css";
+@import "./components.css";
+@import "./utilities.css";
+@import "./animations.css";

@@ -1,0 +1,91 @@
+/* ============================================================
+   AI SKIN FAB — floating entry point to the AI analysis.
+   Collapsed it is a circular icon; on hover/focus it widens to
+   reveal the label. Width is the only animated box property and
+   the element is fixed-position, so it never reflows the page.
+   ============================================================ */
+
+.ai-skin-fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 70; /* above content, below the header's dropdowns (60) is not enough */
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  height: 56px;
+  width: 56px;
+  padding: 0 19px;
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  background: var(--ae-sage);
+  color: #fff;
+  box-shadow: 0 8px 30px rgba(45, 42, 38, 0.28);
+  cursor: pointer;
+
+  transition:
+    width 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.ai-skin-fab:hover {
+  background: #4b695a;
+  box-shadow: 0 12px 38px rgba(45, 42, 38, 0.34);
+}
+
+.ai-skin-fab.is-expanded {
+  width: 208px;
+}
+
+.ai-skin-fab-icon {
+  flex: none;
+}
+
+.ai-skin-fab-label {
+  white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity 0.3s ease 0.06s,
+    transform 0.3s ease 0.06s;
+}
+
+.ai-skin-fab.is-expanded .ai-skin-fab-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Keyboard focus needs a visible ring — the hover expansion alone isn't a
+   sufficient focus cue. */
+.ai-skin-fab:focus-visible {
+  outline: 2px solid var(--ae-turmeric);
+  outline-offset: 3px;
+}
+
+/* Below `lg` the fixed bottom Navigation takes over, and it already carries the
+   AI analysis as its raised centre button — the same destination this FAB
+   points at. Worse, the FAB sat on top of the nav's right-hand item (Journal)
+   and swallowed its clicks. So the FAB is a desktop-only affordance: it appears
+   exactly where the bottom nav does not. Keep this breakpoint in sync with
+   `Navigation`'s `lg:hidden`. */
+@media (max-width: 1023.98px) {
+  .ai-skin-fab {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-skin-fab,
+  .ai-skin-fab-label {
+    transition: none;
+  }
+}

@@ -1,0 +1,132 @@
+/* ============================================================
+   Aura & Earth logo lockup
+
+   One component, two tones. `--ae-logo-ink` is the only thing that
+   changes between them — the mark draws in currentColor, so tone
+   switching is a colour swap, not a second asset.
+   ============================================================ */
+
+.ae-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+  user-select: none;
+}
+
+.ae-logo[role='button'] {
+  cursor: pointer;
+}
+
+.ae-logo[role='button']:focus-visible {
+  outline: 2px solid var(--ae-sage);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* ─── The badge behind the mark ───
+   A soft tinted squircle, not the old saturated green disc. The mark carries
+   the brand; the badge just gives it a surface to sit on. */
+
+.ae-logo__badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  border-radius: 12px;
+  color: var(--ae-logo-ink);
+  background: var(--ae-logo-badge-bg);
+  border: 1px solid var(--ae-logo-badge-border);
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.3s ease, border-color 0.3s ease;
+}
+
+.ae-logo[role='button']:hover .ae-logo__badge {
+  transform: rotate(-6deg) scale(1.05);
+  background: var(--ae-logo-badge-bg-hover);
+  border-color: var(--ae-logo-badge-border-hover);
+}
+
+/* ─── Wordmark ─── */
+
+.ae-logo__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+  min-width: 0;
+}
+
+.ae-logo__word {
+  font-family: var(--ae-font-display);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1;
+  color: var(--ae-logo-ink);
+  white-space: nowrap;
+}
+
+/* The ampersand is the one flourish — italic, and in the warm accent so the
+   lockup carries both brand hues at every size. */
+.ae-logo__amp {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--ae-logo-amp);
+  padding: 0 0.02em;
+}
+
+.ae-logo__tagline {
+  margin-top: 4px;
+  font-family: var(--ae-font-sans);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ae-logo-tagline);
+  white-space: nowrap;
+}
+
+/* ─── Sizes ─── */
+
+.ae-logo--sm { gap: 8px; }
+.ae-logo--sm .ae-logo__badge { width: 30px; height: 30px; border-radius: 10px; }
+.ae-logo--sm .ae-logo__word { font-size: 1.08rem; }
+
+.ae-logo--md .ae-logo__badge { width: 36px; height: 36px; }
+.ae-logo--md .ae-logo__word { font-size: 1.32rem; }
+
+.ae-logo--lg { gap: 12px; }
+.ae-logo--lg .ae-logo__badge { width: 44px; height: 44px; border-radius: 15px; }
+.ae-logo--lg .ae-logo__word { font-size: 1.6rem; }
+
+/* ─── Tones ─── */
+
+.ae-logo--light {
+  --ae-logo-ink: var(--ae-ink);
+  --ae-logo-amp: var(--ae-clay);
+  --ae-logo-tagline: rgba(45, 42, 38, 0.4);
+  --ae-logo-badge-bg: rgba(61, 91, 79, 0.07);
+  --ae-logo-badge-bg-hover: rgba(61, 91, 79, 0.12);
+  --ae-logo-badge-border: rgba(61, 91, 79, 0.14);
+  --ae-logo-badge-border-hover: rgba(61, 91, 79, 0.24);
+}
+
+/* On ivory the mark is forest, not ink — the wordmark stays charcoal so the
+   two read as separate elements rather than one solid block. */
+.ae-logo--light .ae-logo__badge { color: var(--ae-sage); }
+
+.ae-logo--dark {
+  --ae-logo-ink: #ffffff;
+  --ae-logo-amp: var(--ae-turmeric);
+  --ae-logo-tagline: rgba(255, 255, 255, 0.45);
+  --ae-logo-badge-bg: rgba(255, 255, 255, 0.1);
+  --ae-logo-badge-bg-hover: rgba(255, 255, 255, 0.18);
+  --ae-logo-badge-border: rgba(255, 255, 255, 0.2);
+  --ae-logo-badge-border-hover: rgba(255, 255, 255, 0.34);
+}
+
+.ae-logo--dark .ae-logo__badge { color: var(--ae-sage-light); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ae-logo__badge { transition: none; }
+  .ae-logo[role='button']:hover .ae-logo__badge { transform: none; }
+}

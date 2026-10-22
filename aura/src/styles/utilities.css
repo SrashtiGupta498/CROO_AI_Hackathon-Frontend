@@ -1,0 +1,37 @@
+/* ============================================================
+   UTILITIES — small single-purpose helper classes.
+   ============================================================ */
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Hide the page scrollbar site-wide. The page still scrolls by every normal
+   means (wheel, trackpad, keyboard, touch) — only the visual track is gone, so
+   nothing here affects keyboard accessibility. Scoped to the root scroller so
+   inner panes that opt into their own styled bar (the profile edit modal) are
+   unaffected. */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar {
+  display: none;
+}
+
+.pinterest-grid {
+  column-count: 2;
+  column-gap: 1rem;
+}
+.pinterest-item {
+  break-inside: avoid;
+  margin-bottom: 1rem;
+}
+
+.card-shadow {
+  box-shadow: var(--ae-shadow-sm);
+}

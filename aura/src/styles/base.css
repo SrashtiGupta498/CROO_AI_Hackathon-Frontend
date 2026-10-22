@@ -1,0 +1,54 @@
+/* ============================================================
+   BASE — global element styles and Tailwind v3 → v4
+   compatibility (the markup was written against the v3 CDN).
+   ============================================================ */
+
+/* v3 compat: default border/divide color was gray-200 in v3;
+   v4 defaults to currentColor. Keeps bare `border` classes
+   looking the same. */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  /* v3 compat: placeholder text was gray-400 in v3; v4 uses
+     currentColor at 50% opacity. */
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-gray-400);
+  }
+}
+
+/* Reserve the scrollbar gutter on every page.
+
+   Without this, navigating from a tall page (Skin Analysis) to a
+   viewport-height one (Skincare AI, which is overflow-hidden) removes the
+   scrollbar, and every `mx-auto` column jumps sideways by the scrollbar
+   width. That sideways lurch is what reads as the chat "moving". */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* html/body had no background of their own, so the browser's default
+   canvas (grey in some UA/embedded contexts) showed through in the
+   reserved scrollbar gutter and during elastic overscroll. Every page
+   sits on the same paper tone, so this is always correct underneath. */
+html,
+body {
+  background-color: var(--ae-paper);
+}
+
+/* Quiet press feedback (site-wide) — barely-there scale, soft ease */
+button,
+a,
+.pinterest-item {
+  transition: transform 0.2s ease-in-out;
+}
+button:active,
+a:active {
+  transform: scale(0.98);
+}

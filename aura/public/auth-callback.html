@@ -21,14 +21,16 @@
   <body>
     <p>Completing sign-in…</p>
     <script>
-      // Google redirects here with ?code=... after the user grants access.
-      // We bridge to the HashRouter app at /#/auth/callback?code=...
+      // Google redirects here with ?code=&state=... after the user grants access.
+      // We bridge to the HashRouter app at /#/auth/callback?code=&state=...
       var params = new URLSearchParams(window.location.search);
       var code  = params.get('code');
+      var state = params.get('state');
       var error = params.get('error');
 
       if (code) {
-        window.location.replace('/#/auth/callback?code=' + encodeURIComponent(code));
+        window.location.replace('/#/auth/callback?code=' + encodeURIComponent(code) +
+          (state ? '&state=' + encodeURIComponent(state) : ''));
       } else if (error) {
         window.location.replace('/#/Login?google_error=' + encodeURIComponent(error));
       } else {
@@ -37,4 +39,3 @@
     </script>
   </body>
 </html>
-`

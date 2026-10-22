@@ -1,0 +1,133 @@
+/* ============================================================
+   TOAST — transient feedback, replacing window.alert().
+   Bottom-centre on phones (thumb reach, clear of the header),
+   bottom-right from `md` up.
+   ============================================================ */
+
+.ae-toast-viewport {
+  position: fixed;
+  z-index: 90; /* above the AI FAB (70) — it can report through this */
+  left: 50%;
+  transform: translateX(-50%);
+  /* Clear of the fixed bottom nav, which owns the bottom ~88px below `lg`. */
+  bottom: 104px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: min(30rem, calc(100vw - 32px));
+
+  /* The viewport spans the width but must not swallow clicks; each toast
+     re-enables pointer events for itself. */
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .ae-toast-viewport {
+    left: auto;
+    right: 24px;
+    bottom: 24px;
+    transform: none;
+  }
+}
+
+.ae-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+
+  padding: 14px 14px 14px 16px;
+  border-radius: var(--ae-r-sm);
+  border: 1px solid var(--ae-line);
+  background: var(--ae-surface);
+  box-shadow: var(--ae-shadow-md);
+
+  font-family: var(--ae-font-sans);
+  color: var(--ae-ink);
+
+  animation: ae-toast-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* A 4px rail rather than a tinted background: the message stays on white, so
+   the body copy keeps its contrast whatever the variant. */
+.ae-toast::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  border-radius: var(--ae-r-sm) 0 0 var(--ae-r-sm);
+  background: currentColor;
+}
+.ae-toast {
+  position: relative;
+  overflow: hidden;
+}
+
+.ae-toast--success .ae-toast-icon,
+.ae-toast--success::before {
+  color: var(--ae-sage);
+}
+.ae-toast--error .ae-toast-icon,
+.ae-toast--error::before {
+  color: var(--ae-danger);
+}
+.ae-toast--info .ae-toast-icon,
+.ae-toast--info::before {
+  color: var(--ae-muted);
+}
+
+.ae-toast-icon {
+  flex: none;
+  font-size: 20px;
+  line-height: 1.35;
+}
+
+.ae-toast-message {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.ae-toast-dismiss {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin: -3px -3px 0 0;
+  border-radius: 999px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--ae-muted);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.ae-toast-dismiss:hover {
+  background: var(--ae-paper-2);
+  color: var(--ae-ink);
+}
+.ae-toast-dismiss:focus-visible {
+  outline: 2px solid var(--ae-sage);
+  outline-offset: 2px;
+}
+
+@keyframes ae-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ae-toast {
+    animation: none;
+  }
+}

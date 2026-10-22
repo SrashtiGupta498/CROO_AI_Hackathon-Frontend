@@ -1,0 +1,197 @@
+/* ============================================================
+   SectionBlockEditors.tsx — co-located styles. Bundled globally,
+   so every class is prefixed with `sbe-`. Matches the surrounding
+   ArticleEditor chrome rather than the public site.
+   ============================================================ */
+
+.sbe {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sbe-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ae-muted);
+}
+.sbe-optional {
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.7;
+}
+
+.sbe-input {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--ae-line);
+  background: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--ae-ink);
+}
+.sbe-input::placeholder {
+  color: rgba(45, 42, 38, 0.38);
+}
+.sbe-input:focus-visible {
+  outline: 2px solid var(--ae-sage);
+  outline-offset: 1px;
+  border-color: var(--ae-sage);
+}
+
+.sbe-textarea {
+  resize: vertical;
+  line-height: 1.55;
+}
+
+/* ── Ingredient rows ──────────────────────────────────────── */
+.sbe-row {
+  display: grid;
+  grid-template-columns: 1fr 130px 34px;
+  gap: 8px;
+  align-items: center;
+}
+
+.sbe-row-head {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ae-muted);
+  padding: 0 4px;
+}
+
+/* ── Instruction steps ────────────────────────────────────── */
+.sbe-step {
+  display: grid;
+  grid-template-columns: 18px 26px 1fr auto;
+  gap: 8px;
+  align-items: start;
+  padding: 6px;
+  border-radius: 14px;
+  background: rgba(var(--ae-sage-rgb), 0.05);
+}
+
+.sbe-grip {
+  cursor: grab;
+  color: rgba(45, 42, 38, 0.3);
+  padding-top: 10px;
+}
+
+.sbe-step-num {
+  width: 26px;
+  height: 26px;
+  margin-top: 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ae-sage);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.sbe-step-moves {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.sbe-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: 1px solid var(--ae-line);
+  background: #fff;
+  color: var(--ae-muted);
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+}
+.sbe-icon-btn:hover:not(:disabled) {
+  color: var(--ae-danger);
+  border-color: rgba(180, 65, 60, 0.4);
+}
+.sbe-icon-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.sbe-add {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--ae-r-pill);
+  border: 1px dashed rgba(var(--ae-sage-rgb), 0.5);
+  background: rgba(var(--ae-sage-rgb), 0.07);
+  color: var(--ae-sage-dark);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.sbe-add:hover {
+  background: rgba(var(--ae-sage-rgb), 0.13);
+}
+
+.sbe-icon-btn:focus-visible,
+.sbe-add:focus-visible {
+  outline: 2px solid var(--ae-sage);
+  outline-offset: 2px;
+}
+
+/* ── Reel picker ──────────────────────────────────────────── */
+.sbe-reel-preview {
+  position: relative;
+  width: 110px;
+  aspect-ratio: 9 / 16;
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--ae-ink);
+}
+.sbe-reel-preview video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sbe-reel-play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ae-ink);
+}
+
+/* ── Hints ────────────────────────────────────────────────── */
+.sbe-hint {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--ae-muted);
+  margin: 0;
+}
+.sbe-hint-error {
+  color: var(--ae-danger);
+}
+.sbe-hint code {
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: rgba(var(--ae-ink-rgb), 0.07);
+  font-size: 12px;
+}

@@ -6,20 +6,28 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, ".", "");
   return {
     server: {
-      port: 3000,
+      port: Number(env.PORT) || 3000,
       host: "0.0.0.0",
     },
     plugins: [
       react(),
       tailwindcss(), // 👈 THIS replaces tailwind.config.js
     ],
-    define: {
-      "process.env.API_KEY": JSON.stringify(env.GEMINI_API_KEY),
-      "process.env.GEMINI_API_KEY": JSON.stringify(env.GEMINI_API_KEY),
-    },
     resolve: {
       alias: {
-        "@": path.resolve(__dirname, "."),
+        "@": path.resolve(__dirname, "./src"),
+      },
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          // Split the always-loaded framework libs into their own long-lived
+          // chunk so they cache across app-code deploys.
+          manualChunks: {
+            "react-vendor": ["react", "react-dom", "react-router-dom"],
+            "redux-vendor": ["@reduxjs/toolkit", "react-redux"],
+          },
+        },
       },
     },
   };

@@ -1,0 +1,41 @@
+/* ============================================================
+   Categories — page-scoped styles extracted from the old
+   embedded <style> block and inline style props. This file is
+   bundled globally, so classes/keyframes are prefixed with
+   `categories-`.
+   ============================================================ */
+
+/* NOT page-prefixed on purpose: CategoryFlashCard
+   (src/components/CategoryFlashCard.tsx) references `cardFadeUp`
+   by name from an inline `animation` shorthand. The identical
+   definition also lives in CategorySubcategories.css — the only
+   other page that renders CategoryFlashCard. */
+@keyframes cardFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes categories-hero-fade-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.categories-hero {
+  background: linear-gradient(135deg, var(--ae-ink-soft) 0%, #1e3329 50%, var(--ae-ink) 100%);
+  padding: 56px 0 60px;
+  position: relative;
+  overflow: hidden;
+}
+.categories-hero-blob {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 197, 171, 0.16) 0%, transparent 70%);
+  pointer-events: none;
+}
+.categories-hero-fade {
+  animation: categories-hero-fade-in 0.6s ease both;
+}

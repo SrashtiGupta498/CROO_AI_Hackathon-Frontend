@@ -1,0 +1,42 @@
+/* ============================================================
+   DailyLayout — extracted Beauty Journal shell styles.
+   This file is bundled globally (it used to be a <style> block
+   that mounted with the layout), so everything is prefixed with
+   `daily-layout-`. The card/heart classes are shared by every
+   daily sub-page (Today, Notes, Habits, Planner, Progress),
+   which always render inside this layout.
+   ============================================================ */
+
+@keyframes daily-layout-pop {
+  0% { transform: scale(.6); opacity: 0; }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes daily-layout-float-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes daily-layout-confetti-fall {
+  0% { transform: translateY(-10vh) rotate(0); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(540deg); opacity: 0; }
+}
+
+.daily-layout-card {
+  animation: daily-layout-float-up .5s cubic-bezier(.22,1,.36,1) both;
+}
+
+.daily-layout-heart {
+  animation: daily-layout-pop .35s cubic-bezier(.22,1,.36,1);
+}
+
+.daily-layout-confetti-piece {
+  position: fixed;
+  top: 0;
+  width: 10px;
+  height: 14px;
+  border-radius: 3px;
+  animation: daily-layout-confetti-fall 2.6s linear forwards;
+  z-index: 60;
+}

@@ -1,0 +1,147 @@
+/* ============================================================
+   EXPLORE — extracted from the inline <style> block and static
+   inline styles in Explore.tsx. All class names are prefixed
+   with `explore-` because this file is bundled globally (the
+   old <style> block only existed while the page was mounted).
+   ============================================================ */
+
+/* Local fadeUp (24px offset) — intentionally different from the
+   shared fadeUp in src/styles/animations.css (30px). */
+@keyframes explore-fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes explore-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.explore-hero {
+  background: linear-gradient(
+    135deg,
+    var(--ae-ink-soft) 0%,
+    #1e3329 50%,
+    var(--ae-ink) 100%
+  );
+}
+
+.explore-search-glass {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: all 0.35s ease;
+}
+.explore-search-glass:focus-within {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(168, 197, 171, 0.5);
+  box-shadow: 0 0 0 4px rgba(168, 197, 171, 0.12);
+}
+
+/* ------------------------------------------------------------
+   Concern filter pills. Radiant's rule is colour-only hovers and
+   no movement, so the lift and the drop-shadow are gone; weight
+   now comes from the fill and a hairline ring instead.
+   ------------------------------------------------------------ */
+.explore-filter-pill {
+  padding: 0.7rem 1.35rem;
+  line-height: 1;
+  color: var(--ae-ink);
+  transition: background-color 0.25s ease-in-out, color 0.25s ease-in-out,
+    border-color 0.25s ease-in-out;
+}
+.explore-filter-pill:hover:not(.explore-filter-pill-active) {
+  border-color: rgba(61, 91, 79, 0.45);
+  color: var(--ae-sage);
+  background: rgba(61, 91, 79, 0.04);
+}
+.explore-filter-pill:focus-visible {
+  outline: 2px solid var(--ae-sage);
+  outline-offset: 2px;
+}
+/* Active: one flat sage fill — no gradient, no glow. */
+.explore-filter-pill-active {
+  background: var(--ae-sage);
+  border: 1px solid var(--ae-sage);
+}
+
+/* Fade the row's trailing edge so an overflowing pill strip reads as
+   scrollable instead of cut off. */
+.explore-filter-row {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent 100%);
+  mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent 100%);
+  scroll-snap-type: x proximity;
+}
+.explore-filter-row > * {
+  scroll-snap-align: start;
+}
+
+/* Result count + reset: reserve the space so nothing reflows when they
+   appear, and cross-fade instead of popping. */
+.explore-filter-count {
+  min-height: 1rem;
+  margin-top: 0.65rem;
+  opacity: 0;
+  transform: translateY(-3px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.explore-filter-count.is-shown {
+  opacity: 1;
+  transform: none;
+}
+.explore-reset {
+  transition: opacity 0.3s ease, color 0.2s ease-in-out;
+}
+.explore-reset:hover { color: var(--ae-ink); }
+.explore-reset-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.explore-empty {
+  animation: explore-fadeIn 0.5s ease both;
+}
+
+/* 300px columns + 38px gap mirror the Wix "Lifestyle Blog" blog grid
+   (301px columns, 38px gutters both directions). */
+.explore-post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 38px;
+}
+.explore-post-card .explore-card-img {
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.explore-post-card:hover .explore-card-img {
+  transform: scale(1.06);
+}
+.explore-post-card:hover .explore-card-overlay {
+  opacity: 1;
+}
+/* Hover gradient — was an inline style on the overlay div. */
+.explore-card-overlay {
+  background: linear-gradient(to top, rgba(61, 91, 79, 0.65) 0%, transparent 55%);
+}
+
+/* Entrance animations — were inline style={{ animation: ... }} props. */
+.explore-anim-hero {
+  animation: explore-fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.explore-anim-search {
+  animation: explore-fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
+}
+.explore-anim-card {
+  /* Per-card stagger is set inline via animation-delay. */
+  animation: explore-fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}

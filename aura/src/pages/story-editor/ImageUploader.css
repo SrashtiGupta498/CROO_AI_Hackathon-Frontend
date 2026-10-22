@@ -1,0 +1,49 @@
+/* ════════════════════════════════════════════════════════════
+   ImageUploader.css — extracted from ImageUploader.tsx inline
+   styles. Color values resolved from EDITOR_THEME in blockTypes.ts.
+   ════════════════════════════════════════════════════════════ */
+
+.image-uploader-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(47, 39, 68, 0.55);
+  margin-bottom: 8px;
+}
+
+/* height / border / background stay inline (prop + value driven). */
+.image-uploader-dropzone {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-uploader-remove-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.55);
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.image-uploader-url-input {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(47, 39, 68, 0.1);
+  font-size: 13px;
+  font-family: var(--font-sans);
+  color: var(--ae-ink);
+  outline: none;
+}

@@ -173,13 +173,20 @@ Cosmetic guidance only — **never a medical diagnosis** (persistent disclaimer 
 ## 8. Repository map
 
 ```
-agents/                   # CAP agent wrappers (DID, wallet, service listing, order lifecycle)  ← hackathon core
-ml-service/               # perception models the specialist agents call
-  └── src/                # quality, predict (skin-type CNN), face_analysis (concern CNN),
-                          # skin_metrics (CV), gemini_agent (LLM)
-aura/                     # React consumer app (H2A entry → concierge)
-  ├── pages/SkinAnalysis.tsx   # selfie → concierge → result
-  ├── services/skinAnalysis.ts # calls the concierge agent
-  └── data/remedies.ts         # remedy KB (feeds the RAG agent)
-ARCHITECTURE.md           # A2A mesh, CAP state machine, model internals, roadmap
+src/                      # React app code
+  main.tsx                # entry (mounts App, imports styles/index.css)
+  App.tsx                 # router + layout shell
+  pages/                  # route components; page-specific styles in a co-located .css
+  pages/daily/            # beauty-journal sub-pages
+  components/             # shared UI (Header, Footer, Navigation, …)
+  story-editor/           # admin story editor feature
+  services/               # API clients (api.ts, skinAnalysis.ts, …)
+  store/                  # Redux Toolkit slices
+  styles/                 # design system: theme.css (tokens), base, components (.ae-*),
+                          # utilities, animations — imported once via styles/index.css
+  assets/  data/  journals/  # bundled media & content data
+public/                   # static files served as-is (auth-callback.html, …)
+data/                     # raw data artifacts (recipe JSONs, source PDF)
+docs/                     # project documentation (ARCHITECTURE.md, audits, scopes)
+scripts/                  # utility scripts
 ```

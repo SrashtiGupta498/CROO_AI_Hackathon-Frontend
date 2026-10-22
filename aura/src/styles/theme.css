@@ -1,0 +1,127 @@
+/* ============================================================
+   DESIGN TOKENS — single source of truth for color, type,
+   radius and shadow. Replaces the old inline tailwind.config
+   from index.html and the :root block from the old index.css.
+   ============================================================ */
+
+@plugin "@tailwindcss/forms";
+
+/* Dark mode is class-based (App.tsx toggles a `dark` class),
+   matching the old CDN config `darkMode: 'class'`. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Type — "Botanical Luxury": Fraunces (display serif) + Hanken Grotesk (sans).
+     --font-newsreader kept as an alias so existing `font-newsreader` classes
+     resolve to the new editorial serif instead of silently falling back. */
+  --font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-newsreader: "Fraunces", "Iowan Old Style", Georgia, serif;
+
+  /* Brand palette — Botanical Luxury: warm ivory canvas, soft sage accents,
+     deep forest CTAs, warm-charcoal type. Forest is the signature accent, not
+     the dominant surface — the interface reads ~15% lighter than the previous
+     herb-green scheme. The `sage`/`turmeric` token names are kept (they are
+     referenced in ~40 files); their VALUES are what the palette defines. */
+  --color-primary: #3D5B4F;
+  --color-secondary: #4B695A;
+  --color-background-light: #FCFAF7;
+  --color-background-dark: #10201a;
+  --color-cream: #F6F2EC;
+  --color-mocha: #2D2A26;       /* legacy alias — body/heading type, not a surface */
+
+  /* Extended brand palette — use these instead of arbitrary hex values */
+  --color-ink: #2D2A26;         /* warm charcoal — headings & type            */
+  --color-ink-soft: #3D5B4F;    /* forest — dark surfaces, quote band, footer */
+  --color-sage: #3D5B4F;        /* forest — buttons, brand, primary CTA       */
+  --color-sage-dark: #4B695A;   /* forest hover (lighter, by design)          */
+  --color-sage-light: #DCE5DD;  /* soft sage — accents & labels on dark       */
+  --color-herb: #71816F;        /* olive — fills, borders, progress. NOT small
+                                   text: 3.97:1 on ivory. Use sage for links.  */
+  --color-turmeric: #C6A66B;    /* champagne — tiny hints only, never shiny   */
+  --color-clay: #c67d63;        /* skin & personalization accent only         */
+  --color-synthetic: #8a94a6;   /* chemical / synthetic actives — cool, muted,
+                                   deliberately LOW priority vs the warm naturals */
+  --color-paper: #FCFAF7;       /* ivory — the page background               */
+  --color-paper-2: #F6F2EC;     /* warm sand — alternating sections          */
+  --color-surface: #ffffff;     /* cards on paper                            */
+  --color-muted: #6D6A65;       /* muted body text                           */
+
+  /* Hairline border colour. Mirrors --ae-line below, exposed to the
+     theme so `border-line` / `divide-line` work — `divide-[var(--ae-line)]`
+     silently generates no rule (Tailwind can't tell width from colour). */
+  --color-line: rgba(45, 42, 38, 0.1);
+
+  /* Card radius/shadow scale, exposed under a `-card-` key so Tailwind
+     generates real utilities (rounded-card-sm, shadow-card-md, …) without
+     touching the framework's own rounded-sm/shadow-md defaults used
+     elsewhere in the app. Values mirror --ae-r-*/--ae-shadow-* below —
+     change both together. Use these instead of one-off arbitrary values
+     (rounded-[1.9rem], shadow-[0_10px_30px_rgba(...)]) so every card in
+     the same tier renders pixel-identical and updates from one place. */
+  --radius-card-sm: 14px;
+  --radius-card-md: 20px;
+  --radius-card-lg: 28px;
+  --radius-card-xl: 40px;
+  --shadow-card-sm: 0 4px 20px rgba(45, 42, 38, 0.06);
+  --shadow-card-md: 0 12px 34px rgba(45, 42, 38, 0.1);
+  --shadow-card-lg: 0 24px 60px rgba(45, 42, 38, 0.16);
+}
+
+/* Legacy CSS variables — kept because components.css and
+   extracted page styles reference them. */
+:root {
+  /* Brand palette — Botanical Luxury (see @theme above for the source) */
+  --ae-ink: #2D2A26;          /* warm charcoal — primary text & dark surfaces   */
+  --ae-ink-soft: #3D5B4F;     /* forest — gradients, secondary dark surfaces    */
+  --ae-sage: #3D5B4F;         /* forest — buttons, accents, primary CTA         */
+  --ae-sage-dark: #4B695A;    /* forest hover / gradient end                    */
+  --ae-sage-light: #DCE5DD;   /* soft sage — labels on dark, soft accents       */
+
+  /* Warm accents */
+  --ae-herb: #71816F;         /* olive — fills & borders, not small text        */
+  --ae-turmeric: #C6A66B;     /* champagne — tiny hints only, never shiny       */
+  --ae-clay: #c67d63;         /* skin & personalization accent only             */
+  --ae-synthetic: #8a94a6;    /* chemical / synthetic actives — cool & muted,
+                                 deliberately lower priority than warm naturals  */
+
+  /* Channel triplets — for rgba() with a literal alpha, e.g.
+     rgba(var(--ae-ink-rgb), 0.5). Keep in sync with the hex above. */
+  --ae-ink-rgb: 45, 42, 38;
+  --ae-sage-rgb: 61, 91, 79;
+  --ae-turmeric-rgb: 198, 166, 107;
+  --ae-danger: #b4413c;
+  --ae-warning: #c98a3a;      /* caution / draft state — semantic, not decorative */
+
+  /* Neutrals */
+  --ae-paper: #FCFAF7;        /* ivory — the page background                   */
+  --ae-paper-2: #F6F2EC;      /* warm sand — alternating sections              */
+  --ae-surface: #ffffff;      /* cards on paper                                */
+  --ae-muted: #6D6A65;        /* muted body text                              */
+  --ae-line: rgba(45, 42, 38, 0.10); /* hairline borders                      */
+
+  /* Radius scale */
+  --ae-r-sm: 14px;
+  --ae-r-md: 20px;
+  --ae-r-lg: 28px;
+  --ae-r-xl: 40px;
+  --ae-r-pill: 999px;
+
+  /* Shadow scale */
+  --ae-shadow-sm: 0 4px 20px rgba(45, 42, 38, 0.06);
+  --ae-shadow-md: 0 12px 34px rgba(45, 42, 38, 0.10);
+  --ae-shadow-lg: 0 24px 60px rgba(45, 42, 38, 0.16);
+
+  /* Spacing rhythm — canonical steps: 8/16/24/32/48/64/96/128px. These are
+     Tailwind's own defaults (spacing-N = N * 0.25rem), so p-2/p-4/p-6/p-8/
+     p-12/p-16/p-24/p-32 already land exactly on this scale — no override
+     needed, just don't reach for arbitrary p-[Npx] values off it. Section
+     vertical rhythm (.ae-section, below) is the 96px step; card gutters
+     are usually the 24px or 32px step.
+  */
+
+  /* Type */
+  --ae-font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --ae-font-serif: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --ae-font-sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}

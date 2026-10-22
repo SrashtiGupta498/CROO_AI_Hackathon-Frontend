@@ -1,0 +1,33 @@
+/* ============================================================
+   JournalPage — extracted page styles.
+   This file is bundled globally (it used to be a <style> block
+   that mounted with the page), so every class is prefixed with
+   `journal-`. The `fadeUp` keyframes come from the shared
+   src/styles/animations.css; the page's zoom differs from the
+   global `slowZoom`, so it is kept here under a prefixed name.
+   ============================================================ */
+
+@keyframes journal-slow-zoom {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
+}
+
+.journal-fade-up {
+  animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.journal-hero-zoom {
+  animation: journal-slow-zoom 20s linear infinite alternate;
+}
+
+.journal-video-card video {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.journal-video-card:hover video {
+  transform: scale(1.05);
+}
+
+.journal-faq-body {
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+  overflow: hidden;
+}

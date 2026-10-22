@@ -1,0 +1,40 @@
+/* ============================================================
+   CategoryFlashCard.tsx — co-located styles.
+   Extracted from static inline style={{}} props. This file
+   loads globally, so every class is prefixed with `cat-card-`.
+   Note: the entrance animation stays inline in the JSX — its
+   delay is computed per card, and the `cardFadeUp` keyframes
+   are defined by the pages that render these cards.
+   ============================================================ */
+
+/* background + animation stay inline (gradient cycles by index,
+   animation delay is computed per card). */
+.cat-card-root {
+  border-radius: 20px;
+  padding: 22px;
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.32s;
+  font-family: inherit;
+}
+
+.cat-card-overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.1) 60%, transparent 100%);
+  pointer-events: none;
+}
+
+.cat-card-blob {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 197, 171, 0.22) 0%, transparent 70%);
+  pointer-events: none;
+}

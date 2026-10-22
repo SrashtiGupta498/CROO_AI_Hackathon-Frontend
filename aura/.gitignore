@@ -12,6 +12,31 @@ dist
 dist-ssr
 *.local
 
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Secrets — `*.local` alone did NOT cover a plain `.env`, and .env.local holds
+# a live GEMINI_API_KEY. Keep the example template tracked.
+.env
+.env.*
+!.env.example
+
+# TLS material — never ship private keys.
+certs/
+*.pem
+*.key
+
+# Scratch/working files (logs, one-off scripts, dumps).
+scratch/
+
+# Source material for content authoring, NOT app data — the app imports
+# src/data/. The leading slash matters: bare `data` would also exclude src/data.
+# Contains a copyrighted PDF that must not be redistributed.
+/data/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,3 +47,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# One-off article dump produced by scripts/article-restructure (regenerate, never commit)
+/scripts/article-restructure/output/

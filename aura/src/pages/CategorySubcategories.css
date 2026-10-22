@@ -1,0 +1,53 @@
+/* ============================================================
+   CategorySubcategories — page-scoped styles extracted from the
+   old embedded <style> block and inline style props. This file
+   is bundled globally, so classes/keyframes are prefixed with
+   `category-subs-`.
+   ============================================================ */
+
+/* NOT page-prefixed on purpose: CategoryFlashCard
+   (src/components/CategoryFlashCard.tsx) references `cardFadeUp`
+   by name from an inline `animation` shorthand. The identical
+   definition also lives in Categories.css — the only other page
+   that renders CategoryFlashCard. */
+@keyframes cardFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes category-subs-hero-fade-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.category-subs-hero {
+  background: linear-gradient(135deg, var(--ae-ink-soft) 0%, #1e3329 50%, var(--ae-ink) 100%);
+  padding: 48px 0 56px;
+  position: relative;
+  overflow: hidden;
+}
+.category-subs-hero-blob {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168, 197, 171, 0.16) 0%, transparent 70%);
+  pointer-events: none;
+}
+.category-subs-hero-fade {
+  animation: category-subs-hero-fade-in 0.6s ease both;
+}
+.category-subs-back-btn {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.1em;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 100px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-family: inherit;
+}

@@ -1,0 +1,212 @@
+/* ============================================================
+   REUSABLE COMPONENT CLASSES (ae-*)
+   Shared visual building blocks used across pages.
+   Page-specific styles live in a .css file next to the page.
+   ============================================================ */
+
+/* Layout */
+.ae-container {
+  max-width: 80rem; /* 1280px / max-w-7xl */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;  /* 24px — matches `px-6` used inline on Home/Header/Footer */
+  padding-right: 1.5rem;
+}
+@media (min-width: 768px) {
+  .ae-container {
+    padding-left: 3rem;  /* 48px — matches `md:px-12` */
+    padding-right: 3rem;
+  }
+}
+.ae-section {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+}
+.ae-bg-paper { background: var(--ae-paper); }
+.ae-bg-paper-2 { background: var(--ae-paper-2); }
+.ae-bg-ink { background: var(--ae-ink); }
+
+/* Eyebrow label (uppercase tracked sage) */
+.ae-eyebrow {
+  display: inline-block;
+  font-family: var(--ae-font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ae-sage);
+}
+
+/* Headings — editorial serif at regular weight: size and tight tracking do
+   the work, not boldness. */
+
+/* Site-wide: serif headings render regular + tight-tracked even where the
+   markup still carries ad-hoc `font-bold` utilities. Unlayered on purpose so
+   it outranks Tailwind's layered utility classes. */
+h1.font-serif, h2.font-serif, h3.font-serif,
+h1.font-newsreader, h2.font-newsreader, h3.font-newsreader {
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+.ae-h2 {
+  font-family: var(--ae-font-display);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  color: var(--ae-ink);
+  font-size: clamp(2.5rem, 5.5vw, 4rem);
+}
+.ae-h3 {
+  font-family: var(--ae-font-display);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ae-ink);
+}
+
+/* Buttons — one shared base, four variants */
+.ae-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--ae-font-sans);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  padding: 0.95rem 2.1rem;
+  border-radius: var(--ae-r-pill);
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  white-space: nowrap;
+}
+.ae-btn-primary {
+  background: var(--ae-sage);
+  color: #fff;
+  box-shadow: var(--ae-shadow-sm);
+}
+.ae-btn-primary:hover {
+  background: var(--ae-sage-dark);
+}
+.ae-btn-dark {
+  background: var(--ae-ink);
+  color: #fff;
+}
+.ae-btn-dark:hover {
+  background: var(--ae-ink-soft);
+}
+.ae-btn-outline {
+  background: transparent;
+  color: var(--ae-ink);
+  border: 1px solid var(--ae-line);
+}
+.ae-btn-outline:hover {
+  border-color: var(--ae-sage);
+  color: var(--ae-sage);
+}
+.ae-btn-ghost {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+.ae-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+/* Destructive actions (delete). Muted until hover so it never
+   competes with the primary action in a row of buttons. */
+.ae-btn-danger {
+  background: transparent;
+  color: #b4413c;
+  border: 1px solid rgba(180, 65, 60, 0.3);
+}
+.ae-btn-danger:hover {
+  background: #b4413c;
+  border-color: #b4413c;
+  color: #fff;
+}
+
+/* Size modifier — dense UI (admin rows, inline forms). */
+.ae-btn-sm {
+  font-size: 12px;
+  padding: 0.55rem 1.1rem;
+}
+
+.ae-btn:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Pills / filter chips */
+.ae-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--ae-font-sans);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--ae-r-pill);
+  background: var(--ae-surface);
+  color: rgba(45, 42, 38, 0.6);
+  border: 1px solid var(--ae-line);
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.ae-pill:hover {
+  color: var(--ae-ink);
+  border-color: var(--ae-sage);
+}
+.ae-pill-active {
+  background: var(--ae-sage);
+  color: #fff;
+  border-color: var(--ae-sage);
+  box-shadow: var(--ae-shadow-sm);
+}
+
+/* Cards */
+.ae-card {
+  background: var(--ae-surface);
+  border-radius: var(--ae-r-lg);
+  box-shadow: var(--ae-shadow-sm);
+  border: 1px solid var(--ae-line);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease-in-out;
+}
+.ae-card:hover {
+  box-shadow: var(--ae-shadow-md);
+}
+
+/* Form field label — quieter than .ae-eyebrow, which is for
+   section headers rather than inputs. */
+.ae-label {
+  display: block;
+  font-family: var(--ae-font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--ae-muted);
+  margin-bottom: 0.5rem;
+}
+
+/* Inputs */
+.ae-input {
+  width: 100%;
+  font-family: var(--ae-font-sans);
+  font-size: 14px;
+  color: var(--ae-ink);
+  padding: 0.9rem 1.25rem;
+  border-radius: var(--ae-r-md);
+  background: var(--ae-surface);
+  border: 1px solid var(--ae-line);
+  outline: none;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out,
+    background-color 0.2s ease-in-out;
+}
+.ae-input::placeholder { color: rgba(45, 42, 38, 0.4); }
+.ae-input:focus {
+  border-color: var(--ae-sage);
+  box-shadow: 0 0 0 3px rgba(61, 91, 79, 0.15);
+}

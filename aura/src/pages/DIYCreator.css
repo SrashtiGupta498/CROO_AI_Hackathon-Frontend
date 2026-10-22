@@ -1,0 +1,33 @@
+/* ============================================================
+   DIY CREATOR PAGE — styles extracted from the former two
+   <style> blocks in DIYCreator.tsx (recipe list + details).
+   Classes are page-prefixed (`diy-`) because this file is
+   global once imported. The list view's extra
+   `min-height: 100%` is applied via the `min-h-full` utility
+   in the JSX.
+   ============================================================ */
+
+/* Inline paper-grain texture — subtle ink dots on transparent, so no
+   external hotlink dependency. */
+.diy-page-paper {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cg fill='%2316241e' fill-opacity='0.028'%3E%3Ccircle cx='7' cy='11' r='1'/%3E%3Ccircle cx='29' cy='5' r='0.8'/%3E%3Ccircle cx='47' cy='17' r='1'/%3E%3Ccircle cx='17' cy='31' r='0.8'/%3E%3Ccircle cx='39' cy='37' r='1'/%3E%3Ccircle cx='9' cy='49' r='1'/%3E%3Ccircle cx='51' cy='47' r='0.8'/%3E%3Ccircle cx='27' cy='53' r='1'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+.diy-card {
+  box-shadow: 0 20px 40px rgba(74, 63, 53, 0.05);
+}
+
+/* Vertical connector between "How to make" step bullets. */
+.diy-step-line::before {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 24px;
+  bottom: -12px;
+  width: 1px;
+  background-color: rgba(74, 56, 37, 0.25);
+}
+.diy-step-item:last-child .diy-step-line::before {
+  display: none;
+}

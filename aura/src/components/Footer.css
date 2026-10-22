@@ -1,0 +1,237 @@
+/* ============================================================
+   Footer.tsx — co-located styles.
+   Extracted from the former embedded <style> block and static
+   inline style={{}} props. This file loads globally, so every
+   class and keyframe is prefixed with `app-footer-`.
+   ============================================================ */
+
+@keyframes appFooterLeafFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.06; }
+  50%       { transform: translateY(-18px) rotate(8deg); opacity: 0.1; }
+}
+.app-footer-root {
+  background: linear-gradient(160deg, #1e3329 0%, #162820 60%, #0f1f19 100%);
+}
+
+/* Radiant rule: colour-only hovers, no movement. The marker dash is absolutely
+   positioned in a reserved 18px lane so it can grow without shifting the label
+   — same idiom as the header's scaleX underline. */
+.app-footer-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding-left: 18px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.25s ease-in-out;
+  text-decoration: none;
+}
+.app-footer-link:hover {
+  color: var(--ae-sage-light);
+}
+.app-footer-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 0;
+  height: 1px;
+  background: var(--ae-sage-light);
+  transition: width 0.25s ease-in-out;
+}
+.app-footer-link:hover::before {
+  width: 12px;
+}
+
+.app-footer-social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out,
+    border-color 0.25s ease-in-out;
+  backdrop-filter: blur(8px);
+}
+.app-footer-social-btn:hover {
+  color: white;
+  background: var(--ae-sage);
+  border-color: var(--ae-sage);
+}
+/* Smaller variant (back-to-top button). */
+.app-footer-social-btn--sm {
+  width: 38px;
+  height: 38px;
+}
+
+.app-footer-divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.app-footer-nl-input {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: white;
+  border-radius: 16px;
+  padding: 14px 20px;
+  font-size: 0.9rem;
+  flex: 1;
+  outline: none;
+  transition: border-color 0.25s, background 0.25s;
+  font-family: inherit;
+}
+.app-footer-nl-input::placeholder {
+  color: rgba(255, 255, 255, 0.25);
+}
+.app-footer-nl-input:focus {
+  border-color: var(--ae-sage);
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.app-footer-nl-btn {
+  background: var(--ae-sage);
+  color: white;
+  border: none;
+  border-radius: 16px;
+  padding: 14px 26px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.25s ease-in-out, opacity 0.25s ease-in-out;
+  font-family: inherit;
+}
+.app-footer-nl-btn:hover {
+  background: var(--ae-sage-dark);
+}
+
+/* Decorative botanical blobs. */
+.app-footer-leaf {
+  position: absolute;
+  pointer-events: none;
+  animation: appFooterLeafFloat 8s ease-in-out infinite;
+}
+.app-footer-leaf-1 {
+  top: -80px;
+  right: -60px;
+  width: 340px;
+  height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--ae-sage-light) 0%, transparent 70%);
+  opacity: 0.07;
+  animation-delay: 0s;
+}
+.app-footer-leaf-2 {
+  bottom: 80px;
+  left: -100px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--ae-sage) 0%, transparent 70%);
+  opacity: 0.08;
+  animation-delay: 4s;
+}
+
+/* ============================================================
+   2026 refresh — editorial newsletter band, airier link columns,
+   and an oversized wordmark signature.
+   ============================================================ */
+
+/* ─── Band 1: newsletter ─── */
+
+.app-footer-kicker {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ae-turmeric);
+  margin-bottom: 9px;
+}
+
+.app-footer-headline {
+  font-family: var(--ae-font-display);
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 0;
+}
+
+.app-footer-headline-accent {
+  font-style: italic;
+  color: var(--ae-sage-light);
+}
+
+/* The field is one pill containing the input and the button, rather than two
+   floating boxes with a gap — reads as a single control at large sizes. */
+.app-footer-nl-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 440px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: border-color 0.25s ease, background 0.25s ease;
+}
+
+.app-footer-nl-field:focus-within {
+  border-color: rgba(220, 229, 221, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Override the boxed styling above now that the wrapper carries the surface. */
+.app-footer-nl-field .app-footer-nl-input {
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 20px;
+  min-width: 0;
+}
+
+.app-footer-nl-field .app-footer-nl-input:focus {
+  background: transparent;
+  border-color: transparent;
+}
+
+.app-footer-nl-field .app-footer-nl-btn {
+  border-radius: 999px;
+  padding: 13px 28px;
+}
+
+.app-footer-nl-success {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 24px;
+  border-radius: 999px;
+  color: var(--ae-sage-light);
+  background: rgba(220, 229, 221, 0.1);
+  border: 1px solid rgba(220, 229, 221, 0.28);
+}
+
+/* ─── Band 2: column headings ─── */
+
+.app-footer-col-head {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.32);
+  padding-bottom: 11px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+

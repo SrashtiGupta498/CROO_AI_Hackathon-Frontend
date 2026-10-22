@@ -1,0 +1,290 @@
+/* ============================================================
+   ARTICLE VIEW — extracted from the inline <style> block in
+   ArticleView.tsx. Class and keyframe names are prefixed with
+   `article-view-` because this file is bundled globally (the
+   old <style> block only existed while the page was mounted).
+   ============================================================ */
+
+/* Local floatUp (24px offset) — intentionally different from the
+   shared fadeUp in src/styles/animations.css (30px). */
+@keyframes article-view-floatUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.article-view-float-up {
+  animation: article-view-floatUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.article-view-float-up-1 {
+  animation: article-view-floatUp 0.7s 0.08s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.article-view-float-up-2 {
+  animation: article-view-floatUp 0.7s 0.16s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.article-view-float-up-3 {
+  animation: article-view-floatUp 0.7s 0.24s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes article-view-floatOrb {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(20px, -30px) scale(1.08);
+  }
+}
+.article-view-float-orb {
+  animation: article-view-floatOrb 18s ease-in-out infinite;
+}
+.article-view-float-orb-slow {
+  animation: article-view-floatOrb 26s ease-in-out infinite reverse;
+}
+
+@keyframes article-view-petalDrift {
+  0% {
+    transform: translateY(0) rotate(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(40px) rotate(180deg);
+    opacity: 0;
+  }
+}
+.article-view-petal-drift {
+  /* Per-petal delay/duration are set inline. */
+  animation: article-view-petalDrift linear infinite;
+}
+
+@keyframes article-view-sway {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+  50% {
+    transform: rotate(4deg);
+  }
+}
+.article-view-sway-slow {
+  animation: article-view-sway 6s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+
+@keyframes article-view-twinkle {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.15);
+  }
+}
+.article-view-twinkle {
+  animation: article-view-twinkle 3.5s ease-in-out infinite;
+}
+
+@keyframes article-view-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+.article-view-shimmer-text {
+  background: linear-gradient(110deg, #DCE5DD 20%, #fff 40%, #DCE5DD 60%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: article-view-shimmer 5s linear infinite;
+}
+
+@keyframes article-view-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(8px);
+  }
+}
+.article-view-bob {
+  animation: article-view-bob 2.2s ease-in-out infinite;
+}
+
+/* TL;DR card background — was an inline style using the module
+   constant DARK (#2D2A26 = --ae-ink) and #2d4a3e (= --ae-ink-soft). */
+.article-view-tldr-card {
+  background: linear-gradient(135deg, var(--ae-ink) 0%, var(--ae-ink-soft) 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .article-view-float-orb,
+  .article-view-float-orb-slow,
+  .article-view-petal-drift,
+  .article-view-sway-slow,
+  .article-view-twinkle,
+  .article-view-shimmer-text,
+  .article-view-bob {
+    animation: none !important;
+  }
+}
+
+/* ============================================================
+   READING MODE — a focus overlay toggled from the article nav.
+   Strips ambience and chrome, widens the leading, and clamps the
+   measure to a comfortable ~68ch. Theme + size are driven by
+   data attributes set on the root by ArticleView.
+   ============================================================ */
+
+.article-view-reading {
+  --ar-measure: 68ch;
+  background: var(--ae-paper-2);
+}
+
+/* Ambient orbs, petals and the video sidebar are pure decoration —
+   they are the first thing to go. */
+.article-view-reading .article-view-ambient,
+.article-view-reading .article-view-aside,
+.article-view-reading .article-view-hide-in-reading {
+  display: none !important;
+}
+
+/* Collapse the two-column grid to a single centred column. */
+.article-view-reading .article-view-shell {
+  display: block !important;
+  max-width: none;
+  padding-top: 96px;
+}
+
+.article-view-reading .article-view-body {
+  max-width: var(--ar-measure);
+  margin-inline: auto;
+}
+
+/* Type scale — driven by the size stepper (1 = default). */
+.article-view-reading .article-view-body {
+  font-size: calc(1rem * var(--ar-scale, 1));
+  line-height: 1.85;
+}
+.article-view-reading .article-view-body p,
+.article-view-reading .article-view-body li,
+.article-view-reading .article-view-body .ab-body,
+.article-view-reading .article-view-body .ab-step-text {
+  font-size: calc(1.06rem * var(--ar-scale, 1));
+  line-height: 1.85;
+}
+.article-view-reading .article-view-body .prose {
+  max-width: none;
+}
+
+/* ── Themes ─────────────────────────────────────────────────── */
+.article-view-reading[data-reading-theme="sepia"] {
+  background: #f4ecdd;
+}
+.article-view-reading[data-reading-theme="sepia"] .ab-block,
+.article-view-reading[data-reading-theme="sepia"] .article-view-body {
+  background-color: transparent;
+}
+
+.article-view-reading[data-reading-theme="dark"] {
+  background: var(--ae-ink);
+  color: rgba(255, 255, 255, 0.87);
+}
+.article-view-reading[data-reading-theme="dark"] .article-view-body,
+.article-view-reading[data-reading-theme="dark"] .ab-body,
+.article-view-reading[data-reading-theme="dark"] .ab-step-text,
+.article-view-reading[data-reading-theme="dark"] .ab-ing-name,
+.article-view-reading[data-reading-theme="dark"] .ab-faq-a,
+.article-view-reading[data-reading-theme="dark"] .ab-hero-sub {
+  color: rgba(255, 255, 255, 0.87);
+}
+.article-view-reading[data-reading-theme="dark"] .ab-head-title,
+.article-view-reading[data-reading-theme="dark"] .ab-hero-title,
+.article-view-reading[data-reading-theme="dark"] .ab-faq-q,
+.article-view-reading[data-reading-theme="dark"] .article-view-body h1,
+.article-view-reading[data-reading-theme="dark"] .article-view-body h2,
+.article-view-reading[data-reading-theme="dark"] .article-view-body h3 {
+  color: #fff;
+}
+.article-view-reading[data-reading-theme="dark"] .ab-block {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.article-view-reading[data-reading-theme="dark"] .ab-source-text {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ── Control bar ────────────────────────────────────────────── */
+.article-view-reading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.86);
+  border-bottom: 1px solid var(--ae-line);
+}
+[data-reading-theme="dark"] .article-view-reading-bar {
+  background: rgba(45, 42, 38, 0.9);
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+.article-view-reading-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 34px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: var(--ae-r-pill);
+  border: 1px solid var(--ae-line);
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.article-view-reading-btn[aria-pressed="true"] {
+  background: var(--ae-sage);
+  border-color: var(--ae-sage);
+  color: #fff;
+}
+[data-reading-theme="dark"] .article-view-reading-btn {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.article-view-reading-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.article-view-reading-btn:focus-visible,
+.article-view-reading-toggle:focus-visible {
+  outline: 3px solid var(--ae-sage);
+  outline-offset: 2px;
+}
+
+.article-view-reading-spacer {
+  margin-left: auto;
+}

@@ -1,0 +1,73 @@
+/* ════════════════════════════════════════════════════════════
+   EditorSidebar.css — extracted from EditorSidebar.tsx inline
+   styles. Color values resolved from EDITOR_THEME in blockTypes.ts.
+   ════════════════════════════════════════════════════════════ */
+
+.editor-sidebar {
+  width: 230px;
+  flex-shrink: 0;
+  position: sticky;
+  top: 84px;
+  align-self: flex-start;
+  font-family: var(--font-sans);
+}
+
+.editor-sidebar-card {
+  background: #ffffff;
+  border: 1px solid rgba(47, 39, 68, 0.1);
+  border-radius: 20px;
+  padding: 14px;
+  box-shadow: 0 4px 20px rgba(47, 39, 68, 0.06);
+}
+
+.editor-sidebar-heading {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: rgba(47, 39, 68, 0.35);
+  text-transform: uppercase;
+  margin: 4px 8px 12px;
+}
+
+/* Active background/color/font-weight stay inline (state-driven). */
+.editor-sidebar-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  font-size: 13.5px;
+  font-family: var(--font-sans);
+  transition: background 0.15s, color 0.15s;
+}
+
+/* Active background/color stay inline (state-driven). */
+.editor-sidebar-count {
+  font-size: 10px;
+  font-weight: 800;
+  border-radius: 100px;
+  padding: 1px 7px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.editor-sidebar-stats {
+  margin-top: 14px;
+  background: linear-gradient(135deg, var(--ae-ink) 0%, var(--ae-ink-soft) 100%);
+  border-radius: 20px;
+  padding: 18px;
+  color: white;
+}
+
+.editor-sidebar-stats-heading {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  opacity: 0.6;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}

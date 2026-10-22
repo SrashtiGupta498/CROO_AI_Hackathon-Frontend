@@ -1,0 +1,12 @@
+/* ============================================================
+   Progress — extracted static styles for the achievements card.
+   Bundled globally, so classes are prefixed with `daily-progress-`.
+   Palette-driven colors stay inline in the component.
+   ============================================================ */
+
+/* Night → morning, matching PALETTE in shared.ts. Keep these two stops in sync
+   with `night.soft` / `morning.soft` if that palette is retuned. */
+.daily-progress-achievements {
+  background: linear-gradient(135deg, #E5EDE9 0%, #F7EFE0 100%);
+  box-shadow: var(--ae-shadow-md);
+}

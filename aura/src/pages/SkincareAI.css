@@ -1,0 +1,165 @@
+/* ============================================================
+   Skincare AI (chat) — split screen
+   Left: the assistant's identity + entry points (deep clay gradient)
+   Right: the conversation (bright working surface)
+
+   WARM CLAY on purpose. The scan (/ai/analysis) owns the green family; this
+   screen owns the clay family, so the two can never be mistaken for each
+   other at a glance — that hue split is the whole point, see AiHub.css. The
+   only green thing allowed in here is an imported skin report and the link
+   out to the scan, because both point at the green screen.
+   ============================================================ */
+
+.ai-page {
+  --ai-deep: #5C382C;   /* deep cocoa — gradient base                       */
+  --ai-warm: #8B5A44;   /* warm clay — links & icons on ivory (6.2:1)       */
+  --ai-flame: #C08063;  /* brand clay — tiles, accents, gradient end        */
+  --ai-gold: #E9CFAE;   /* warm sand — highlights on the dark gradient only */
+  --ai-scan: #3D5B4F;   /* the scan's forest — imported-report card only    */
+}
+
+/* ─── LEFT: identity panel ─── */
+
+.ai-panel-left {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+  background: linear-gradient(
+    152deg,
+    var(--ai-deep) 0%,
+    var(--ai-warm) 36%,
+    var(--ai-flame) 74%,
+    #cf9a80 100%
+  );
+}
+
+.ai-panel-left::before,
+.ai-panel-left::after {
+  content: '';
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+.ai-panel-left::before {
+  width: 24rem;
+  height: 24rem;
+  top: -8rem;
+  right: -8rem;
+  background: var(--ai-gold);
+  opacity: 0.3;
+  animation: ai-drift 24s infinite ease-in-out;
+}
+
+.ai-panel-left::after {
+  width: 20rem;
+  height: 20rem;
+  bottom: -7rem;
+  left: -7rem;
+  background: var(--ai-flame);
+  opacity: 0.22;
+  animation: ai-drift 30s infinite ease-in-out reverse;
+}
+
+@keyframes ai-drift {
+  0%, 100% { transform: translate(0, 0); }
+  33%      { transform: translate(24px, -20px); }
+  66%      { transform: translate(-20px, 18px); }
+}
+
+/* Frosted element sitting ON the gradient */
+.ai-chip {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: background 0.3s ease, transform 0.25s ease, border-color 0.3s ease;
+}
+
+.ai-chip:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+/* The one solid card on the gradient — the cross-link to the scan. It wears
+   the SCAN's green, not this page's clay, so it reads as "leaves here and
+   goes there" rather than as another chat control. */
+.ai-entry {
+  background: #fff;
+  color: #24463A;
+  box-shadow: 0 16px 40px -14px rgba(0, 0, 0, 0.45);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+
+.ai-entry:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 54px -16px rgba(0, 0, 0, 0.5);
+}
+
+.ai-tile-flame { background: linear-gradient(135deg, var(--ai-warm), var(--ai-flame)); }
+/* Green tile — used only on the cross-link out to the scan. */
+.ai-tile-scan { background: linear-gradient(135deg, #24463A, var(--ai-scan)); }
+
+/* ─── RIGHT: conversation surface ─── */
+
+.ai-panel-right {
+  background:
+    radial-gradient(circle at 100% 0%, rgba(198, 125, 99, 0.07) 0%, transparent 42%),
+    radial-gradient(circle at 0% 100%, rgba(198, 166, 107, 0.07) 0%, transparent 42%),
+    #FCFAF7;
+}
+
+/* User bubble */
+.ai-bubble-user {
+  background: linear-gradient(100deg, var(--ai-deep), var(--ai-warm));
+  color: #fff;
+  box-shadow: 0 8px 20px -10px rgba(92, 56, 44, 0.45);
+}
+
+.ai-bubble-bot {
+  background: #fff;
+  border: 1px solid rgba(45, 42, 38, 0.07);
+  box-shadow: 0 6px 20px -12px rgba(45, 42, 38, 0.4);
+}
+
+/* Send button */
+.ai-send {
+  background: linear-gradient(120deg, var(--ai-deep), var(--ai-warm));
+  box-shadow: 0 8px 20px -8px rgba(92, 56, 44, 0.45);
+  transition: filter 0.25s ease, transform 0.15s ease;
+}
+
+.ai-send:not(:disabled):hover { filter: brightness(1.08); }
+.ai-send:disabled { background: rgba(45, 42, 38, 0.15); box-shadow: none; }
+
+/* Suggestion chip inside the conversation column */
+.ai-suggest {
+  background: rgba(139, 90, 68, 0.1);
+  color: var(--ai-warm);
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.ai-suggest:hover {
+  background: rgba(139, 90, 68, 0.18);
+  transform: translateY(-1px);
+}
+
+.ai-fade-up {
+  opacity: 0;
+  animation: ai-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes ai-fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-panel-left::before,
+  .ai-panel-left::after { animation: none; }
+  .ai-fade-up { animation-duration: 0.01ms; opacity: 1; }
+}

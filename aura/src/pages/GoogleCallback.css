@@ -1,0 +1,47 @@
+/* ============================================================
+   GOOGLE OAUTH CALLBACK PAGE — styles extracted from the former
+   <style> block in GoogleCallback.tsx. Classes and keyframes
+   are page-prefixed (`gcb-`) because this file is global once
+   imported. Note: gcb-fadeUp is intentionally kept local — it
+   slides from 20px, unlike the global fadeUp's 30px.
+   ============================================================ */
+
+@keyframes gcb-pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+
+@keyframes gcb-fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gcb-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(250%);
+  }
+}
+
+.gcb-glow-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  animation: gcb-fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}

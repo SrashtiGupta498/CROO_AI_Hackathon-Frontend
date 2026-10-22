@@ -1,0 +1,404 @@
+/* ============================================================
+   ArticleBlocks.tsx — co-located styles for the recipe/reference
+   section blocks (ingredients, instructions, benefits, notes,
+   source, tip, warning, faq, reel).
+
+   This file is bundled globally, so every class is prefixed
+   with `ab-`. Colours come from the brand tokens in
+   src/styles/theme.css — no raw hex here.
+   ============================================================ */
+
+/* ── Shared shell ─────────────────────────────────────────── */
+.ab-block {
+  margin: 40px 0;
+  border-radius: var(--ae-r-lg);
+  padding: 28px;
+  background: var(--ae-surface);
+  border: 1px solid var(--ae-line);
+  box-shadow: var(--ae-shadow-sm);
+}
+
+.ab-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ab-head-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--ae-r-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  background: rgba(var(--ae-sage-rgb), 0.12);
+  color: var(--ae-sage-dark);
+}
+
+.ab-head-title {
+  font-family: var(--ae-font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ae-ink);
+  margin: 0;
+}
+
+/* Count / meta chip sitting at the end of a block header. */
+.ab-chip {
+  margin-left: auto;
+  flex: none;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: var(--ae-r-pill);
+  background: rgba(var(--ae-sage-rgb), 0.12);
+  color: var(--ae-sage-dark);
+}
+
+/* Body copy inside a block. 70% ink is the readability floor —
+   anything lighter fails AA against the cream page. */
+.ab-body {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: rgba(var(--ae-ink-rgb), 0.82);
+}
+.ab-body p + p {
+  margin-top: 1em;
+}
+.ab-body a {
+  color: var(--ae-sage-dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* ── Ingredients ──────────────────────────────────────────── */
+.ab-ingredients {
+  background: linear-gradient(
+    135deg,
+    rgba(var(--ae-sage-rgb), 0.07) 0%,
+    var(--ae-paper-2) 100%
+  );
+  border-color: rgba(var(--ae-sage-rgb), 0.2);
+}
+
+.ab-ing-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+@media (min-width: 700px) {
+  .ab-ing-list {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 28px;
+  }
+}
+
+.ab-ing-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 11px 4px;
+  border-bottom: 1px dashed rgba(var(--ae-ink-rgb), 0.13);
+}
+
+/* Leaf bullet. Decorative only — the <ul> already conveys listness. */
+.ab-ing-dot {
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ae-sage);
+  transform: translateY(-2px);
+}
+
+.ab-ing-name {
+  flex: 1;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--ae-ink);
+  font-weight: 500;
+}
+
+/* Amounts are tabular data — align them and keep them scannable. */
+.ab-ing-amount {
+  flex: none;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ae-sage-dark);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ab-ing-note {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--ae-muted);
+  margin-top: 2px;
+}
+
+/* ── Instructions ─────────────────────────────────────────── */
+.ab-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  counter-reset: ab-step;
+}
+
+.ab-step {
+  counter-increment: ab-step;
+  position: relative;
+  display: flex;
+  gap: 18px;
+  padding-bottom: 26px;
+}
+.ab-step:last-child {
+  padding-bottom: 0;
+}
+
+/* Connector line threading the numerals together. */
+.ab-step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 21px;
+  top: 46px;
+  bottom: 6px;
+  width: 2px;
+  background: rgba(var(--ae-sage-rgb), 0.22);
+}
+
+.ab-step-num {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ae-sage);
+  color: #fff;
+  font-family: var(--ae-font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(var(--ae-sage-rgb), 0.35);
+}
+.ab-step-num::after {
+  content: counter(ab-step);
+}
+
+.ab-step-text {
+  flex: 1;
+  padding-top: 9px;
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: rgba(var(--ae-ink-rgb), 0.85);
+}
+
+/* ── Benefits ─────────────────────────────────────────────── */
+.ab-benefits {
+  background: linear-gradient(
+    135deg,
+    var(--ae-paper-2) 0%,
+    rgba(var(--ae-sage-rgb), 0.08) 100%
+  );
+  border-color: rgba(var(--ae-sage-rgb), 0.2);
+}
+
+/* ── Tip / Warning / Notes / Source ───────────────────────── */
+.ab-tip {
+  background: rgba(var(--ae-sage-rgb), 0.08);
+  border-color: rgba(var(--ae-sage-rgb), 0.22);
+}
+
+.ab-warning {
+  background: rgba(201, 138, 58, 0.1); /* --ae-warning at low alpha */
+  border-color: rgba(201, 138, 58, 0.32);
+}
+.ab-warning .ab-head-icon {
+  background: rgba(201, 138, 58, 0.18);
+  color: var(--ae-warning);
+}
+
+.ab-notes {
+  background: var(--ae-paper-2);
+}
+
+/* Source is a citation, not body copy — quieter, smaller. */
+.ab-source {
+  margin: 32px 0;
+  padding: 16px 20px;
+  border-radius: var(--ae-r-sm);
+  border-left: 3px solid rgba(var(--ae-sage-rgb), 0.4);
+  background: rgba(var(--ae-ink-rgb), 0.03);
+}
+.ab-source-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ae-sage-dark);
+  margin-bottom: 6px;
+}
+.ab-source-text {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--ae-muted);
+}
+
+/* ── FAQ accordion ────────────────────────────────────────── */
+.ab-faq-item {
+  border-bottom: 1px solid var(--ae-line);
+}
+.ab-faq-item:last-child {
+  border-bottom: none;
+}
+
+.ab-faq-q {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 16px 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--ae-font-display);
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--ae-ink);
+}
+/* Hide the native disclosure triangle in both engines. */
+.ab-faq-q::-webkit-details-marker {
+  display: none;
+}
+
+.ab-faq-caret {
+  flex: none;
+  margin-left: auto;
+  transition: transform 0.25s ease;
+  color: var(--ae-sage-dark);
+}
+.ab-faq-item[open] .ab-faq-caret {
+  transform: rotate(180deg);
+}
+
+.ab-faq-a {
+  padding: 0 0 18px 28px;
+  font-size: 1rem;
+  line-height: 1.75;
+  color: rgba(var(--ae-ink-rgb), 0.78);
+}
+
+/* ── Textless hero (285 legacy sections had title+subtitle only) ── */
+.ab-hero-text {
+  margin: 44px 0 32px;
+  text-align: center;
+}
+.ab-hero-title {
+  font-family: var(--ae-font-display);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  line-height: 1.05;
+  color: var(--ae-ink);
+  margin: 0;
+}
+.ab-hero-sub {
+  max-width: 58ch;
+  margin: 16px auto 0;
+  font-family: var(--ae-font-serif);
+  font-size: 1.15rem;
+  line-height: 1.7;
+  color: rgba(var(--ae-ink-rgb), 0.72);
+}
+.ab-hero-rule {
+  width: 60px;
+  height: 2px;
+  margin: 22px auto 0;
+  border-radius: 2px;
+  background: rgba(var(--ae-sage-rgb), 0.5);
+}
+
+/* ── Reel preview card ────────────────────────────────────── */
+.ab-reel {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ab-reel-thumb {
+  position: relative;
+  flex: none;
+  width: 150px;
+  aspect-ratio: 9 / 16;
+  border-radius: var(--ae-r-md);
+  overflow: hidden;
+  background: var(--ae-ink);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  box-shadow: var(--ae-shadow-md);
+}
+.ab-reel-thumb video,
+.ab-reel-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ab-reel-thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.55) 0%,
+    transparent 55%
+  );
+  pointer-events: none;
+}
+
+.ab-reel-play {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ae-ink);
+  z-index: 1;
+}
+
+.ab-reel-meta {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* ── Accessibility ────────────────────────────────────────── */
+/* Every block is inside an article; interactive parts need a
+   visible focus ring since the site-wide default is none. */
+.ab-faq-q:focus-visible,
+.ab-reel-thumb:focus-visible {
+  outline: 3px solid var(--ae-sage);
+  outline-offset: 3px;
+  border-radius: var(--ae-r-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ab-faq-caret {
+    transition: none;
+  }
+}

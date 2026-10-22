@@ -1,0 +1,65 @@
+/* ============================================================
+   PROFILE — extracted from the inline <style> block in
+   Profile.tsx. Class names are prefixed with `profile-` because
+   this file is bundled globally (the old <style> block only
+   existed while the page was mounted).
+   ============================================================ */
+
+/* Fonts (Fraunces + Hanken Grotesk) are loaded globally from
+   index.html — the old Playfair/Jakarta @import was removed as
+   part of the Herbal Apothecary redesign. */
+
+@keyframes profile-float {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-10px, -10px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+.profile-glass-card {
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 20px 40px -15px rgba(45, 42, 38, 0.05);
+}
+
+/* The local slideUp keyframes were identical to the shared fadeUp
+   in src/styles/animations.css, so the global keyframes are used. */
+.profile-animate-slide-up {
+  animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.profile-blob {
+  position: absolute;
+  filter: blur(80px);
+  z-index: 0;
+  opacity: 0.3;
+  animation: profile-float 20s ease-in-out infinite;
+}
+
+.profile-edit-input {
+  width: 100%;
+  background: var(--ae-paper-2);
+  border: 1px solid var(--ae-line);
+  border-radius: 1rem;
+  padding: 0.85rem 1.1rem;
+  color: var(--ae-ink);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+.profile-edit-input:focus {
+  border-color: var(--ae-sage);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(61, 91, 79, 0.12);
+}
+
+.profile-custom-scrollbar::-webkit-scrollbar {
+  width: 0px;
+}

@@ -1,0 +1,427 @@
+/* ============================================================
+   Header.tsx — co-located styles.
+   Extracted from the former embedded <style> block and static
+   inline style={{}} props. This file loads globally, so every
+   class and keyframe is prefixed with `app-header-`.
+   ============================================================ */
+
+@keyframes appHeaderMegaSlide {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes appHeaderSearchDrop {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes appHeaderDrawerSlide {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+/* ── Sticky header shell ──────────────────────────────────
+   background / border-bottom / box-shadow stay inline in the
+   JSX — they depend on scroll state. */
+.app-header-root {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  width: 100%;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Scroll progress hairline. Pinned to the header's bottom edge (the header is
+   sticky, so it rides along). scaleX from the left edge — transform only, so it
+   never triggers layout while scrolling. */
+.app-header-progress-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  overflow: hidden;
+  pointer-events: none;
+}
+.app-header-progress-bar {
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  background: linear-gradient(90deg, var(--ae-sage), var(--ae-turmeric));
+  will-change: transform;
+}
+
+/* ── Primary nav links ────────────────────────────────────
+   Text color stays inline — active/hover color set from JSX. */
+.app-header-nav-link {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: color 0.2s;
+  font-family: var(--ae-font-sans);
+}
+.app-header-nav-link::after {
+  content: '';
+  display: block;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ae-sage);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 4px;
+}
+.app-header-nav-link:hover::after,
+.app-header-nav-link.active::after {
+  transform: scaleX(1);
+}
+
+/* Round icon buttons (also used by NotificationBell). */
+.app-header-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3a3a3a;
+  transition: background 0.2s, color 0.2s;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+}
+.app-header-icon-btn:hover {
+  background: rgba(61, 91, 79, 0.12);
+  color: var(--ae-sage);
+}
+
+.app-header-badge {
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, var(--ae-sage), var(--ae-sage-dark));
+  color: white;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+
+/* ── Mega menu ────────────────────────────────────────── */
+.app-header-mega-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.14), 0 0 0 1px rgba(0, 0, 0, 0.05);
+  padding: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  gap: 24px;
+  z-index: 100;
+  min-width: 640px;
+  animation: appHeaderMegaSlide 0.25s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.app-header-mega-heading {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ae-sage);
+  margin-bottom: 14px;
+}
+.app-header-mega-heading-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--ae-font-sans);
+}
+.app-header-mega-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: rgba(45, 42, 38, 0.7);
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: background 0.18s, color 0.18s;
+  font-family: var(--ae-font-sans);
+}
+.app-header-trending-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 100px;
+  background: rgba(61, 91, 79, 0.1);
+  color: var(--ae-sage);
+  border: none;
+  cursor: pointer;
+  font-family: var(--ae-font-sans);
+  transition: background 0.2s;
+}
+
+/* ── "Join Free" CTA ──────────────────────────────────── */
+.app-header-join-btn {
+  background: linear-gradient(135deg, var(--ae-sage) 0%, var(--ae-sage-dark) 100%);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  padding: 9px 22px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(61, 91, 79, 0.35);
+  transition: transform 0.22s, box-shadow 0.22s;
+  font-family: var(--ae-font-sans);
+  white-space: nowrap;
+}
+
+/* ── Secondary quick-access bar ───────────────────────────
+   Plain, static, non-sticky — scrolls away as ordinary page content.
+   No animated height/opacity here: that used to live inside the sticky
+   header and reflow the page on every scroll-threshold crossing. */
+/* ── Search overlay ───────────────────────────────────── */
+.app-header-search-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(10, 20, 15, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 18vh;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+.app-header-search-drop {
+  max-width: 680px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  animation: appHeaderSearchDrop 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.app-header-search-term {
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 600;
+  background: rgba(61, 91, 79, 0.08);
+  color: rgba(45, 42, 38, 0.7);
+  border: 1px solid rgba(61, 91, 79, 0.15);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--ae-font-sans);
+}
+.app-header-search-cta-ai {
+  flex: 1;
+  padding: 14px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #3D5B4F15 0%, rgba(113, 129, 111, 0.1) 100%);
+  border: 1px solid #3D5B4F30;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--ae-font-sans);
+}
+.app-header-search-cta-diy {
+  flex: 1;
+  padding: 14px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--ae-font-sans);
+}
+
+/* ── Mobile drawer ────────────────────────────────────── */
+.app-header-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: rgba(10, 20, 15, 0.5);
+  backdrop-filter: blur(4px);
+}
+.app-header-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 160;
+  width: min(85vw, 360px);
+  background: white;
+  box-shadow: -20px 0 60px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--ae-font-sans);
+  animation: appHeaderDrawerSlide 0.32s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+.app-header-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: linear-gradient(135deg, var(--ae-ink) 0%, var(--ae-ink-soft) 100%);
+}
+.app-header-mobile-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ae-ink);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.app-header-mobile-link:hover {
+  color: var(--ae-sage);
+}
+.app-header-mobile-chevron {
+  /* transform stays inline — it depends on the expanded state */
+  transition: transform 0.25s;
+}
+.app-header-mobile-sublink {
+  display: flex;
+  padding: 9px 16px;
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+  transition: color 0.2s;
+  border-radius: 8px;
+}
+.app-header-mobile-sublink:hover {
+  color: var(--ae-sage);
+  background: rgba(61, 91, 79, 0.06);
+}
+.app-header-drawer-join {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--ae-sage) 0%, var(--ae-sage-dark) 100%);
+  color: white;
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--ae-font-sans);
+  letter-spacing: 0.04em;
+}
+.app-header-drawer-signin {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  background: rgba(45, 42, 38, 0.05);
+  color: var(--ae-ink);
+  border: none;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--ae-font-sans);
+}
+.app-header-drawer-profile {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(61, 91, 79, 0.08);
+  border: 1px solid rgba(61, 91, 79, 0.2);
+  color: var(--ae-ink);
+  cursor: pointer;
+  font-family: var(--ae-font-sans);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+.app-header-drawer-profile:hover {
+  background: rgba(61, 91, 79, 0.14);
+}
+.app-header-drawer-profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: var(--ae-sage);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.app-header-drawer-profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* min-width:0 + ellipsis so a long user-supplied name truncates instead of
+   wrapping and pushing the avatar out of the row. */
+.app-header-drawer-profile-meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  min-width: 0;
+  overflow: hidden;
+}
+.app-header-drawer-profile-meta > * {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.app-header-drawer-profile-role {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ae-sage-dark, #4B695A);
+}
+.app-header-drawer-profile-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ae-ink);
+}
+.app-header-drawer-logout {
+  width: 100%;
+  padding: 13px;
+  border-radius: 14px;
+  background: rgba(220, 38, 38, 0.06);
+  color: #dc2626;
+  border: 1px solid rgba(220, 38, 38, 0.15);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--ae-font-sans);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.2s ease;
+}
+.app-header-drawer-logout:hover {
+  background: rgba(220, 38, 38, 0.12);
+}

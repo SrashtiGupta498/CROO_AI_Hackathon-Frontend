@@ -1,0 +1,97 @@
+/* ════════════════════════════════════════════════════════════
+   BlockEditor.css — extracted from BlockEditor.tsx inline styles.
+   Color values resolved from EDITOR_THEME in blockTypes.ts.
+   ════════════════════════════════════════════════════════════ */
+
+.block-editor-field {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(47, 39, 68, 0.1);
+  font-size: 14px;
+  font-family: var(--font-sans);
+  color: var(--ae-ink);
+  outline: none;
+  background: white;
+}
+
+.block-editor-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(47, 39, 68, 0.55);
+  margin: 0 0 6px;
+}
+
+.block-editor-richtext {
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(47, 39, 68, 0.1);
+  background: white;
+}
+
+.block-editor-richtext-toolbar {
+  display: flex;
+  gap: 2px;
+  padding: 6px 8px;
+  background: rgba(215, 115, 169, 0.1);
+  border-bottom: 1px solid rgba(47, 39, 68, 0.1);
+}
+
+/* font-style stays inline (italic for the "i" tool only). */
+.block-editor-richtext-tool {
+  width: 30px;
+  height: 28px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: rgba(47, 39, 68, 0.55);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.block-editor-richtext-editor {
+  min-height: 96px;
+  padding: 12px 16px;
+  outline: none;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--ae-ink);
+  font-family: var(--font-sans);
+}
+
+.block-editor-control-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid rgba(47, 39, 68, 0.1);
+  background: white;
+  cursor: pointer;
+  color: rgba(47, 39, 68, 0.55);
+  font-size: 13px;
+}
+.block-editor-control-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.block-editor-add-item-btn {
+  margin-top: 10px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px dashed rgba(215, 115, 169, 0.22);
+  background: rgba(215, 115, 169, 0.1);
+  color: var(--ae-sage);
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.block-editor-card {
+  border: 1px solid rgba(47, 39, 68, 0.1);
+  border-radius: 18px;
+  background: #ffffff;
+  padding: 18px;
+  box-shadow: 0 2px 12px rgba(47, 39, 68, 0.05);
+}

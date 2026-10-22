@@ -1,0 +1,307 @@
+/* ============================================================
+   SkinResultVisuals ENHANCED — Pinterest-aesthetic skin analysis
+   Liquid gradients, dynamic micro-interactions, floating elements,
+   soft shadow depth, and engaging motion.
+   ============================================================ */
+
+:root {
+  --sv-mild: #8fb89a;
+  --sv-moderate: #d8a657;
+  --sv-significant: #c4756a;
+
+  /* Enhanced palette */
+  --sv-glow-mild: rgba(143, 184, 154, 0.3);
+  --sv-glow-moderate: rgba(216, 166, 87, 0.3);
+  --sv-glow-significant: rgba(196, 117, 106, 0.3);
+
+  --sv-light-bg: rgba(253, 249, 243, 0.7);
+  --sv-glass-border: rgba(255, 255, 255, 0.6);
+}
+
+/* ──────────────────────────────────────────────────────────
+   OVERALL SCORE GAUGE — Liquid gradient + glow effects
+   ────────────────────────────────────────────────────────── */
+
+.sv-gauge {
+  position: relative;
+  width: 200px;
+  margin: 0 auto;
+  text-align: center;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.08));
+}
+
+.sv-gauge-svg {
+  width: 200px;
+  height: 200px;
+  transform: rotate(-90deg);
+  filter: drop-shadow(0 0 20px var(--sv-glow-mild));
+  transition: filter 0.6s ease-out;
+}
+
+/* Track background with subtle gradient */
+.sv-gauge-track {
+  fill: none;
+  stroke: rgba(var(--ae-ink-rgb), 0.06);
+  stroke-width: 14;
+  opacity: 0.9;
+}
+
+/* Animated fill with liquid gradient effect */
+.sv-gauge-fill {
+  fill: none;
+  stroke-width: 14;
+  stroke-linecap: round;
+  transition: all 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 4px 12px currentColor);
+}
+
+.sv-gauge--good .sv-gauge-fill {
+  stroke: var(--sv-mild);
+  filter: drop-shadow(0 6px 16px var(--sv-glow-mild));
+}
+
+.sv-gauge--fair .sv-gauge-fill {
+  stroke: var(--sv-moderate);
+  filter: drop-shadow(0 6px 16px var(--sv-glow-moderate));
+}
+
+.sv-gauge--attention .sv-gauge-fill {
+  stroke: var(--sv-significant);
+  filter: drop-shadow(0 6px 16px var(--sv-glow-significant));
+}
+
+/* Pulsing glow ring behind gauge */
+.sv-gauge::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--sv-glow-mild) 0%, transparent 70%);
+  opacity: 0;
+  z-index: -1;
+  animation: sv-gauge-pulse 3s ease-in-out infinite;
+}
+
+@keyframes sv-gauge-pulse {
+  0%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.95); }
+  50%      { opacity: 0.5; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+/* Center number with smooth font rendering */
+.sv-gauge-center {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(253, 249, 243, 0.9) 0%, rgba(253, 249, 243, 0.7) 100%);
+  width: 160px;
+  height: 160px;
+  margin: 0 auto;
+  border-radius: 50%;
+  justify-content: center;
+  box-shadow: inset 0 8px 16px rgba(255, 255, 255, 0.5), inset 0 -8px 16px rgba(0, 0, 0, 0.05);
+}
+
+.sv-gauge-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ae-muted);
+  margin-bottom: 2px;
+}
+
+.sv-gauge-num {
+  font-family: var(--ae-font-display);
+  font-size: 3.2rem;
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--ae-ink);
+  font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
+  animation: sv-num-pop 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes sv-num-pop {
+  0%   { opacity: 0; transform: scale(0.5); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.sv-gauge-unit {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ae-muted);
+  margin-top: 4px;
+  opacity: 0;
+  animation: sv-unit-fade 0.8s ease-out 0.3s forwards;
+}
+
+@keyframes sv-unit-fade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.sv-gauge-caption {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: rgba(var(--ae-ink-rgb), 0.7);
+}
+
+/* ── Face map ─────────────────────────────────────────────── */
+.sv-facemap {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.sv-facemap-svg {
+  width: 170px;
+  height: auto;
+  flex: none;
+}
+
+.sv-face-shape {
+  fill: rgba(var(--ae-sage-rgb), 0.1);
+  stroke: rgba(var(--ae-sage-rgb), 0.35);
+  stroke-width: 2;
+}
+
+.sv-face-zone {
+  opacity: 0.55;
+  mix-blend-mode: multiply;
+}
+
+.sv-face-feature {
+  fill: rgba(var(--ae-ink-rgb), 0.35);
+}
+
+.sv-face-feature-line {
+  fill: none;
+  stroke: rgba(var(--ae-ink-rgb), 0.3);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+
+.sv-facemap-legend {
+  flex: 1;
+  min-width: 200px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sv-facemap-legend li {
+  display: grid;
+  grid-template-columns: 10px auto;
+  gap: 4px 10px;
+  align-items: center;
+}
+
+.sv-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  grid-row: span 2;
+  align-self: start;
+  margin-top: 4px;
+}
+
+.sv-legend-zone {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--ae-ink);
+}
+
+.sv-legend-concerns {
+  grid-column: 2;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--ae-muted);
+}
+
+.sv-facemap-empty {
+  flex: 1;
+  min-width: 200px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(var(--ae-ink-rgb), 0.7);
+  margin: 0;
+}
+
+/* ── Skin type spread ─────────────────────────────────────── */
+.sv-spread {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sv-spread-row {
+  display: grid;
+  grid-template-columns: 92px 1fr 42px;
+  gap: 10px;
+  align-items: center;
+}
+
+.sv-spread-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: rgba(var(--ae-ink-rgb), 0.72);
+}
+
+.sv-spread-track {
+  height: 8px;
+  border-radius: var(--ae-r-pill);
+  background: rgba(var(--ae-ink-rgb), 0.08);
+  overflow: hidden;
+}
+
+.sv-spread-fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--ae-r-pill);
+  background: rgba(var(--ae-sage-rgb), 0.45);
+  transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sv-spread-pct {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-align: right;
+  color: var(--ae-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The winning type gets the emphasis. */
+.sv-spread-row.is-top .sv-spread-label,
+.sv-spread-row.is-top .sv-spread-pct {
+  color: var(--ae-ink);
+  font-weight: 700;
+}
+.sv-spread-row.is-top .sv-spread-fill {
+  background: var(--ae-sage);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sv-gauge-fill,
+  .sv-spread-fill {
+    transition: none;
+  }
+}
