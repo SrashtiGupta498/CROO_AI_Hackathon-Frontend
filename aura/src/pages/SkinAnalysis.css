@@ -8,18 +8,26 @@
   /* Page-local accents, drawn from the brand's Botanical Luxury tokens. The
      scan owns the GREEN family; the chat (/ai/chat) owns the warm CLAY family.
      The two screens are told apart by hue, not by saturation — see AiHub.css. */
-  --sa-deep: #24463A;    /* deep forest — gradient base                     */
-  --sa-green: #3D5B4F;   /* brand forest — CTAs, links, numerals (7.5:1)    */
-  --sa-mint: #6E8F7D;    /* soft sage — tiles, fills, accents               */
-  --sa-lime: #DCE5DD;    /* sage light — highlights on the dark panel only  */
-  --sa-coral: #C67D63;   /* brand clay — the secondary/warm accent          */
-  --sa-amber: #C6A66B;   /* champagne — tiny hints, never shiny             */
-  --sa-clay-deep: #9A5B41; /* clay dark enough for text on ivory (5.0:1)   */
+  --sa-deep: #24463a; /* deep forest — gradient base                     */
+  --sa-green: #3d5b4f; /* brand forest — CTAs, links, numerals (7.5:1)    */
+  --sa-mint: #6e8f7d; /* soft sage — tiles, fills, accents               */
+  --sa-lime: #dce5dd; /* sage light — highlights on the dark panel only  */
+  --sa-coral: #c67d63; /* brand clay — the secondary/warm accent          */
+  --sa-amber: #c6a66b; /* champagne — tiny hints, never shiny             */
+  --sa-clay-deep: #9a5b41; /* clay dark enough for text on ivory (5.0:1)   */
 
   background:
-    radial-gradient(circle at 10% 18%, rgba(168, 197, 171, 0.22) 0%, transparent 48%),
-    radial-gradient(circle at 90% 82%, rgba(251, 217, 193, 0.22) 0%, transparent 48%),
-    radial-gradient(circle at top right, #FCFAF7 0%, #F6F2EC 100%);
+    radial-gradient(
+      circle at 10% 18%,
+      rgba(168, 197, 171, 0.22) 0%,
+      transparent 48%
+    ),
+    radial-gradient(
+      circle at 90% 82%,
+      rgba(251, 217, 193, 0.22) 0%,
+      transparent 48%
+    ),
+    radial-gradient(circle at top right, #fcfaf7 0%, #f6f2ec 100%);
   position: relative;
   /* `clip` not `hidden`: hidden would make this a scroll container and kill
      the `lg:sticky` left panel. clip contains the orbs without doing that. */
@@ -64,7 +72,7 @@
 /* Two colour blooms that keep the gradient from reading flat */
 .sa-panel-left::before,
 .sa-panel-left::after {
-  content: '';
+  content: "";
   position: absolute;
   border-radius: 9999px;
   filter: blur(70px);
@@ -98,7 +106,9 @@
   border: 1px solid rgba(255, 255, 255, 0.22);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  transition: background 0.3s ease, transform 0.3s ease;
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
 }
 
 .sa-chip-dark:hover {
@@ -111,16 +121,32 @@
 .sa-panel-right {
   position: relative;
   background:
-    radial-gradient(circle at 90% 0%, rgba(61, 91, 79, 0.07) 0%, transparent 45%),
-    radial-gradient(circle at 0% 100%, rgba(198, 125, 99, 0.07) 0%, transparent 45%),
-    #FCFAF7;
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(61, 91, 79, 0.07) 0%,
+      transparent 45%
+    ),
+    radial-gradient(
+      circle at 0% 100%,
+      rgba(198, 125, 99, 0.07) 0%,
+      transparent 45%
+    ),
+    #fcfaf7;
 }
 
 /* Primary CTA — a forest gradient, not a flat block */
 .sa-cta {
-  background: linear-gradient(100deg, var(--sa-deep) 0%, var(--sa-green) 60%, var(--sa-mint) 130%);
+  background: linear-gradient(
+    100deg,
+    var(--sa-deep) 0%,
+    var(--sa-green) 60%,
+    var(--sa-mint) 130%
+  );
   box-shadow: 0 12px 30px -10px rgba(61, 91, 79, 0.45);
-  transition: box-shadow 0.3s ease, transform 0.2s ease, filter 0.3s ease;
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.2s ease,
+    filter 0.3s ease;
 }
 
 .sa-cta:not(:disabled):hover {
@@ -154,7 +180,9 @@
   background: #fff;
   border: 1px solid rgba(45, 42, 38, 0.07);
   box-shadow: 0 8px 26px -14px rgba(45, 42, 38, 0.35);
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease,
+  transition:
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.25s ease,
     border-color 0.25s ease;
 }
 
@@ -164,8 +192,12 @@
   box-shadow: 0 16px 32px -16px rgba(61, 91, 79, 0.4);
 }
 
-.sa-tile-mint { background: linear-gradient(135deg, var(--sa-green), var(--sa-mint)); }
-.sa-tile-coral { background: linear-gradient(135deg, #b06f56, var(--sa-coral)); }
+.sa-tile-mint {
+  background: linear-gradient(135deg, var(--sa-green), var(--sa-mint));
+}
+.sa-tile-coral {
+  background: linear-gradient(135deg, #b06f56, var(--sa-coral));
+}
 
 /* Soft floating colour orbs behind the content — enhanced movement */
 .sa-orb {
@@ -184,8 +216,10 @@
   left: -12%;
   width: 28rem;
   height: 28rem;
-  background: linear-gradient(135deg, #DCE5DD, #a8c5b8);
-  animation: sa-pulse-slow 16s infinite ease-in-out, sa-drift-1 20s infinite ease-in-out;
+  background: linear-gradient(135deg, #dce5dd, #a8c5b8);
+  animation:
+    sa-pulse-slow 16s infinite ease-in-out,
+    sa-drift-1 20s infinite ease-in-out;
 }
 
 .sa-orb--2 {
@@ -194,27 +228,54 @@
   width: 32rem;
   height: 32rem;
   background: linear-gradient(135deg, #fbd9c1, #fde4d4);
-  animation: sa-pulse-slow 18s infinite ease-in-out, sa-drift-2 24s infinite ease-in-out;
+  animation:
+    sa-pulse-slow 18s infinite ease-in-out,
+    sa-drift-2 24s infinite ease-in-out;
   animation-delay: -3s, 0s;
 }
 
 @keyframes sa-pulse-slow {
-  0%, 100% { opacity: 0.2; transform: scale(1); }
-  50%      { opacity: 0.4; transform: scale(1.15); }
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(1.15);
+  }
 }
 
 @keyframes sa-drift-1 {
-  0%, 100% { transform: translateX(0) translateY(0); }
-  25%      { transform: translateX(20px) translateY(-15px); }
-  50%      { transform: translateX(0) translateY(-30px); }
-  75%      { transform: translateX(-20px) translateY(-15px); }
+  0%,
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(20px) translateY(-15px);
+  }
+  50% {
+    transform: translateX(0) translateY(-30px);
+  }
+  75% {
+    transform: translateX(-20px) translateY(-15px);
+  }
 }
 
 @keyframes sa-drift-2 {
-  0%, 100% { transform: translateX(0) translateY(0); }
-  25%      { transform: translateX(-30px) translateY(20px); }
-  50%      { transform: translateX(0) translateY(30px); }
-  75%      { transform: translateX(30px) translateY(20px); }
+  0%,
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+  25% {
+    transform: translateX(-30px) translateY(20px);
+  }
+  50% {
+    transform: translateX(0) translateY(30px);
+  }
+  75% {
+    transform: translateX(30px) translateY(20px);
+  }
 }
 
 /* Enhanced frosted-glass card with depth */
@@ -254,9 +315,15 @@
   }
 }
 
-.sa-delay-1 { animation-delay: 0.15s; }
-.sa-delay-2 { animation-delay: 0.35s; }
-.sa-delay-3 { animation-delay: 0.55s; }
+.sa-delay-1 {
+  animation-delay: 0.15s;
+}
+.sa-delay-2 {
+  animation-delay: 0.35s;
+}
+.sa-delay-3 {
+  animation-delay: 0.55s;
+}
 
 /* ─── ANALYZING OVERLAY — Premium visual feedback ─── */
 
@@ -272,8 +339,12 @@
 }
 
 @keyframes sa-rotate-smooth {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Enhanced scanline with glow */
@@ -328,11 +399,13 @@
 
 /* Pulsing scan guide ring — organic breathing motion */
 .sa-scan-guide {
-  animation: sa-organic-pulse-enhanced 4.5s cubic-bezier(0.4, 0.2, 0.6, 0.8) infinite;
+  animation: sa-organic-pulse-enhanced 4.5s cubic-bezier(0.4, 0.2, 0.6, 0.8)
+    infinite;
 }
 
 @keyframes sa-organic-pulse-enhanced {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.4;
     filter: drop-shadow(0 0 8px rgba(168, 197, 171, 0.2));
@@ -349,14 +422,19 @@
 /* Smooth progress bar animation */
 .sa-progress {
   height: 3px;
-  background: linear-gradient(90deg, #DCE5DD, #d8a657);
+  background: linear-gradient(90deg, #dce5dd, #d8a657);
   border-radius: 2px;
   animation: sa-progress-flow 2s ease-in-out infinite;
 }
 
 @keyframes sa-progress-flow {
-  0%, 100% { box-shadow: 0 0 12px rgba(168, 197, 171, 0.4); }
-  50%      { box-shadow: 0 0 24px rgba(216, 166, 87, 0.6); }
+  0%,
+  100% {
+    box-shadow: 0 0 12px rgba(168, 197, 171, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(216, 166, 87, 0.6);
+  }
 }
 
 /* Step indicator with smooth transitions */
@@ -405,9 +483,21 @@
 }
 
 @keyframes sa-quote-fade {
-  0%, 10% { opacity: 0; transform: translateY(8px); }
-  20%, 80% { opacity: 1; transform: translateY(0); }
-  90%, 100% { opacity: 0; transform: translateY(-8px); }
+  0%,
+  10% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  20%,
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90%,
+  100% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
 }
 
 /* ─── SCROLL REVEAL ANIMATIONS ─── */
@@ -416,8 +506,9 @@
 .sa-scroll-reveal {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Revealed state — visible and in place */
@@ -427,18 +518,29 @@
 }
 
 /* Staggered reveal for multiple elements */
-.sa-scroll-reveal:nth-child(1) { transition-delay: 0ms; }
-.sa-scroll-reveal:nth-child(2) { transition-delay: 80ms; }
-.sa-scroll-reveal:nth-child(3) { transition-delay: 160ms; }
-.sa-scroll-reveal:nth-child(4) { transition-delay: 240ms; }
-.sa-scroll-reveal:nth-child(5) { transition-delay: 320ms; }
+.sa-scroll-reveal:nth-child(1) {
+  transition-delay: 0ms;
+}
+.sa-scroll-reveal:nth-child(2) {
+  transition-delay: 80ms;
+}
+.sa-scroll-reveal:nth-child(3) {
+  transition-delay: 160ms;
+}
+.sa-scroll-reveal:nth-child(4) {
+  transition-delay: 240ms;
+}
+.sa-scroll-reveal:nth-child(5) {
+  transition-delay: 320ms;
+}
 
 /* Alternative: slide from left */
 .sa-scroll-reveal-left {
   opacity: 0;
   transform: translateX(-32px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .sa-scroll-reveal-left.is-revealed {
@@ -450,8 +552,9 @@
 .sa-scroll-reveal-right {
   opacity: 0;
   transform: translateX(32px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .sa-scroll-reveal-right.is-revealed {
@@ -463,8 +566,9 @@
 .sa-scroll-reveal-scale {
   opacity: 0;
   transform: scale(0.92);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .sa-scroll-reveal-scale.is-revealed {
@@ -480,14 +584,22 @@
 
 /* Responsive adjustments */
 @media (max-width: 640px) {
-  .sa-orb--1 { width: 18rem; height: 18rem; }
-  .sa-orb--2 { width: 22rem; height: 22rem; }
+  .sa-orb--1 {
+    width: 18rem;
+    height: 18rem;
+  }
+  .sa-orb--2 {
+    width: 22rem;
+    height: 22rem;
+  }
 
-  .sa-quote { font-size: 14px; max-width: 240px; }
+  .sa-quote {
+    font-size: 14px;
+    max-width: 240px;
+  }
 
   /* Reduce parallax intensity on mobile */
   .sa-parallax-container {
     /* Parallax speed will be adjusted to 0.3 on mobile via JS */
   }
 }
-

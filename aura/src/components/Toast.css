@@ -104,7 +104,9 @@
   border: none;
   cursor: pointer;
   color: var(--ae-muted);
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 .ae-toast-dismiss:hover {
   background: var(--ae-paper-2);

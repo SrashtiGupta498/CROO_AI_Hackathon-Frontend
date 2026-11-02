@@ -35,7 +35,10 @@ export interface UseStoryEditor {
   readingTime: number;
 
   updateField: <K extends keyof Story>(key: K, value: Story[K]) => void;
-  updateSeo: <K extends keyof Story["seo"]>(key: K, value: Story["seo"][K]) => void;
+  updateSeo: <K extends keyof Story["seo"]>(
+    key: K,
+    value: Story["seo"][K],
+  ) => void;
 
   // blocks
   addBlock: (type: BlockType) => void;
@@ -46,7 +49,11 @@ export interface UseStoryEditor {
 
   // string-list helpers (highlights, tags, keywords)
   addToList: (key: "highlights" | "tags", value?: string) => void;
-  updateInList: (key: "highlights" | "tags", index: number, value: string) => void;
+  updateInList: (
+    key: "highlights" | "tags",
+    index: number,
+    value: string,
+  ) => void;
   removeFromList: (key: "highlights" | "tags", index: number) => void;
   addKeyword: (value?: string) => void;
   updateKeyword: (index: number, value: string) => void;
@@ -76,7 +83,9 @@ export function useStoryEditor(storyId?: string): UseStoryEditor {
   const isNew = !storyId || storyId === "new";
 
   const [story, setStory] = useState<Story>(createEmptyStory());
-  const [currentId, setCurrentId] = useState<string | undefined>(isNew ? undefined : storyId);
+  const [currentId, setCurrentId] = useState<string | undefined>(
+    isNew ? undefined : storyId,
+  );
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -102,7 +111,9 @@ export function useStoryEditor(storyId?: string): UseStoryEditor {
       })
       .catch((e: any) => {
         if (!active) return;
-        setError(e?.response?.data?.message || e?.message || "Failed to load story");
+        setError(
+          e?.response?.data?.message || e?.message || "Failed to load story",
+        );
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -123,13 +134,18 @@ export function useStoryEditor(storyId?: string): UseStoryEditor {
   );
 
   const updateSeo = useCallback<UseStoryEditor["updateSeo"]>(
-    (key, value) => mutate((prev) => ({ ...prev, seo: { ...prev.seo, [key]: value } })),
+    (key, value) =>
+      mutate((prev) => ({ ...prev, seo: { ...prev.seo, [key]: value } })),
     [mutate],
   );
 
   /* ── Blocks ── */
   const addBlock = useCallback(
-    (type: BlockType) => mutate((prev) => ({ ...prev, blocks: [...prev.blocks, createEmptyBlock(type)] })),
+    (type: BlockType) =>
+      mutate((prev) => ({
+        ...prev,
+        blocks: [...prev.blocks, createEmptyBlock(type)],
+      })),
     [mutate],
   );
 
@@ -137,13 +153,19 @@ export function useStoryEditor(storyId?: string): UseStoryEditor {
     (id: string, patch: Partial<StoryBlock>) =>
       mutate((prev) => ({
         ...prev,
-        blocks: prev.blocks.map((b) => (b.id === id ? ({ ...b, ...patch } as StoryBlock) : b)),
+        blocks: prev.blocks.map((b) =>
+          b.id === id ? ({ ...b, ...patch } as StoryBlock) : b,
+        ),
       })),
     [mutate],
   );
 
   const removeBlock = useCallback(
-    (id: string) => mutate((prev) => ({ ...prev, blocks: prev.blocks.filter((b) => b.id !== id) })),
+    (id: string) =>
+      mutate((prev) => ({
+        ...prev,
+        blocks: prev.blocks.filter((b) => b.id !== id),
+      })),
     [mutate],
   );
 
@@ -181,26 +203,38 @@ export function useStoryEditor(storyId?: string): UseStoryEditor {
   );
   const updateInList = useCallback(
     (key: "highlights" | "tags", index: number, value: string) =>
-      mutate((prev) => ({ ...prev, [key]: prev[key].map((v, i) => (i === index ? value : v)) })),
+      mutate((prev) => ({
+        ...prev,
+        [key]: prev[key].map((v, i) => (i === index ? value : v)),
+      })),
     [mutate],
   );
   const removeFromList = useCallback(
     (key: "highlights" | "tags", index: number) =>
-      mutate((prev) => ({ ...prev, [key]: prev[key].filter((_, i) => i !== index) })),
+      mutate((prev) => ({
+        ...prev,
+        [key]: prev[key].filter((_, i) => i !== index),
+      })),
     [mutate],
   );
 
   /* ── SEO keywords ── */
   const addKeyword = useCallback(
     (value = "") =>
-      mutate((prev) => ({ ...prev, seo: { ...prev.seo, keywords: [...prev.seo.keywords, value] } })),
+      mutate((prev) => ({
+        ...prev,
+        seo: { ...prev.seo, keywords: [...prev.seo.keywords, value] },
+      })),
     [mutate],
   );
   const updateKeyword = useCallback(
     (index: number, value: string) =>
       mutate((prev) => ({
         ...prev,
-        seo: { ...prev.seo, keywords: prev.seo.keywords.map((k, i) => (i === index ? value : k)) },
+        seo: {
+          ...prev.seo,
+          keywords: prev.seo.keywords.map((k, i) => (i === index ? value : k)),
+        },
       })),
     [mutate],
   );
@@ -208,7 +242,10 @@ export function useStoryEditor(storyId?: string): UseStoryEditor {
     (index: number) =>
       mutate((prev) => ({
         ...prev,
-        seo: { ...prev.seo, keywords: prev.seo.keywords.filter((_, i) => i !== index) },
+        seo: {
+          ...prev.seo,
+          keywords: prev.seo.keywords.filter((_, i) => i !== index),
+        },
       })),
     [mutate],
   );
@@ -229,13 +266,18 @@ export function useStoryEditor(storyId?: string): UseStoryEditor {
     (id: string, patch: Partial<BeautyInsight>) =>
       mutate((prev) => ({
         ...prev,
-        beautyInsights: prev.beautyInsights.map((i) => (i.id === id ? { ...i, ...patch } : i)),
+        beautyInsights: prev.beautyInsights.map((i) =>
+          i.id === id ? { ...i, ...patch } : i,
+        ),
       })),
     [mutate],
   );
   const removeInsight = useCallback(
     (id: string) =>
-      mutate((prev) => ({ ...prev, beautyInsights: prev.beautyInsights.filter((i) => i.id !== id) })),
+      mutate((prev) => ({
+        ...prev,
+        beautyInsights: prev.beautyInsights.filter((i) => i.id !== id),
+      })),
     [mutate],
   );
 
@@ -250,11 +292,15 @@ export function useStoryEditor(storyId?: string): UseStoryEditor {
   );
   const updateFaq = useCallback(
     (id: string, patch: Partial<FAQItem>) =>
-      mutate((prev) => ({ ...prev, faq: prev.faq.map((f) => (f.id === id ? { ...f, ...patch } : f)) })),
+      mutate((prev) => ({
+        ...prev,
+        faq: prev.faq.map((f) => (f.id === id ? { ...f, ...patch } : f)),
+      })),
     [mutate],
   );
   const removeFaq = useCallback(
-    (id: string) => mutate((prev) => ({ ...prev, faq: prev.faq.filter((f) => f.id !== id) })),
+    (id: string) =>
+      mutate((prev) => ({ ...prev, faq: prev.faq.filter((f) => f.id !== id) })),
     [mutate],
   );
 
@@ -271,12 +317,18 @@ export function useStoryEditor(storyId?: string): UseStoryEditor {
     (id: string, patch: Partial<SourceItem>) =>
       mutate((prev) => ({
         ...prev,
-        sources: prev.sources.map((s) => (s.id === id ? { ...s, ...patch } : s)),
+        sources: prev.sources.map((s) =>
+          s.id === id ? { ...s, ...patch } : s,
+        ),
       })),
     [mutate],
   );
   const removeSource = useCallback(
-    (id: string) => mutate((prev) => ({ ...prev, sources: prev.sources.filter((s) => s.id !== id) })),
+    (id: string) =>
+      mutate((prev) => ({
+        ...prev,
+        sources: prev.sources.filter((s) => s.id !== id),
+      })),
     [mutate],
   );
 
@@ -298,12 +350,14 @@ export function useStoryEditor(storyId?: string): UseStoryEditor {
             ...story.seo,
             slug: story.seo.slug || slugify(story.title),
             metaTitle: story.seo.metaTitle || story.title,
-            metaDescription: story.seo.metaDescription || story.subtitle || story.quickAnswer,
+            metaDescription:
+              story.seo.metaDescription || story.subtitle || story.quickAnswer,
           },
         };
 
-        const result =
-          currentId ? await StoryService.update(currentId, payload) : await StoryService.create(payload);
+        const result = currentId
+          ? await StoryService.update(currentId, payload)
+          : await StoryService.create(payload);
 
         const merged = { ...payload, ...result };
         setStory(merged);
@@ -313,7 +367,9 @@ export function useStoryEditor(storyId?: string): UseStoryEditor {
         setTimeout(() => setSavedFlash(false), 2200);
         return merged;
       } catch (e: any) {
-        setError(e?.response?.data?.message || e?.message || "Failed to save story");
+        setError(
+          e?.response?.data?.message || e?.message || "Failed to save story",
+        );
         return null;
       } finally {
         setSaving(false);
@@ -331,7 +387,9 @@ export function useStoryEditor(storyId?: string): UseStoryEditor {
       await StoryService.remove(currentId);
       return true;
     } catch (e: any) {
-      setError(e?.response?.data?.message || e?.message || "Failed to delete story");
+      setError(
+        e?.response?.data?.message || e?.message || "Failed to delete story",
+      );
       return false;
     } finally {
       setDeleting(false);

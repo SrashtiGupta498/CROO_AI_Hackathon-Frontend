@@ -60,7 +60,7 @@ const SEVERITY_WORD: Record<string, string> = {
 };
 
 export function buildRecommendations(
-  analysis: SelfieAnalysis | null
+  analysis: SelfieAnalysis | null,
 ): RecommendationGroup[] {
   if (!analysis || analysis.status !== "ok") return [];
 
@@ -103,7 +103,7 @@ export function buildRecommendations(
       score: item.score_0_100,
       dosha: entry.dosha,
       remedies: entry.remedies,
-      chemical: showsActives(item.severity) ? entry.chemical ?? [] : [],
+      chemical: showsActives(item.severity) ? (entry.chemical ?? []) : [],
       products: entry.products,
     });
   }
@@ -125,7 +125,10 @@ export function buildRecommendations(
       score: rednessScore,
       dosha: entry.dosha,
       remedies: entry.remedies,
-      chemical: rednessScore >= REDNESS_SCORE_TRIGGER + 15 ? entry.chemical ?? [] : [],
+      chemical:
+        rednessScore >= REDNESS_SCORE_TRIGGER + 15
+          ? (entry.chemical ?? [])
+          : [],
       products: entry.products,
     });
   }
@@ -157,8 +160,7 @@ export function buildRecommendations(
       // Measurement-derived, so phrase it as what was measured — there is no
       // classifier confidence to quote any more.
       reason:
-        analysis.skin_type?.note ??
-        `Your skin measured in the ${type} range`,
+        analysis.skin_type?.note ?? `Your skin measured in the ${type} range`,
       dosha: entry.dosha,
       remedies: entry.remedies,
       chemical: [], // base ritual stays natural — the concern groups carry actives
@@ -184,7 +186,9 @@ export function buildRecommendations(
  * Builds the targeted acne product plan — the escalation block shown only when
  * acne is detected at moderate/significant severity. Returns null otherwise.
  */
-export function buildAcnePlan(analysis: SelfieAnalysis | null): AcnePlan | null {
+export function buildAcnePlan(
+  analysis: SelfieAnalysis | null,
+): AcnePlan | null {
   if (!analysis || analysis.status !== "ok") return null;
   const detected: ConcernItem[] =
     analysis.concerns?.status === "ok" && analysis.concerns.detected
@@ -231,7 +235,9 @@ export function buildAcnePlan(analysis: SelfieAnalysis | null): AcnePlan | null 
 }
 
 /** The single most pressing concern label, for saving to the user profile. */
-export function topConcernLabel(analysis: SelfieAnalysis | null): string | null {
+export function topConcernLabel(
+  analysis: SelfieAnalysis | null,
+): string | null {
   const first =
     analysis?.concerns?.status === "ok" && analysis.concerns.detected?.length
       ? analysis.concerns.detected[0]

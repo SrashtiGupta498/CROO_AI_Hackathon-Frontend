@@ -43,7 +43,10 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
   // lone dot reads as broken.
   if (slides.length === 1) {
     return (
-      <div className={`overflow-hidden ${radiusClassName}`} style={{ aspectRatio: aspect }}>
+      <div
+        className={`overflow-hidden ${radiusClassName}`}
+        style={{ aspectRatio: aspect }}
+      >
         <img src={slides[0]} alt={alt} className="w-full h-full object-cover" />
       </div>
     );
@@ -55,16 +58,30 @@ export const ImageCarousel: React.FC<ImageCarouselProps> = ({
         ref={trackRef}
         onScroll={(e) => {
           const t = e.currentTarget;
-          if (t.clientWidth) setActive(Math.round(t.scrollLeft / t.clientWidth));
+          if (t.clientWidth)
+            setActive(Math.round(t.scrollLeft / t.clientWidth));
         }}
         className={`flex overflow-x-auto snap-x snap-mandatory ${radiusClassName}`}
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" } as React.CSSProperties}
+        style={
+          {
+            scrollbarWidth: "none",
+            msOverflowStyle: "none",
+          } as React.CSSProperties
+        }
       >
         {slides.map((src, i) => (
-          <div key={`${src}-${i}`} className="min-w-full snap-center" style={{ aspectRatio: aspect }}>
+          <div
+            key={`${src}-${i}`}
+            className="min-w-full snap-center"
+            style={{ aspectRatio: aspect }}
+          >
             <img
               src={src}
-              alt={slides.length > 1 ? `${alt} (${i + 1} of ${slides.length})` : alt}
+              alt={
+                slides.length > 1
+                  ? `${alt} (${i + 1} of ${slides.length})`
+                  : alt
+              }
               // The first slide is above the fold by definition; the rest can wait.
               loading={i === 0 ? "eager" : "lazy"}
               className="w-full h-full object-cover"

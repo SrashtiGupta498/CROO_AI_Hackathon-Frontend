@@ -54,7 +54,12 @@ const looksLikeHtml = (s: string) => /<[a-z][\s\S]*>/i.test(s);
  *  blank-line paragraph breaks. */
 const Body: React.FC<{ text: string }> = ({ text }) => {
   if (looksLikeHtml(text)) {
-    return <div className="ab-body" dangerouslySetInnerHTML={{ __html: sanitizeHtml(text) }} />;
+    return (
+      <div
+        className="ab-body"
+        dangerouslySetInnerHTML={{ __html: sanitizeHtml(text) }}
+      />
+    );
   }
   return (
     <div className="ab-body">
@@ -92,7 +97,9 @@ const Block: React.FC<{
 
 /* ─── Ingredients — the per-post ingredient library ────────── */
 
-export const IngredientsBlock: React.FC<{ section: ArticleSectionData }> = ({ section }) => {
+export const IngredientsBlock: React.FC<{ section: ArticleSectionData }> = ({
+  section,
+}) => {
   const items = (section.items || []).filter((i) => i && (i.name || i.amount));
   if (!items.length) return null;
 
@@ -111,7 +118,9 @@ export const IngredientsBlock: React.FC<{ section: ArticleSectionData }> = ({ se
               {item.name}
               {item.note && <span className="ab-ing-note">{item.note}</span>}
             </span>
-            {item.amount && <span className="ab-ing-amount">{item.amount}</span>}
+            {item.amount && (
+              <span className="ab-ing-amount">{item.amount}</span>
+            )}
           </li>
         ))}
       </ul>
@@ -121,8 +130,12 @@ export const IngredientsBlock: React.FC<{ section: ArticleSectionData }> = ({ se
 
 /* ─── Instructions ─────────────────────────────────────────── */
 
-export const InstructionsBlock: React.FC<{ section: ArticleSectionData }> = ({ section }) => {
-  const steps = (section.steps || []).map((s) => (s || "").trim()).filter(Boolean);
+export const InstructionsBlock: React.FC<{ section: ArticleSectionData }> = ({
+  section,
+}) => {
+  const steps = (section.steps || [])
+    .map((s) => (s || "").trim())
+    .filter(Boolean);
   if (!steps.length) return null;
 
   return (
@@ -148,41 +161,67 @@ export const InstructionsBlock: React.FC<{ section: ArticleSectionData }> = ({ s
 
 /* ─── Benefits / Tip / Warning / Notes ─────────────────────── */
 
-export const BenefitsBlock: React.FC<{ section: ArticleSectionData }> = ({ section }) =>
+export const BenefitsBlock: React.FC<{ section: ArticleSectionData }> = ({
+  section,
+}) =>
   section.body?.trim() ? (
-    <Block variant="ab-benefits" icon={<Sparkles size={20} />} title={section.title || "Why It Works"}>
+    <Block
+      variant="ab-benefits"
+      icon={<Sparkles size={20} />}
+      title={section.title || "Why It Works"}
+    >
       <Body text={section.body} />
     </Block>
   ) : null;
 
-export const TipBlock: React.FC<{ section: ArticleSectionData }> = ({ section }) =>
+export const TipBlock: React.FC<{ section: ArticleSectionData }> = ({
+  section,
+}) =>
   section.body?.trim() ? (
-    <Block variant="ab-tip" icon={<Lightbulb size={20} />} title={section.title || "Tip"}>
+    <Block
+      variant="ab-tip"
+      icon={<Lightbulb size={20} />}
+      title={section.title || "Tip"}
+    >
       <Body text={section.body} />
     </Block>
   ) : null;
 
-export const WarningBlock: React.FC<{ section: ArticleSectionData }> = ({ section }) =>
+export const WarningBlock: React.FC<{ section: ArticleSectionData }> = ({
+  section,
+}) =>
   section.body?.trim() ? (
     /* role="note" rather than "alert": this is standing safety copy,
        not something that appeared in response to a user action. */
     <div role="note">
-      <Block variant="ab-warning" icon={<AlertTriangle size={20} />} title={section.title || "Caution"}>
+      <Block
+        variant="ab-warning"
+        icon={<AlertTriangle size={20} />}
+        title={section.title || "Caution"}
+      >
         <Body text={section.body} />
       </Block>
     </div>
   ) : null;
 
-export const NotesBlock: React.FC<{ section: ArticleSectionData }> = ({ section }) =>
+export const NotesBlock: React.FC<{ section: ArticleSectionData }> = ({
+  section,
+}) =>
   section.body?.trim() ? (
-    <Block variant="ab-notes" icon={<NotebookPen size={20} />} title={section.title || "Notes"}>
+    <Block
+      variant="ab-notes"
+      icon={<NotebookPen size={20} />}
+      title={section.title || "Notes"}
+    >
       <Body text={section.body} />
     </Block>
   ) : null;
 
 /* ─── Source — a citation, deliberately quiet ──────────────── */
 
-export const SourceBlock: React.FC<{ section: ArticleSectionData }> = ({ section }) => {
+export const SourceBlock: React.FC<{ section: ArticleSectionData }> = ({
+  section,
+}) => {
   const text = section.body?.trim();
   if (!text) return null;
   return (
@@ -202,13 +241,17 @@ const parseFaq = (body: string) => {
     .map((chunk) => chunk.trim())
     .filter(Boolean)
     .forEach((chunk) => {
-      const m = chunk.match(/^Q\s*[:.\-]\s*([\s\S]*?)\n\s*A\s*[:.\-]\s*([\s\S]*)$/i);
+      const m = chunk.match(
+        /^Q\s*[:.-]\s*([\s\S]*?)\n\s*A\s*[:.-]\s*([\s\S]*)$/i,
+      );
       if (m) pairs.push({ q: m[1].trim(), a: m[2].trim() });
     });
   return pairs;
 };
 
-export const FaqBlock: React.FC<{ section: ArticleSectionData }> = ({ section }) => {
+export const FaqBlock: React.FC<{ section: ArticleSectionData }> = ({
+  section,
+}) => {
   const body = section.body?.trim();
   if (!body) return null;
   const pairs = parseFaq(body);
@@ -245,7 +288,9 @@ export const FaqBlock: React.FC<{ section: ArticleSectionData }> = ({ section })
 
 /* ─── Textless hero — title + subtitle, no image ───────────── */
 
-export const HeroTextBlock: React.FC<{ section: ArticleSectionData }> = ({ section }) => {
+export const HeroTextBlock: React.FC<{ section: ArticleSectionData }> = ({
+  section,
+}) => {
   if (!section.title && !section.subtitle) return null;
   return (
     <div className="ab-hero-text">
@@ -261,7 +306,9 @@ export const HeroTextBlock: React.FC<{ section: ArticleSectionData }> = ({ secti
 export const ReelBlock: React.FC<{
   section: ArticleSectionData;
   /** Resolves a reel id to its playable source + title. */
-  resolveReel?: (id: string) => { src?: string; title?: string; poster?: string } | undefined;
+  resolveReel?: (
+    id: string,
+  ) => { src?: string; title?: string; poster?: string } | undefined;
   onOpen?: (id: string) => void;
 }> = ({ section, resolveReel, onOpen }) => {
   const id = section.reelId;
@@ -285,13 +332,26 @@ export const ReelBlock: React.FC<{
           <span className="ab-reel-play" aria-hidden>
             <Play size={20} fill="currentColor" />
           </span>
-          <video src={src} muted playsInline preload="metadata" poster={reel?.poster} />
+          <video
+            src={src}
+            muted
+            playsInline
+            preload="metadata"
+            poster={reel?.poster}
+          />
         </button>
         <div className="ab-reel-meta">
-          <h4 className="ab-head-title" style={{ fontSize: "1.25rem", fontStyle: "italic" }}>
+          <h4
+            className="ab-head-title"
+            style={{ fontSize: "1.25rem", fontStyle: "italic" }}
+          >
             {title}
           </h4>
-          {section.caption && <p className="ab-body" style={{ marginTop: 8 }}>{section.caption}</p>}
+          {section.caption && (
+            <p className="ab-body" style={{ marginTop: 8 }}>
+              {section.caption}
+            </p>
+          )}
         </div>
       </div>
     </Block>

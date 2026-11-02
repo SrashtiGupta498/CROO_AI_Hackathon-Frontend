@@ -7,14 +7,14 @@
 /* Morning → night, matching PALETTE in shared.ts. Keep these two stops in sync
    with `morning.soft` / `night.soft` if that palette is retuned. */
 .daily-today-progress-card {
-  background: linear-gradient(135deg, #F7EFE0 0%, #E5EDE9 100%);
+  background: linear-gradient(135deg, #f7efe0 0%, #e5ede9 100%);
   box-shadow: var(--ae-shadow-md);
 }
 
 .daily-today-ring {
-  transition: stroke-dashoffset .6s cubic-bezier(.22,1,.36,1);
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .daily-today-bar {
-  transition: width .6s cubic-bezier(.22,1,.36,1);
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }

@@ -135,9 +135,7 @@ const articleSlice = createSlice({
           );
           state.posts = [
             ...state.posts,
-            ...incoming.filter(
-              (p: any) => !seen.has(String(p.id ?? p._id)),
-            ),
+            ...incoming.filter((p: any) => !seen.has(String(p.id ?? p._id))),
           ];
         } else {
           state.posts = incoming;

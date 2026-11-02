@@ -60,7 +60,8 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
         </div>
       </div>
       <div className="p-5">
-        {(getCategoryName(article) || getSubcategoryNames(article).length > 0) && (
+        {(getCategoryName(article) ||
+          getSubcategoryNames(article).length > 0) && (
           <div className="flex flex-wrap gap-1.5 mb-2">
             {getCategoryName(article) && (
               <span className="text-[10px] font-bold uppercase tracking-wider text-white bg-sage px-2 py-0.5 rounded-full">
@@ -68,7 +69,10 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
               </span>
             )}
             {getSubcategoryNames(article).map((name) => (
-              <span key={name} className="text-[10px] font-bold uppercase tracking-wider text-sage border border-sage/30 px-2 py-0.5 rounded-full">
+              <span
+                key={name}
+                className="text-[10px] font-bold uppercase tracking-wider text-sage border border-sage/30 px-2 py-0.5 rounded-full"
+              >
                 {name}
               </span>
             ))}
@@ -90,10 +94,12 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
               <i className="far fa-heart mr-1"></i> {article?.stats?.likes ?? 0}
             </span>
             <span>
-              <i className="far fa-comment mr-1"></i> {article?.stats?.comments ?? 0}
+              <i className="far fa-comment mr-1"></i>{" "}
+              {article?.stats?.comments ?? 0}
             </span>
             <span>
-              <i className="far fa-share-square mr-1"></i> {article?.stats?.shares ?? 0}
+              <i className="far fa-share-square mr-1"></i>{" "}
+              {article?.stats?.shares ?? 0}
             </span>
           </div>
         </div>

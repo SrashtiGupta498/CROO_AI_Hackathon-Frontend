@@ -22,7 +22,10 @@
   transform: scale(1.2);
 }
 @media (prefers-reduced-motion: reduce) {
-  .home-px { transform: none !important; transition: none; }
+  .home-px {
+    transform: none !important;
+    transition: none;
+  }
 }
 
 /* ------------------------------------------------------------
@@ -32,7 +35,8 @@
 .home-reveal {
   opacity: 0;
   transform: translateY(38px);
-  transition: opacity 0.9s ease-out,
+  transition:
+    opacity 0.9s ease-out,
     transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .home-reveal.is-inview {
@@ -55,76 +59,139 @@
 
 /* Hero entrance — one-shot stagger down the left column on first paint. */
 @keyframes homeRise {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: none; }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 .home-rise {
   opacity: 0;
   animation: homeRise 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
-.home-rise:nth-child(1) { animation-delay: 0.08s; }
-.home-rise:nth-child(2) { animation-delay: 0.20s; }
-.home-rise:nth-child(3) { animation-delay: 0.36s; }
-.home-rise:nth-child(4) { animation-delay: 0.50s; }
-.home-rise:nth-child(5) { animation-delay: 0.60s; }
-.home-rise:nth-child(6) { animation-delay: 0.68s; }
+.home-rise:nth-child(1) {
+  animation-delay: 0.08s;
+}
+.home-rise:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.home-rise:nth-child(3) {
+  animation-delay: 0.36s;
+}
+.home-rise:nth-child(4) {
+  animation-delay: 0.5s;
+}
+.home-rise:nth-child(5) {
+  animation-delay: 0.6s;
+}
+.home-rise:nth-child(6) {
+  animation-delay: 0.68s;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .home-reveal { opacity: 1; transform: none; transition: none; }
-  .home-wipe { clip-path: none; transform: none; transition: none; }
-  .home-rise { opacity: 1; animation: none; }
+  .home-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .home-wipe {
+    clip-path: none;
+    transform: none;
+    transition: none;
+  }
+  .home-rise {
+    opacity: 1;
+    animation: none;
+  }
 }
 
 .home-faq-answer {
   overflow: hidden;
-  transition: max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  transition:
+    max-height 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease;
 }
 
 /* Media hover: slow, quiet zooms only — no card movement */
-.home-video-card:hover video { transform: scale(1.04); }
-.home-video-card video { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+.home-video-card:hover video {
+  transform: scale(1.04);
+}
+.home-video-card video {
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
 .home-btn-primary {
   background: var(--ae-sage);
-  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    background-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
 }
 .home-btn-primary:hover {
   background: var(--ae-sage-dark);
 }
 
 /* Rotating seal badge — slow enough to read as a still until watched */
-@keyframes homeSpinSlow { to { transform: rotate(360deg); } }
-.home-spin-badge { animation: homeSpinSlow 40s linear infinite; }
+@keyframes homeSpinSlow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.home-spin-badge {
+  animation: homeSpinSlow 40s linear infinite;
+}
 @media (prefers-reduced-motion: reduce) {
-  .home-spin-badge { animation: none; }
+  .home-spin-badge {
+    animation: none;
+  }
 }
 
 .home-glass-card {
-  background: rgba(255,255,255,0.7);
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.6);
+  border: 1px solid rgba(255, 255, 255, 0.6);
 }
 
 /* Full-bleed break-out: lets a grid escape the app's max-w-7xl wrapper and
-   span the whole viewport width (Wix-Studio edge-to-edge look). */
+   span the whole viewport width (Wix-Studio edge-to-edge look).
+
+   No `width: 100vw` here. `100vw` counts the vertical scrollbar but the
+   wrapper's `50%` does not, so the two disagree by half a scrollbar: the band
+   landed 7.5px left of where it should and stopped 8px short of the right
+   edge, leaving a strip of page background running down the right of every
+   full-bleed section — it read as a sidebar following the scroll.
+
+   Letting `width` stay `auto` makes the box fill whatever the two negative
+   margins open up, so both edges are derived the same way and the band
+   reaches both sides however wide the scrollbar is. */
 .home-fullbleed {
-  width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
 }
 /* Edge-to-edge mosaic tile: fills its grid cell, subtle zoom on hover. */
-.home-tile { position: relative; overflow: hidden; }
-.home-tile .home-cat-img { transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); }
-.home-tile:hover .home-cat-img { transform: scale(1.06); }
+.home-tile {
+  position: relative;
+  overflow: hidden;
+}
+.home-tile .home-cat-img {
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.home-tile:hover .home-cat-img {
+  transform: scale(1.06);
+}
 .home-link-underline {
   background-image: linear-gradient(currentColor, currentColor);
   background-size: 0% 1px;
   background-position: 0 100%;
   background-repeat: no-repeat;
-  transition: background-size 0.4s cubic-bezier(0.22,1,0.36,1);
+  transition: background-size 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.home-link-underline:hover { background-size: 100% 1px; }
+.home-link-underline:hover {
+  background-size: 100% 1px;
+}
 
 /* ------------------------------------------------------------
    Static inline style={{}} blobs extracted from the JSX.
@@ -147,7 +214,9 @@
 .home-hero-slide {
   opacity: 0;
   transform: scale(1.07);
-  transition: opacity 2.2s ease-in-out, transform 14s ease-out;
+  transition:
+    opacity 2.2s ease-in-out,
+    transform 14s ease-out;
 }
 .home-hero-slide.is-active {
   opacity: 1;
@@ -189,7 +258,8 @@
   height: 2px;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.3);
-  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+  transition:
+    width 0.6s cubic-bezier(0.22, 1, 0.36, 1),
     background-color 0.6s ease;
 }
 .home-hero-dot:hover {
@@ -217,6 +287,20 @@
   max-width: 460px;
 }
 
+/* Section heading — ONE scale for every section h2 on this page. The markup
+   used to carry four different clamps (2/2.25/2.5rem floors) and only three of
+   the seven set a line-height, so the rest inherited the body's 1.5 and gaped
+   open the moment they wrapped. Serif at regular weight, same as .ae-h2:
+   size and tracking do the work, not boldness. */
+.home-h2 {
+  font-family: var(--ae-font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--ae-ink);
+}
+
 /* Small uppercase section label (repeated across sections) */
 .home-eyebrow {
   font-size: 10px;
@@ -230,16 +314,16 @@
 /* Quote banner — forest on forest. The old gradient ran into near-black,
    which is the one dark move this palette rules out. */
 .home-quote-banner {
-  background: linear-gradient(135deg, #4B695A 0%, #35503F 100%);
+  background: linear-gradient(135deg, #4b695a 0%, #35503f 100%);
 }
 
 /* Quote banner decorative blobs */
 .home-blob-tl {
-  background: radial-gradient(circle, #DCE5DD, transparent);
+  background: radial-gradient(circle, #dce5dd, transparent);
   transform: translate(-30%, -30%);
 }
 .home-blob-br {
-  background: radial-gradient(circle, #C6A66B, transparent);
+  background: radial-gradient(circle, #c6a66b, transparent);
   transform: translate(30%, 30%);
 }
 
@@ -253,7 +337,15 @@
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(38% 55% at 22% 30%, rgba(61, 91, 79, 0.16), transparent 70%),
-    radial-gradient(32% 45% at 78% 75%, rgba(198, 166, 107, 0.18), transparent 70%);
+    radial-gradient(
+      38% 55% at 22% 30%,
+      rgba(61, 91, 79, 0.16),
+      transparent 70%
+    ),
+    radial-gradient(
+      32% 45% at 78% 75%,
+      rgba(198, 166, 107, 0.18),
+      transparent 70%
+    );
   filter: blur(40px);
 }

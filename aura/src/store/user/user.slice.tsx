@@ -61,8 +61,27 @@ const buildSessionUser = (payload: any) => {
  * in-memory Redux copies can be stale. Overwriting storage with a stale token
  * used to log users out right after a successful refresh.
  */
+/**
+ * Pull the user object out of a profile response, whatever shape it arrives in.
+ *
+ * Every backend response goes through Nest's ResponseInterceptor, which wraps
+ * it as { status, message, data }. `data` is then either the user itself
+ * (GET /users/:id, GET /users/me) or { message, user } (PATCH /users/:id/profile).
+ *
+ * The previous `payload?.data?.user || payload?.user || payload` missed the
+ * first of those: on a GET the envelope has no `.data.user` and no `.user`, so
+ * it fell through to the ENVELOPE and merged { status, message, data } into the
+ * session user while dropping every real field. The page then never showed
+ * anything the server had — only whatever localStorage happened to hold.
+ * Unwrapping `.data` first handles all three shapes, bare responses included.
+ */
+const unwrapProfilePayload = (payload: any) => {
+  const body = payload?.data ?? payload;
+  return body?.user ?? body ?? {};
+};
+
 const mergeProfileUser = (stateUser: any, payload: any) => {
-  const userData = payload?.data?.user || payload?.user || payload || {};
+  const userData = unwrapProfilePayload(payload);
   // Profile endpoints never issue tokens; drop any token-ish fields they echo.
   const {
     AccessToken: _a,
@@ -79,8 +98,18 @@ const mergeProfileUser = (stateUser: any, payload: any) => {
     persisted = null;
   }
 
+  // Sessions stored while the bug above was live carry the envelope's own keys.
+  // Drop them on the way through so a stored user heals on the next fetch
+  // instead of keeping a stale nested copy of itself under `data`.
+  const {
+    status: _s,
+    message: _m,
+    data: _d,
+    ...cleanStateUser
+  } = (stateUser || {}) as any;
+
   return {
-    ...stateUser,
+    ...cleanStateUser,
     ...profileFields,
     AccessToken: persisted?.AccessToken || stateUser?.AccessToken,
     RefreshToken: persisted?.RefreshToken || stateUser?.RefreshToken,
@@ -146,13 +175,13 @@ const userSlice = createSlice({
         updateUserProfile.fulfilled,
         (state, action: PayloadAction<any>) => {
           state.loading = false;
-          const finalUser = mergeProfileUser(state.currentUser, action.payload) as User;
+          const finalUser = mergeProfileUser(
+            state.currentUser,
+            action.payload,
+          ) as User;
           state.currentUser = finalUser;
           state.error = null;
-          localStorage.setItem(
-            "currentUser",
-            JSON.stringify(finalUser),
-          );
+          localStorage.setItem("currentUser", JSON.stringify(finalUser));
         },
       )
       .addCase(
@@ -171,13 +200,13 @@ const userSlice = createSlice({
         fetchUserProfile.fulfilled,
         (state, action: PayloadAction<any>) => {
           state.loading = false;
-          const finalUser = mergeProfileUser(state.currentUser, action.payload) as User;
+          const finalUser = mergeProfileUser(
+            state.currentUser,
+            action.payload,
+          ) as User;
           state.currentUser = finalUser;
           state.error = null;
-          localStorage.setItem(
-            "currentUser",
-            JSON.stringify(finalUser),
-          );
+          localStorage.setItem("currentUser", JSON.stringify(finalUser));
         },
       )
       .addCase(
@@ -252,37 +281,49 @@ const userSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchUserSettings.fulfilled, (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.settings = action.payload.data || action.payload;
-        state.error = null;
-        localStorage.setItem("userSettings", JSON.stringify(state.settings));
-      })
-      .addCase(fetchUserSettings.rejected, (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
+      .addCase(
+        fetchUserSettings.fulfilled,
+        (state, action: PayloadAction<any>) => {
+          state.loading = false;
+          state.settings = action.payload.data || action.payload;
+          state.error = null;
+          localStorage.setItem("userSettings", JSON.stringify(state.settings));
+        },
+      )
+      .addCase(
+        fetchUserSettings.rejected,
+        (state, action: PayloadAction<any>) => {
+          state.loading = false;
+          state.error = action.payload as string;
+        },
+      )
       // Update Settings cases
       .addCase(updateUserSettings.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(updateUserSettings.fulfilled, (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        // action.payload is the unwrapped settings object. Merge it in, then
-        // scrub any response-envelope keys that earlier versions may have stored.
-        const mergedSettings: any = { ...state.settings, ...action.payload };
-        delete mergedSettings.status;
-        delete mergedSettings.message;
-        delete mergedSettings.data;
-        state.settings = mergedSettings as UserSettings;
-        state.error = null;
-        localStorage.setItem("userSettings", JSON.stringify(state.settings));
-      })
-      .addCase(updateUserSettings.rejected, (state, action: PayloadAction<any>) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
+      .addCase(
+        updateUserSettings.fulfilled,
+        (state, action: PayloadAction<any>) => {
+          state.loading = false;
+          // action.payload is the unwrapped settings object. Merge it in, then
+          // scrub any response-envelope keys that earlier versions may have stored.
+          const mergedSettings: any = { ...state.settings, ...action.payload };
+          delete mergedSettings.status;
+          delete mergedSettings.message;
+          delete mergedSettings.data;
+          state.settings = mergedSettings as UserSettings;
+          state.error = null;
+          localStorage.setItem("userSettings", JSON.stringify(state.settings));
+        },
+      )
+      .addCase(
+        updateUserSettings.rejected,
+        (state, action: PayloadAction<any>) => {
+          state.loading = false;
+          state.error = action.payload as string;
+        },
+      );
   },
 });
 

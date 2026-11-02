@@ -48,7 +48,10 @@ const JournalPage: React.FC = () => {
         </div>
         <div
           className="flex flex-wrap justify-center gap-2 p-2 rounded-2xl mx-auto w-fit"
-          style={{ backgroundColor: t.surface, border: `1px solid ${t.border}` }}
+          style={{
+            backgroundColor: t.surface,
+            border: `1px solid ${t.border}`,
+          }}
         >
           {JOURNALS.map((j) => {
             const active = j.id === data.id;
@@ -57,7 +60,11 @@ const JournalPage: React.FC = () => {
                 key={j.id}
                 onClick={() => switchJournal(j.id)}
                 className={`px-5 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 ${active ? "text-white" : "bg-transparent"}`}
-                style={active ? { backgroundColor: j.theme.primary } : { color: t.muted }}
+                style={
+                  active
+                    ? { backgroundColor: j.theme.primary }
+                    : { color: t.muted }
+                }
               >
                 <span className="mr-1.5">{j.emoji}</span>
                 {j.label}
@@ -100,7 +107,9 @@ const JournalPage: React.FC = () => {
               </h1>
               <p
                 className="text-lg md:text-xl font-medium max-w-2xl"
-                style={{ color: isDark ? "rgba(255,255,255,0.85)" : `${t.heading}` }}
+                style={{
+                  color: isDark ? "rgba(255,255,255,0.85)" : `${t.heading}`,
+                }}
               >
                 {data.subtitle}
               </p>
@@ -139,7 +148,10 @@ const JournalPage: React.FC = () => {
               <div
                 key={idx}
                 className="p-8 rounded-3xl shadow-sm hover:shadow-md transition-all"
-                style={{ backgroundColor: t.surface, border: `1px solid ${t.border}` }}
+                style={{
+                  backgroundColor: t.surface,
+                  border: `1px solid ${t.border}`,
+                }}
               >
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center font-bold mb-6"
@@ -147,8 +159,18 @@ const JournalPage: React.FC = () => {
                 >
                   {idx + 1}
                 </div>
-                <h4 className="text-lg font-bold mb-3" style={{ color: t.heading }}>{b.title}</h4>
-                <p className="text-sm leading-relaxed" style={{ color: t.muted }}>{b.desc}</p>
+                <h4
+                  className="text-lg font-bold mb-3"
+                  style={{ color: t.heading }}
+                >
+                  {b.title}
+                </h4>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: t.muted }}
+                >
+                  {b.desc}
+                </p>
               </div>
             ))}
           </div>
@@ -165,7 +187,8 @@ const JournalPage: React.FC = () => {
                 The Routine
               </h2>
               <p className="leading-relaxed" style={{ color: t.body }}>
-                Follow the steps in order — it's quick once you get the flow down.
+                Follow the steps in order — it's quick once you get the flow
+                down.
               </p>
             </div>
             <div className="space-y-6">
@@ -173,15 +196,26 @@ const JournalPage: React.FC = () => {
                 <div
                   key={idx}
                   className="group flex gap-6 p-6 rounded-3xl shadow-sm hover:shadow-md transition-all duration-300"
-                  style={{ backgroundColor: t.surface, border: `1px solid ${t.border}` }}
+                  style={{
+                    backgroundColor: t.surface,
+                    border: `1px solid ${t.border}`,
+                  }}
                 >
                   <div className="flex-none">
-                    <span className="font-serif italic text-4xl opacity-35" style={{ color: t.primary }}>
+                    <span
+                      className="font-serif italic text-4xl opacity-35"
+                      style={{ color: t.primary }}
+                    >
                       {String(idx + 1).padStart(2, "0")}
                     </span>
                   </div>
                   <div className="pt-2">
-                    <p className="text-lg font-semibold leading-snug" style={{ color: t.heading }}>{step}</p>
+                    <p
+                      className="text-lg font-semibold leading-snug"
+                      style={{ color: t.heading }}
+                    >
+                      {step}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -205,7 +239,10 @@ const JournalPage: React.FC = () => {
                     onMouseEnter={() => videoRefs.current[idx]?.play()}
                     onMouseLeave={() => {
                       const v = videoRefs.current[idx];
-                      if (v) { v.pause(); v.currentTime = 0; }
+                      if (v) {
+                        v.pause();
+                        v.currentTime = 0;
+                      }
                     }}
                   >
                     <video
@@ -216,7 +253,9 @@ const JournalPage: React.FC = () => {
                         videoRefs.current[idx] = el;
                       }}
                       src={resolveAsset(video.video)}
-                      muted loop playsInline
+                      muted
+                      loop
+                      playsInline
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -227,7 +266,14 @@ const JournalPage: React.FC = () => {
                     </div>
                     <div className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                       <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="white"
+                        >
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
                       </div>
                     </div>
                   </div>
@@ -241,19 +287,37 @@ const JournalPage: React.FC = () => {
                 <div
                   key={idx}
                   className="p-6 rounded-2xl"
-                  style={{ backgroundColor: t.primarySoft, border: `1px solid ${t.border}` }}
+                  style={{
+                    backgroundColor: t.primarySoft,
+                    border: `1px solid ${t.border}`,
+                  }}
                 >
-                  <h4 className="text-base font-bold mb-2" style={{ color: t.heading }}>{item.heading}</h4>
-                  <p className="text-sm leading-relaxed" style={{ color: t.body }}>{item.body}</p>
+                  <h4
+                    className="text-base font-bold mb-2"
+                    style={{ color: t.heading }}
+                  >
+                    {item.heading}
+                  </h4>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: t.body }}
+                  >
+                    {item.body}
+                  </p>
                 </div>
               ))}
             </div>
 
             {/* Pro Tip */}
-            <div className="p-8 rounded-[2rem] text-white shadow-xl relative overflow-hidden group" style={{ backgroundColor: t.primary }}>
+            <div
+              className="p-8 rounded-[2rem] text-white shadow-xl relative overflow-hidden group"
+              style={{ backgroundColor: t.primary }}
+            >
               <div className="relative z-10">
                 <h4 className="font-serif text-xl font-bold mb-4">Pro Tip</h4>
-                <p className="text-white/85 leading-relaxed italic">"{data.proTip}"</p>
+                <p className="text-white/85 leading-relaxed italic">
+                  "{data.proTip}"
+                </p>
               </div>
               <div className="absolute top-[-20px] right-[-20px] w-32 h-32 bg-white/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700" />
             </div>
@@ -265,7 +329,10 @@ const JournalPage: React.FC = () => {
       <section className="py-20" style={{ backgroundColor: t.surface }}>
         <div className="max-w-3xl mx-auto px-6">
           <div className="text-center mb-12">
-            <span className="text-[10px] font-bold tracking-[0.3em] uppercase block mb-3" style={{ color: t.primary }}>
+            <span
+              className="text-[10px] font-bold tracking-[0.3em] uppercase block mb-3"
+              style={{ color: t.primary }}
+            >
               No dumb questions
             </span>
             <h2
@@ -282,22 +349,42 @@ const JournalPage: React.FC = () => {
                 <div
                   key={idx}
                   className="rounded-2xl overflow-hidden"
-                  style={{ backgroundColor: t.bg, border: `1px solid ${t.border}` }}
+                  style={{
+                    backgroundColor: t.bg,
+                    border: `1px solid ${t.border}`,
+                  }}
                 >
                   <button
                     onClick={() => setOpenFaq(open ? null : idx)}
                     className="w-full flex items-center justify-between gap-4 text-left px-6 py-5"
                   >
-                    <span className="font-bold text-base md:text-lg" style={{ color: t.heading }}>{faq.q}</span>
+                    <span
+                      className="font-bold text-base md:text-lg"
+                      style={{ color: t.heading }}
+                    >
+                      {faq.q}
+                    </span>
                     <span
                       className="flex-none w-7 h-7 rounded-full flex items-center justify-center text-lg font-bold transition-transform duration-300"
-                      style={{ backgroundColor: t.primarySoft, color: t.primary, transform: open ? "rotate(45deg)" : "none" }}
+                      style={{
+                        backgroundColor: t.primarySoft,
+                        color: t.primary,
+                        transform: open ? "rotate(45deg)" : "none",
+                      }}
                     >
                       +
                     </span>
                   </button>
-                  <div className="journal-faq-body px-6" style={{ maxHeight: open ? 240 : 0, opacity: open ? 1 : 0 }}>
-                    <p className="pb-5 leading-relaxed" style={{ color: t.body }}>{faq.a}</p>
+                  <div
+                    className="journal-faq-body px-6"
+                    style={{ maxHeight: open ? 240 : 0, opacity: open ? 1 : 0 }}
+                  >
+                    <p
+                      className="pb-5 leading-relaxed"
+                      style={{ color: t.body }}
+                    >
+                      {faq.a}
+                    </p>
                   </div>
                 </div>
               );
@@ -311,7 +398,10 @@ const JournalPage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-end justify-between mb-16">
             <div>
-              <span className="text-[10px] font-bold tracking-[0.3em] uppercase block mb-4" style={{ color: t.primary }}>
+              <span
+                className="text-[10px] font-bold tracking-[0.3em] uppercase block mb-4"
+                style={{ color: t.primary }}
+              >
                 Deep Dive
               </span>
               <h2
@@ -331,19 +421,35 @@ const JournalPage: React.FC = () => {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {ARTICLES.slice(0, 3).map((article) => (
-              <div key={article.id} onClick={() => navigate(`/article/${article.id}`)} className="group cursor-pointer">
+              <div
+                key={article.id}
+                onClick={() => navigate(`/article/${article.id}`)}
+                className="group cursor-pointer"
+              >
                 <div className="aspect-[4/3] rounded-3xl overflow-hidden mb-6 relative shadow-md">
-                  <img src={article.imageUrl} alt={article.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                  <img
+                    src={article.imageUrl}
+                    alt={article.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
                   <div className="absolute top-4 left-4">
-                    <span className="px-3 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-widest text-white" style={{ backgroundColor: t.primary }}>
+                    <span
+                      className="px-3 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-widest text-white"
+                      style={{ backgroundColor: t.primary }}
+                    >
                       {article.category}
                     </span>
                   </div>
                 </div>
-                <h3 className="text-xl font-bold mb-2 leading-snug transition-colors" style={{ color: t.heading }}>
+                <h3
+                  className="text-xl font-bold mb-2 leading-snug transition-colors"
+                  style={{ color: t.heading }}
+                >
                   {article.title}
                 </h3>
-                <p className="text-sm line-clamp-2" style={{ color: t.muted }}>{article.content}</p>
+                <p className="text-sm line-clamp-2" style={{ color: t.muted }}>
+                  {article.content}
+                </p>
               </div>
             ))}
           </div>

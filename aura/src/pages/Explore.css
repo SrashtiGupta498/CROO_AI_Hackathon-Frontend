@@ -58,7 +58,9 @@
   padding: 0.7rem 1.35rem;
   line-height: 1;
   color: var(--ae-ink);
-  transition: background-color 0.25s ease-in-out, color 0.25s ease-in-out,
+  transition:
+    background-color 0.25s ease-in-out,
+    color 0.25s ease-in-out,
     border-color 0.25s ease-in-out;
 }
 .explore-filter-pill:hover:not(.explore-filter-pill-active) {
@@ -79,8 +81,16 @@
 /* Fade the row's trailing edge so an overflowing pill strip reads as
    scrollable instead of cut off. */
 .explore-filter-row {
-  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent 100%);
-  mask-image: linear-gradient(to right, #000 calc(100% - 48px), transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    #000 calc(100% - 48px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    #000 calc(100% - 48px),
+    transparent 100%
+  );
   scroll-snap-type: x proximity;
 }
 .explore-filter-row > * {
@@ -94,16 +104,22 @@
   margin-top: 0.65rem;
   opacity: 0;
   transform: translateY(-3px);
-  transition: opacity 0.35s ease, transform 0.35s ease;
+  transition:
+    opacity 0.35s ease,
+    transform 0.35s ease;
 }
 .explore-filter-count.is-shown {
   opacity: 1;
   transform: none;
 }
 .explore-reset {
-  transition: opacity 0.3s ease, color 0.2s ease-in-out;
+  transition:
+    opacity 0.3s ease,
+    color 0.2s ease-in-out;
 }
-.explore-reset:hover { color: var(--ae-ink); }
+.explore-reset:hover {
+  color: var(--ae-ink);
+}
 .explore-reset-hidden {
   opacity: 0;
   pointer-events: none;
@@ -131,7 +147,11 @@
 }
 /* Hover gradient — was an inline style on the overlay div. */
 .explore-card-overlay {
-  background: linear-gradient(to top, rgba(61, 91, 79, 0.65) 0%, transparent 55%);
+  background: linear-gradient(
+    to top,
+    rgba(61, 91, 79, 0.65) 0%,
+    transparent 55%
+  );
 }
 
 /* Entrance animations — were inline style={{ animation: ... }} props. */

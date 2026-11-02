@@ -18,23 +18,34 @@ interface EditorSidebarProps {
 /* count filled items per section for the little badge */
 const sectionCount = (story: Story, id: string): number => {
   switch (id) {
-    case "content": return story.blocks.length;
-    case "highlights": return story.highlights.length;
-    case "insights": return story.beautyInsights.length;
-    case "faq": return story.faq.length;
-    case "sources": return story.sources.length;
-    case "seo": return story.seo.keywords.length;
-    default: return 0;
+    case "content":
+      return story.blocks.length;
+    case "highlights":
+      return story.highlights.length;
+    case "insights":
+      return story.beautyInsights.length;
+    case "faq":
+      return story.faq.length;
+    case "sources":
+      return story.sources.length;
+    case "seo":
+      return story.seo.keywords.length;
+    default:
+      return 0;
   }
 };
 
-const EditorSidebar: React.FC<EditorSidebarProps> = ({ story, active, onSelect, wordCount, readingTime }) => {
+const EditorSidebar: React.FC<EditorSidebarProps> = ({
+  story,
+  active,
+  onSelect,
+  wordCount,
+  readingTime,
+}) => {
   return (
     <aside className="editor-sidebar">
       <div className="editor-sidebar-card">
-        <p className="editor-sidebar-heading">
-          Sections
-        </p>
+        <p className="editor-sidebar-heading">Sections</p>
 
         <nav className="flex flex-col gap-0.5">
           {EDITOR_SECTIONS.map((s) => {
@@ -72,9 +83,7 @@ const EditorSidebar: React.FC<EditorSidebarProps> = ({ story, active, onSelect, 
 
       {/* Stats card */}
       <div className="editor-sidebar-stats">
-        <p className="editor-sidebar-stats-heading">
-          Overview
-        </p>
+        <p className="editor-sidebar-stats-heading">Overview</p>
         <div className="mb-2.5 flex justify-between">
           <span className="text-[13px] opacity-75">Words</span>
           <span className="text-[14px] font-extrabold">{wordCount}</span>
@@ -85,7 +94,9 @@ const EditorSidebar: React.FC<EditorSidebarProps> = ({ story, active, onSelect, 
         </div>
         <div className="flex justify-between">
           <span className="text-[13px] opacity-75">Blocks</span>
-          <span className="text-[14px] font-extrabold">{story.blocks.length}</span>
+          <span className="text-[14px] font-extrabold">
+            {story.blocks.length}
+          </span>
         </div>
       </div>
     </aside>

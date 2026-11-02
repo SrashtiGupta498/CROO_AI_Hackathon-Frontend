@@ -14,11 +14,11 @@
   user-select: none;
 }
 
-.ae-logo[role='button'] {
+.ae-logo[role="button"] {
   cursor: pointer;
 }
 
-.ae-logo[role='button']:focus-visible {
+.ae-logo[role="button"]:focus-visible {
   outline: 2px solid var(--ae-sage);
   outline-offset: 4px;
   border-radius: 6px;
@@ -37,11 +37,13 @@
   color: var(--ae-logo-ink);
   background: var(--ae-logo-badge-bg);
   border: 1px solid var(--ae-logo-badge-border);
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-    background 0.3s ease, border-color 0.3s ease;
+  transition:
+    transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.3s ease,
+    border-color 0.3s ease;
 }
 
-.ae-logo[role='button']:hover .ae-logo__badge {
+.ae-logo[role="button"]:hover .ae-logo__badge {
   transform: rotate(-6deg) scale(1.05);
   background: var(--ae-logo-badge-bg-hover);
   border-color: var(--ae-logo-badge-border-hover);
@@ -87,16 +89,37 @@
 
 /* ─── Sizes ─── */
 
-.ae-logo--sm { gap: 8px; }
-.ae-logo--sm .ae-logo__badge { width: 30px; height: 30px; border-radius: 10px; }
-.ae-logo--sm .ae-logo__word { font-size: 1.08rem; }
+.ae-logo--sm {
+  gap: 8px;
+}
+.ae-logo--sm .ae-logo__badge {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+}
+.ae-logo--sm .ae-logo__word {
+  font-size: 1.08rem;
+}
 
-.ae-logo--md .ae-logo__badge { width: 36px; height: 36px; }
-.ae-logo--md .ae-logo__word { font-size: 1.32rem; }
+.ae-logo--md .ae-logo__badge {
+  width: 36px;
+  height: 36px;
+}
+.ae-logo--md .ae-logo__word {
+  font-size: 1.32rem;
+}
 
-.ae-logo--lg { gap: 12px; }
-.ae-logo--lg .ae-logo__badge { width: 44px; height: 44px; border-radius: 15px; }
-.ae-logo--lg .ae-logo__word { font-size: 1.6rem; }
+.ae-logo--lg {
+  gap: 12px;
+}
+.ae-logo--lg .ae-logo__badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 15px;
+}
+.ae-logo--lg .ae-logo__word {
+  font-size: 1.6rem;
+}
 
 /* ─── Tones ─── */
 
@@ -112,7 +135,9 @@
 
 /* On ivory the mark is forest, not ink — the wordmark stays charcoal so the
    two read as separate elements rather than one solid block. */
-.ae-logo--light .ae-logo__badge { color: var(--ae-sage); }
+.ae-logo--light .ae-logo__badge {
+  color: var(--ae-sage);
+}
 
 .ae-logo--dark {
   --ae-logo-ink: #ffffff;
@@ -124,9 +149,15 @@
   --ae-logo-badge-border-hover: rgba(255, 255, 255, 0.34);
 }
 
-.ae-logo--dark .ae-logo__badge { color: var(--ae-sage-light); }
+.ae-logo--dark .ae-logo__badge {
+  color: var(--ae-sage-light);
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .ae-logo__badge { transition: none; }
-  .ae-logo[role='button']:hover .ae-logo__badge { transform: none; }
+  .ae-logo__badge {
+    transition: none;
+  }
+  .ae-logo[role="button"]:hover .ae-logo__badge {
+    transform: none;
+  }
 }

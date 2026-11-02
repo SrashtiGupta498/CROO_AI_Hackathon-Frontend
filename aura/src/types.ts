@@ -1,4 +1,3 @@
-
 export interface PostStats {
   views?: number;
   likes?: number;
@@ -110,8 +109,8 @@ export interface UserSettings {
   mailchimpListId?: string;
 }
 
-export interface UpdateProfilePayload extends Partial<User> {}
-export interface UpdateSettingsPayload extends Partial<UserSettings> {}
+export type UpdateProfilePayload = Partial<User>;
+export type UpdateSettingsPayload = Partial<UserSettings>;
 
 export interface LoginPayload {
   Email: string;

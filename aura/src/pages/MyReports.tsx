@@ -8,10 +8,7 @@ import {
   downloadUserReportsPdf,
   SkinReport,
 } from "../services/skinReports";
-import {
-  fetchMyRemedyUsage,
-  MyRemedyUsage,
-} from "../services/remedyUsage";
+import { fetchMyRemedyUsage, MyRemedyUsage } from "../services/remedyUsage";
 import { CONCERN_LABELS } from "../data/remedies";
 import { describeError } from "../services/errorMessage";
 
@@ -82,7 +79,7 @@ const MyReports = () => {
   // Prefer the id from the reports themselves; fall back to the session id.
   const pdfUserId = useMemo(
     () => reports[0]?.userId || userId,
-    [reports, userId]
+    [reports, userId],
   );
 
   const onDownload = async () => {
@@ -166,7 +163,9 @@ const MyReports = () => {
               <div className="mb-6 bg-cream border border-primary/5 rounded-2xl p-5 shadow-sm">
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="font-bold text-mocha flex items-center gap-2">
-                    <span className="material-icons-round text-primary">spa</span>
+                    <span className="material-icons-round text-primary">
+                      spa
+                    </span>
                     Remedies you've used
                   </h3>
                   <span className="text-[11px] text-mocha/40 font-semibold">

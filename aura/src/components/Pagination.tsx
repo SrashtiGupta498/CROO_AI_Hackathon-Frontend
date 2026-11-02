@@ -16,7 +16,11 @@ interface PaginationProps {
 function pageWindow(current: number, total: number): (number | "…")[] {
   const delta = 1; // neighbours shown on each side of the current page
   const ends: number[] = [];
-  for (let i = Math.max(2, current - delta); i <= Math.min(total - 1, current + delta); i++) {
+  for (
+    let i = Math.max(2, current - delta);
+    i <= Math.min(total - 1, current + delta);
+    i++
+  ) {
     ends.push(i);
   }
   const withEnds = [1, ...ends, total].filter(
@@ -35,7 +39,12 @@ function pageWindow(current: number, total: number): (number | "…")[] {
   return out;
 }
 
-const Pagination: React.FC<PaginationProps> = ({ page, totalPages, onChange, className = "" }) => {
+const Pagination: React.FC<PaginationProps> = ({
+  page,
+  totalPages,
+  onChange,
+  className = "",
+}) => {
   if (totalPages <= 1) return null;
   const go = (p: number) => {
     const next = Math.min(totalPages, Math.max(1, p));
@@ -60,7 +69,10 @@ const Pagination: React.FC<PaginationProps> = ({ page, totalPages, onChange, cla
 
       {pageWindow(page, totalPages).map((p, i) =>
         p === "…" ? (
-          <span key={`gap-${i}`} className="px-1.5 text-sm text-muted select-none">
+          <span
+            key={`gap-${i}`}
+            className="px-1.5 text-sm text-muted select-none"
+          >
             …
           </span>
         ) : (

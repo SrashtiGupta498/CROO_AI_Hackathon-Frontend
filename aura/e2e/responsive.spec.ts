@@ -51,7 +51,9 @@ test.describe("Responsive — no horizontal overflow", () => {
 
   for (const vp of VIEWPORTS) {
     for (const route of PUBLIC_ROUTES) {
-      test(`${vp.name} · ${route} does not scroll sideways`, async ({ page }) => {
+      test(`${vp.name} · ${route} does not scroll sideways`, async ({
+        page,
+      }) => {
         await page.setViewportSize({ width: vp.width, height: vp.height });
         await mockBackend(page);
         await gotoApp(page, route);
@@ -73,7 +75,9 @@ test.describe("Responsive — navigation chrome swaps at the breakpoint", () => 
     await page.addInitScript(() => localStorage.clear());
   });
 
-  test("mobile shows the bottom nav and hides the desktop nav", async ({ page }) => {
+  test("mobile shows the bottom nav and hides the desktop nav", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await mockBackend(page);
     await gotoApp(page, "/");
@@ -84,7 +88,9 @@ test.describe("Responsive — navigation chrome swaps at the breakpoint", () => 
     await expect(page.getByTestId("desktop-nav")).toBeHidden();
   });
 
-  test("tablet still shows the mobile bottom nav (below the lg breakpoint)", async ({ page }) => {
+  test("tablet still shows the mobile bottom nav (below the lg breakpoint)", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
     await mockBackend(page);
     await gotoApp(page, "/");
@@ -92,7 +98,9 @@ test.describe("Responsive — navigation chrome swaps at the breakpoint", () => 
     await expect(page.getByTestId("mobile-bottom-nav")).toBeVisible();
   });
 
-  test("desktop shows the desktop nav and hides the bottom nav", async ({ page }) => {
+  test("desktop shows the desktop nav and hides the bottom nav", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await mockBackend(page);
     await gotoApp(page, "/");
@@ -105,7 +113,9 @@ test.describe("Responsive — navigation chrome swaps at the breakpoint", () => 
      z-index 50. Where both showed, the FAB covered the nav's right-hand item
      (Journal) and ate its clicks. The FAB is now desktop-only — these two
      assert the rule from both sides so the overlap can't come back. */
-  test("the AI FAB is hidden wherever the bottom nav is on screen", async ({ page }) => {
+  test("the AI FAB is hidden wherever the bottom nav is on screen", async ({
+    page,
+  }) => {
     await mockBackend(page);
 
     for (const vp of [
@@ -123,7 +133,9 @@ test.describe("Responsive — navigation chrome swaps at the breakpoint", () => 
     }
   });
 
-  test("every bottom-nav item is clickable, not covered by an overlay", async ({ page }) => {
+  test("every bottom-nav item is clickable, not covered by an overlay", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await mockBackend(page);
     await gotoApp(page, "/");

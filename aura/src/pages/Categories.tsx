@@ -6,7 +6,6 @@ import { fetchCategories } from "../store/categories/categories.action";
 import CategoryFlashCard, { LeafIcon } from "../components/CategoryFlashCard";
 import "./Categories.css";
 
-
 import { ACCENT } from "../styles/brand";
 const CardSkeleton = () => (
   <div className="rounded-[20px] bg-line animate-pulse min-h-[150px]" />
@@ -16,10 +15,14 @@ const CardSkeleton = () => (
 const Categories: React.FC = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
-  const { categories, loading } = useSelector((state: RootState) => state.category);
+  const { categories, loading } = useSelector(
+    (state: RootState) => state.category,
+  );
 
   // Top-level (parent) categories.
-  const parents = categories.filter((c) => !c.isSubCategory && !c.parentCategory);
+  const parents = categories.filter(
+    (c) => !c.isSubCategory && !c.parentCategory,
+  );
 
   useEffect(() => {
     if (categories.length === 0) dispatch(fetchCategories());
@@ -38,7 +41,8 @@ const Categories: React.FC = () => {
             All Categories
           </h1>
           <p className="text-white/45 mt-4 max-w-md leading-relaxed text-sm">
-            Pick a category to explore its subcategories, rituals, and ingredient guides.
+            Pick a category to explore its subcategories, rituals, and
+            ingredient guides.
           </p>
         </div>
       </section>

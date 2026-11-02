@@ -8,12 +8,8 @@ import {
   Img3,
   Img4,
   Img5,
-  Img6,
-  Img7,
   Img8,
   Img9,
-  Img10,
-  Img11,
   Img12,
   HeroRoller,
   HeroGuaSha,
@@ -84,7 +80,7 @@ const Home: React.FC = () => {
     subByParent,
     subLoading,
   } = useSelector((state: RootState) => state.category);
-  const { posts: apiPosts = [], loading: postsLoading } = useSelector(
+  const { posts: apiPosts = [] } = useSelector(
     (state: RootState) => state.articles,
   );
   const { reels: liveReels = [] } = useSelector(
@@ -249,8 +245,15 @@ const Home: React.FC = () => {
 
   const categoryImages = [Img1, Img2, Img3, Img4, Img5, Img8, Img9, Img12];
 
+  /* The wrapper below is overflow-x-CLIP, not hidden. `hidden` makes the
+     element a scroll container, which reserves a vertical-scrollbar gutter
+     inside it (15px here): every full-bleed band then stopped ~95px short of
+     the right edge while the sticky header spanned the full width, so a strip
+     of page background ran down the right of the whole page and read as a
+     sidebar following the scroll. `clip` stops horizontal scroll without
+     creating the scroll container, so no gutter and both margins match. */
   return (
-    <main className="overflow-x-hidden font-sans">
+    <main className="overflow-x-clip font-sans">
       {/* ════════════════════════════════════════
           HERO — concern-first + AI skin report
       ════════════════════════════════════════ */}
@@ -294,21 +297,40 @@ const Home: React.FC = () => {
               <span className="w-6 h-px bg-[#C6A66B]" />
               Personal · Natural · Proven
             </span>
-            <h1 className="home-hero-title home-rise text-white mt-6" style={{ textShadow: "0 2px 30px rgba(0,0,0,0.35)" }}>
-              The remedy your skin<br className="hidden md:block" />{" "}
-              <span className="italic text-[#DCE5DD]">has been asking for.</span>
+            <h1
+              className="home-hero-title home-rise text-white mt-6"
+              style={{ textShadow: "0 2px 30px rgba(0,0,0,0.35)" }}
+            >
+              The remedy your skin
+              <br className="hidden md:block" />{" "}
+              <span className="italic text-[#DCE5DD]">
+                has been asking for.
+              </span>
             </h1>
 
             {/* Concern search */}
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                navigate(heroQuery.trim() ? `/explore?q=${encodeURIComponent(heroQuery.trim())}` : "/explore");
+                navigate(
+                  heroQuery.trim()
+                    ? `/explore?q=${encodeURIComponent(heroQuery.trim())}`
+                    : "/explore",
+                );
               }}
               className="home-rise mt-9 flex items-center gap-2 bg-white/95 backdrop-blur-sm border border-white/40 rounded-full p-1.5 pl-5 shadow-[0_16px_44px_rgba(0,0,0,0.3)] max-w-lg focus-within:border-[#DCE5DD] transition-colors"
             >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6D6A65" strokeWidth="2" className="flex-none">
-                <circle cx="11" cy="11" r="7" /><path d="m21 21-4.35-4.35" />
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#6D6A65"
+                strokeWidth="2"
+                className="flex-none"
+              >
+                <circle cx="11" cy="11" r="7" />
+                <path d="m21 21-4.35-4.35" />
               </svg>
               <input
                 value={heroQuery}
@@ -317,7 +339,10 @@ const Home: React.FC = () => {
                 aria-label="Search remedies by concern"
                 className="flex-1 min-w-0 bg-transparent outline-none text-[15px] text-ink placeholder:text-muted/60 py-2"
               />
-              <button type="submit" className="flex-none bg-sage text-white rounded-full px-4 sm:px-5 py-3 text-[13px] font-bold hover:bg-[#4B695A] transition-colors">
+              <button
+                type="submit"
+                className="flex-none bg-sage text-white rounded-full px-4 sm:px-5 py-3 text-[13px] font-bold hover:bg-[#4B695A] transition-colors"
+              >
                 <span className="hidden sm:inline">Find remedies</span>
                 <span className="sm:hidden">Search</span>
               </button>
@@ -332,7 +357,11 @@ const Home: React.FC = () => {
               ].map((c) => (
                 <button
                   key={c.label}
-                  onClick={() => navigate(`/explore?q=${encodeURIComponent(c.label.replace(/[^\w& ]/g, "").trim())}`)}
+                  onClick={() =>
+                    navigate(
+                      `/explore?q=${encodeURIComponent(c.label.replace(/[^\w& ]/g, "").trim())}`,
+                    )
+                  }
                   className={`text-[13px] font-semibold px-3.5 py-2 rounded-full border backdrop-blur-sm transition-colors ${
                     c.hot
                       ? "border-transparent bg-turmeric text-ink hover:bg-turmeric/80"
@@ -346,12 +375,19 @@ const Home: React.FC = () => {
 
             {/* Trust row — the two claims that actually answer a hesitation. */}
             <div className="home-rise mt-7 flex flex-wrap gap-x-6 gap-y-2">
-              {["Dermatologist-reviewed", "Your photo stays private"].map((t) => (
-                <span key={t} className="flex items-center gap-2 text-[12px] font-semibold tracking-wide text-white/70">
-                  <span className="w-[16px] h-[16px] rounded-full bg-[rgba(154,212,183,0.22)] text-[#DCE5DD] grid place-items-center text-[10px]">✓</span>
-                  {t}
-                </span>
-              ))}
+              {["Dermatologist-reviewed", "Your photo stays private"].map(
+                (t) => (
+                  <span
+                    key={t}
+                    className="flex items-center gap-2 text-[12px] font-semibold tracking-wide text-white/70"
+                  >
+                    <span className="w-[16px] h-[16px] rounded-full bg-[rgba(154,212,183,0.22)] text-[#DCE5DD] grid place-items-center text-[10px]">
+                      ✓
+                    </span>
+                    {t}
+                  </span>
+                ),
+              )}
             </div>
 
             {/* Mobile-only AI CTA (the full card is desktop-only to keep the hero short) */}
@@ -359,15 +395,30 @@ const Home: React.FC = () => {
               onClick={() => navigate("/ai/analysis")}
               className="home-rise lg:hidden mt-7 inline-flex items-center gap-2 bg-white text-[#3D5B4F] rounded-full px-6 py-3.5 text-[13px] font-bold shadow-lg"
             >
-              <span className="material-icons-round text-base">face_retouching_natural</span>
+              <span className="material-icons-round text-base">
+                face_retouching_natural
+              </span>
               Scan my skin — free
             </button>
           </div>
 
           {/* ── Right: floating AI result card (desktop only) ── */}
           <div className="relative hidden lg:flex justify-end">
-            <div className="relative z-10 w-full max-w-[340px] rounded-card-lg p-6 text-white shadow-2xl ring-1 ring-white/15 overflow-hidden" style={{ background: "linear-gradient(160deg, rgba(61,91,79,0.92) 0%, rgba(13,23,18,0.92) 130%)", backdropFilter: "blur(6px)" }}>
-              <div className="pointer-events-none absolute -top-14 -right-12 w-48 h-48 rounded-full opacity-50" style={{ background: "radial-gradient(circle, rgba(198,166,107,0.55), transparent 70%)" }} />
+            <div
+              className="relative z-10 w-full max-w-[340px] rounded-card-lg p-6 text-white shadow-2xl ring-1 ring-white/15 overflow-hidden"
+              style={{
+                background:
+                  "linear-gradient(160deg, rgba(61,91,79,0.92) 0%, rgba(13,23,18,0.92) 130%)",
+                backdropFilter: "blur(6px)",
+              }}
+            >
+              <div
+                className="pointer-events-none absolute -top-14 -right-12 w-48 h-48 rounded-full opacity-50"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(198,166,107,0.55), transparent 70%)",
+                }}
+              />
               <p className="relative text-[10px] font-bold uppercase tracking-[0.22em] text-white/60 mb-4">
                 Your Skin Report · AI
               </p>
@@ -375,26 +426,60 @@ const Home: React.FC = () => {
               {/* Gauge + score */}
               <div className="relative flex items-center gap-4 mb-4">
                 <div className="relative w-20 h-20 flex-none">
-                  <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
-                    <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="9" />
-                    <circle cx="60" cy="60" r="52" fill="none" stroke="#C6A66B" strokeWidth="9" strokeLinecap="round"
-                      strokeDasharray={2 * Math.PI * 52} strokeDashoffset={2 * Math.PI * 52 * (1 - 0.82)} />
+                  <svg
+                    className="w-full h-full -rotate-90"
+                    viewBox="0 0 120 120"
+                  >
+                    <circle
+                      cx="60"
+                      cy="60"
+                      r="52"
+                      fill="none"
+                      stroke="rgba(255,255,255,0.16)"
+                      strokeWidth="9"
+                    />
+                    <circle
+                      cx="60"
+                      cy="60"
+                      r="52"
+                      fill="none"
+                      stroke="#C6A66B"
+                      strokeWidth="9"
+                      strokeLinecap="round"
+                      strokeDasharray={2 * Math.PI * 52}
+                      strokeDashoffset={2 * Math.PI * 52 * (1 - 0.82)}
+                    />
                   </svg>
-                  <div className="absolute inset-0 flex items-center justify-center font-serif text-3xl">82</div>
+                  <div className="absolute inset-0 flex items-center justify-center font-serif text-3xl">
+                    82
+                  </div>
                 </div>
                 <div>
-                  <p className="text-[#DCE5DD] text-[11px] font-bold uppercase tracking-[0.18em]">Glowing</p>
-                  <p className="text-white/55 text-[12px] mt-0.5 leading-snug">Hydration high · redness low</p>
+                  <p className="text-[#DCE5DD] text-[11px] font-bold uppercase tracking-[0.18em]">
+                    Glowing
+                  </p>
+                  <p className="text-white/55 text-[12px] mt-0.5 leading-snug">
+                    Hydration high · redness low
+                  </p>
                 </div>
               </div>
 
               {/* Remedy plan */}
               <div className="relative rounded-xl p-3.5 bg-white/[0.07] border border-white/15 mb-4">
-                <p className="text-[11px] font-bold mb-2 flex items-center gap-2">🌿 Your remedy plan</p>
+                <p className="text-[11px] font-bold mb-2 flex items-center gap-2">
+                  🌿 Your remedy plan
+                </p>
                 <div className="flex flex-wrap gap-1.5">
-                  {["Aloe + turmeric", "Rosehip oil", "Niacinamide"].map((c) => (
-                    <span key={c} className="text-[10px] px-2.5 py-1 rounded-full bg-white/12">{c}</span>
-                  ))}
+                  {["Aloe + turmeric", "Rosehip oil", "Niacinamide"].map(
+                    (c) => (
+                      <span
+                        key={c}
+                        className="text-[10px] px-2.5 py-1 rounded-full bg-white/12"
+                      >
+                        {c}
+                      </span>
+                    ),
+                  )}
                 </div>
               </div>
 
@@ -402,7 +487,9 @@ const Home: React.FC = () => {
                 onClick={() => navigate("/ai/analysis")}
                 className="relative w-full bg-white text-[#3D5B4F] rounded-full py-3 text-[13px] font-bold hover:bg-[#FCFAF7] transition-colors inline-flex items-center justify-center gap-2"
               >
-                <span className="material-icons-round text-base">face_retouching_natural</span>
+                <span className="material-icons-round text-base">
+                  face_retouching_natural
+                </span>
                 Scan my skin — free
               </button>
             </div>
@@ -429,30 +516,57 @@ const Home: React.FC = () => {
           PHILOSOPHY — editorial split
       ════════════════════════════════════════ */}
       <section className="home-reveal py-20 bg-paper">
-        <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="max-w-7xl mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           {/* Image stack with rotating seal */}
           <div className="relative">
             <div className="relative h-[360px] md:h-[440px] rounded-card-xl overflow-hidden shadow-xl">
-              <img src={Img8} alt="Natural skincare ritual" data-parallax="30" loading="lazy" decoding="async" className="home-px home-wipe w-full h-full object-cover" />
+              <img
+                src={Img8}
+                alt="Natural skincare ritual"
+                data-parallax="30"
+                loading="lazy"
+                decoding="async"
+                className="home-px home-wipe w-full h-full object-cover"
+              />
             </div>
             <div className="absolute -bottom-8 -right-2 md:right-8 w-32 h-40 md:w-40 md:h-52 rounded-[1.5rem] overflow-hidden shadow-2xl border-[6px] border-[#FCFAF7] hidden sm:block">
-              <img src={Img3} alt="Botanical ingredients" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img
+                src={Img3}
+                alt="Botanical ingredients"
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover"
+              />
             </div>
             {/* Rotating seal badge */}
             <div className="absolute -top-8 -left-6 md:-left-10 w-28 h-28 md:w-32 md:h-32 rounded-full bg-[#3D5B4F] flex items-center justify-center shadow-2xl">
               <div className="home-spin-badge absolute inset-0">
                 <svg viewBox="0 0 200 200" className="w-full h-full">
                   <defs>
-                    <path id="sealCircle" d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0" />
+                    <path
+                      id="sealCircle"
+                      d="M100,100 m-74,0 a74,74 0 1,1 148,0 a74,74 0 1,1 -148,0"
+                    />
                   </defs>
-                  <text fill="#DCE5DD" fontFamily="'Hanken Grotesk', sans-serif" className="text-[15px] font-bold tracking-[4px]">
+                  <text
+                    fill="#DCE5DD"
+                    fontFamily="'Hanken Grotesk', sans-serif"
+                    className="text-[15px] font-bold tracking-[4px]"
+                  >
                     <textPath href="#sealCircle" startOffset="0%">
                       ✦ PURELY NATURAL ✦ EARTH ROOTED&nbsp;
                     </textPath>
                   </text>
                 </svg>
               </div>
-              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#DCE5DD" strokeWidth="1.5">
+              <svg
+                width="30"
+                height="30"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#DCE5DD"
+                strokeWidth="1.5"
+              >
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 <path d="M9 12l2 2 4-4" />
               </svg>
@@ -461,14 +575,12 @@ const Home: React.FC = () => {
 
           {/* Text */}
           <div>
-            <span className="block mb-5 text-[10px] tracking-[0.34em] font-bold uppercase text-sage">
-              Our Philosophy
-            </span>
-            <h2 className="font-serif text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.1] text-ink">
+            <span className="block mb-3 home-eyebrow">Our Philosophy</span>
+            <h2 className="home-h2">
               Beauty, rooted in the{" "}
               <span className="italic text-[#3D5B4F]">earth.</span>
             </h2>
-            <p className="mt-5 text-muted leading-relaxed font-newsreader text-[1.1rem] max-w-[480px]">
+            <p className="mt-5 text-muted leading-relaxed font-serif text-lg max-w-[480px]">
               Skincare is a ritual, not a routine — every remedy draws on
               botanical wisdom to help your skin find its own balance.
             </p>
@@ -480,7 +592,14 @@ const Home: React.FC = () => {
               ].map((point, i) => (
                 <div key={i} className="flex items-center gap-3">
                   <span className="flex-none w-6 h-6 rounded-full bg-[#3D5B4F]/12 flex items-center justify-center">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3D5B4F" strokeWidth="3">
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="#3D5B4F"
+                      strokeWidth="3"
+                    >
                       <path d="M5 12l5 5L20 7" />
                     </svg>
                   </span>
@@ -493,13 +612,19 @@ const Home: React.FC = () => {
               className="mt-8 home-link-underline text-[#2D2A26] font-bold text-sm tracking-wide inline-flex items-center gap-2"
             >
               Discover our story
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
             </button>
           </div>
         </div>
-
       </section>
 
       {/* ════════════════════════════════════════
@@ -507,23 +632,55 @@ const Home: React.FC = () => {
       ════════════════════════════════════════ */}
       <section className="home-reveal relative overflow-hidden py-20 bg-paper-2">
         <div className="home-ai-glow" aria-hidden="true" />
-        <div className="relative z-10 max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Left: interactive AI analysis card */}
           <div className="order-2 lg:order-1 flex justify-center lg:justify-start">
-            <div className="relative w-full max-w-md rounded-[2rem] p-7 md:p-8 text-white shadow-2xl ring-1 ring-white/10 overflow-hidden" style={{ background: "linear-gradient(160deg, #3D5B4F 0%, #2D2A26 130%)" }}>
-              <div className="pointer-events-none absolute -top-16 -right-14 w-56 h-56 rounded-full opacity-50" style={{ background: "radial-gradient(circle, rgba(198,166,107,0.55), transparent 70%)" }} />
+            <div
+              className="relative w-full max-w-md rounded-card-lg p-7 md:p-8 text-white shadow-2xl ring-1 ring-white/10 overflow-hidden"
+              style={{
+                background: "linear-gradient(160deg, #3D5B4F 0%, #2D2A26 130%)",
+              }}
+            >
+              <div
+                className="pointer-events-none absolute -top-16 -right-14 w-56 h-56 rounded-full opacity-50"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(198,166,107,0.55), transparent 70%)",
+                }}
+              />
               <p className="relative text-[10px] font-bold uppercase tracking-[0.22em] text-white/60 mb-6">
                 Your Skin Report · AI
               </p>
 
               <div className="relative flex items-center gap-5 mb-6">
                 <div className="relative w-24 h-24 flex-none">
-                  <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
-                    <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(255,255,255,0.16)" strokeWidth="8" />
-                    <circle cx="60" cy="60" r="52" fill="none" stroke="#C6A66B" strokeWidth="8" strokeLinecap="round"
-                      strokeDasharray={2 * Math.PI * 52} strokeDashoffset={2 * Math.PI * 52 * (1 - 0.82)} />
+                  <svg
+                    className="w-full h-full -rotate-90"
+                    viewBox="0 0 120 120"
+                  >
+                    <circle
+                      cx="60"
+                      cy="60"
+                      r="52"
+                      fill="none"
+                      stroke="rgba(255,255,255,0.16)"
+                      strokeWidth="8"
+                    />
+                    <circle
+                      cx="60"
+                      cy="60"
+                      r="52"
+                      fill="none"
+                      stroke="#C6A66B"
+                      strokeWidth="8"
+                      strokeLinecap="round"
+                      strokeDasharray={2 * Math.PI * 52}
+                      strokeDashoffset={2 * Math.PI * 52 * (1 - 0.82)}
+                    />
                   </svg>
-                  <div className="absolute inset-0 flex items-center justify-center font-serif text-4xl">82</div>
+                  <div className="absolute inset-0 flex items-center justify-center font-serif text-4xl">
+                    82
+                  </div>
                 </div>
                 <div className="flex-1 space-y-3">
                   {[
@@ -533,10 +690,14 @@ const Home: React.FC = () => {
                   ].map((m) => (
                     <div key={m.label}>
                       <div className="flex justify-between text-[11px] mb-1 font-semibold text-white/80">
-                        <span>{m.label}</span><span>{m.value}</span>
+                        <span>{m.label}</span>
+                        <span>{m.value}</span>
                       </div>
                       <div className="h-1.5 rounded-full bg-white/15 overflow-hidden">
-                        <div className="h-full rounded-full" style={{ width: `${m.value}%`, background: m.color }} />
+                        <div
+                          className="h-full rounded-full"
+                          style={{ width: `${m.value}%`, background: m.color }}
+                        />
                       </div>
                     </div>
                   ))}
@@ -544,11 +705,20 @@ const Home: React.FC = () => {
               </div>
 
               <div className="relative rounded-2xl p-4 bg-white/[0.07] border border-white/15 mb-6">
-                <p className="text-[12px] font-bold mb-2.5 flex items-center gap-2">🌿 Your remedy plan</p>
+                <p className="text-[12px] font-bold mb-2.5 flex items-center gap-2">
+                  🌿 Your remedy plan
+                </p>
                 <div className="flex flex-wrap gap-1.5">
-                  {["Aloe + turmeric mask", "Rosehip oil", "Niacinamide"].map((c) => (
-                    <span key={c} className="text-[11px] px-2.5 py-1.5 rounded-full bg-white/12">{c}</span>
-                  ))}
+                  {["Aloe + turmeric mask", "Rosehip oil", "Niacinamide"].map(
+                    (c) => (
+                      <span
+                        key={c}
+                        className="text-[11px] px-2.5 py-1.5 rounded-full bg-white/12"
+                      >
+                        {c}
+                      </span>
+                    ),
+                  )}
                 </div>
               </div>
 
@@ -556,7 +726,9 @@ const Home: React.FC = () => {
                 onClick={() => navigate("/ai/analysis")}
                 className="relative w-full bg-white text-[#3D5B4F] rounded-full py-3.5 text-[13px] font-bold hover:bg-[#FCFAF7] transition-colors inline-flex items-center justify-center gap-2"
               >
-                <span className="material-icons-round text-base">face_retouching_natural</span>
+                <span className="material-icons-round text-base">
+                  face_retouching_natural
+                </span>
                 Scan my skin — free
               </button>
             </div>
@@ -564,26 +736,36 @@ const Home: React.FC = () => {
 
           {/* Right: copy + steps */}
           <div className="order-1 lg:order-2">
-            <span className="inline-flex items-center gap-2.5 text-[11px] font-bold tracking-[0.22em] uppercase text-sage">
+            <span className="home-eyebrow inline-flex items-center gap-2.5">
               <span className="w-6 h-px bg-[#C6A66B]" />
               AI Skin Test
             </span>
-            <h2 className="mt-5 font-serif text-[clamp(2rem,4vw,3rem)] font-bold leading-[1.1] text-ink">
-              Let your skin tell us <span className="italic text-[#3D5B4F]">what it needs.</span>
+            <h2 className="home-h2 mt-5">
+              Let your skin tell us{" "}
+              <span className="italic text-[#3D5B4F]">what it needs.</span>
             </h2>
-            <p className="mt-5 text-muted leading-relaxed font-newsreader text-[1.1rem] max-w-[460px]">
+            <p className="mt-5 text-muted leading-relaxed font-serif text-lg max-w-[460px]">
               Snap a selfie. Our AI reads your skin in seconds, then builds a
               routine around what it actually measured.
             </p>
 
             <div className="mt-8 grid sm:grid-cols-3 gap-3">
               {[
-                { icon: "photo_camera", t: "Snap a selfie", d: "Camera or upload" },
+                {
+                  icon: "photo_camera",
+                  t: "Snap a selfie",
+                  d: "Camera or upload",
+                },
                 { icon: "auto_awesome", t: "AI reads it", d: "In ~10 seconds" },
                 { icon: "spa", t: "Get your ritual", d: "Personalised picks" },
               ].map((s) => (
-                <div key={s.t} className="rounded-2xl p-4 bg-paper border border-[rgba(45,42,38,0.08)]">
-                  <span className="material-icons-round text-[#3D5B4F] text-2xl">{s.icon}</span>
+                <div
+                  key={s.t}
+                  className="rounded-2xl p-4 bg-paper border border-[rgba(45,42,38,0.08)]"
+                >
+                  <span className="material-icons-round text-[#3D5B4F] text-2xl">
+                    {s.icon}
+                  </span>
                   <p className="text-ink font-bold text-sm mt-2">{s.t}</p>
                   <p className="text-muted text-xs mt-0.5">{s.d}</p>
                 </div>
@@ -595,11 +777,15 @@ const Home: React.FC = () => {
                 onClick={() => navigate("/ai/analysis")}
                 className="home-btn-primary text-white px-8 py-3.5 rounded-full font-bold text-sm shadow-lg inline-flex items-center gap-2"
               >
-                <span className="material-icons-round text-base">face_retouching_natural</span>
+                <span className="material-icons-round text-base">
+                  face_retouching_natural
+                </span>
                 Analyze my skin — free
               </button>
               <span className="flex items-center gap-2 text-muted text-xs font-semibold">
-                <span className="material-icons-round text-sm text-sage">lock</span>
+                <span className="material-icons-round text-sm text-sage">
+                  lock
+                </span>
                 Your photo stays private
               </span>
             </div>
@@ -608,15 +794,11 @@ const Home: React.FC = () => {
       </section>
 
       <section className="home-reveal py-20 bg-paper">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div>
-              <span className="block mb-3 home-eyebrow">
-                Discover
-              </span>
-              <h2 className="font-serif text-[clamp(2.5rem,5vw,3.5rem)] font-bold leading-[1.1] text-ink">
-                Browse by Concern
-              </h2>
+              <span className="block mb-3 home-eyebrow">Discover</span>
+              <h2 className="home-h2">Browse by Concern</h2>
             </div>
             <p className="mt-4 md:mt-0 text-muted max-w-xs leading-relaxed">
               Start with what's bothering you.
@@ -627,7 +809,10 @@ const Home: React.FC = () => {
         {categoriesLoading && (
           <div className="home-fullbleed grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1.5">
             {[1, 2, 3, 4].map((i) => (
-              <div key={i} className="h-[300px] md:h-[360px] bg-line animate-pulse" />
+              <div
+                key={i}
+                className="h-[300px] md:h-[360px] bg-line animate-pulse"
+              />
             ))}
           </div>
         )}
@@ -663,7 +848,14 @@ const Home: React.FC = () => {
                 </p>
                 <span className="inline-flex items-center gap-2 text-white/90 translate-y-1 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 text-[11px] font-bold tracking-[0.1em]">
                   EXPLORE
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                  >
                     <path d="M5 12h14M12 5l7 7-7 7" />
                   </svg>
                 </span>
@@ -674,15 +866,11 @@ const Home: React.FC = () => {
       </section>
 
       <section className="home-reveal py-20 bg-sage-light">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="flex items-end justify-between mb-12">
             <div>
-              <span className="block mb-3 home-eyebrow">
-                Short Films
-              </span>
-              <h2 className="font-serif text-[clamp(2rem,4vw,3rem)] font-bold text-ink italic">
-                Latest Natural Rituals
-              </h2>
+              <span className="block mb-3 home-eyebrow">Short Films</span>
+              <h2 className="home-h2 italic">Latest Natural Rituals</h2>
             </div>
             <button
               onClick={() => navigate("/reels")}
@@ -737,7 +925,13 @@ const Home: React.FC = () => {
                   }`}
                 >
                   <div className="relative w-14 h-14 rounded-full flex items-center justify-center bg-white/20 backdrop-blur-[8px] border border-white/30">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white" className="ml-1">
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                      fill="white"
+                      className="ml-1"
+                    >
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </div>
@@ -766,16 +960,15 @@ const Home: React.FC = () => {
           DAILY RITUALS JOURNAL
       ════════════════════════════════════════ */}
       <section className="home-reveal py-20 bg-paper">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="text-center mb-12">
             <span className="block mb-3 home-eyebrow">
               The Skincare Journal
             </span>
-            <h2 className="font-serif text-[clamp(2.5rem,5vw,3.5rem)] font-bold text-ink">
-              Rituals for Every Moment
-            </h2>
+            <h2 className="home-h2">Rituals for Every Moment</h2>
             <p className="text-muted mt-4 max-w-md mx-auto leading-relaxed">
-              Morning, night, or your weekly reset — pick the ritual that fits your vibe.
+              Morning, night, or your weekly reset — pick the ritual that fits
+              your vibe.
             </p>
           </div>
         </div>
@@ -821,7 +1014,15 @@ const Home: React.FC = () => {
                 </p>
                 <span className="inline-flex items-center gap-2 text-white font-bold text-[11px] tracking-[0.1em]">
                   OPEN RITUAL
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="group-hover:translate-x-1 transition-transform">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    className="group-hover:translate-x-1 transition-transform"
+                  >
                     <path d="M5 12h14M12 5l7 7-7 7" />
                   </svg>
                 </span>
@@ -835,15 +1036,11 @@ const Home: React.FC = () => {
           FEATURED ARTICLES
       ════════════════════════════════════════ */}
       <section className="home-reveal py-20 bg-paper">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
           {/* Header */}
-          <div className="text-center mb-14">
-            <span className="block mb-3 home-eyebrow">
-              Journal
-            </span>
-            <h2 className="font-serif text-[clamp(2.25rem,4vw,3rem)] font-bold text-ink">
-              Featured Guides
-            </h2>
+          <div className="text-center mb-12">
+            <span className="block mb-3 home-eyebrow">Journal</span>
+            <h2 className="home-h2">Featured Guides</h2>
           </div>
 
           {/* Four equal guides in a 2×2 — minimal card, parallax cover. Kept
@@ -855,7 +1052,9 @@ const Home: React.FC = () => {
             {displayPosts.slice(0, 4).map((article) => (
               <div
                 key={article.id || article._id}
-                onClick={() => navigate(`/article/${article.id || article._id}`)}
+                onClick={() =>
+                  navigate(`/article/${article.id || article._id}`)
+                }
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
@@ -866,10 +1065,13 @@ const Home: React.FC = () => {
                 }}
                 className="home-article-card group cursor-pointer flex flex-col focus:outline-none"
               >
-                <div className="relative rounded-[1.9rem] p-1.5 bg-white shadow-card-md group-hover:shadow-card-lg ring-1 ring-[rgba(45,42,38,0.06)] transition-shadow duration-500">
-                  <div className="relative overflow-hidden rounded-[1.5rem] aspect-[4/3]">
+                <div className="relative rounded-card-lg p-1.5 bg-white shadow-card-md group-hover:shadow-card-lg ring-1 ring-[rgba(45,42,38,0.06)] transition-shadow duration-500">
+                  <div className="relative overflow-hidden rounded-card-md aspect-[4/3]">
                     <PostCover
-                      src={getPostCover(article) || `https://picsum.photos/seed/${article.id || article._id}/800/1000`}
+                      src={
+                        getPostCover(article) ||
+                        `https://picsum.photos/seed/${article.id || article._id}/800/1000`
+                      }
                       alt={article.title}
                       data-parallax="34"
                       className="home-px absolute inset-0 w-full h-full object-cover"
@@ -883,7 +1085,16 @@ const Home: React.FC = () => {
 
                     {/* Gen-Z "open" affordance — nudges out on hover */}
                     <span className="absolute bottom-3.5 right-3.5 w-11 h-11 rounded-full bg-[#C6A66B] text-[#2D2A26] flex items-center justify-center shadow-lg translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
                         <path d="M7 17L17 7M17 7H8M17 7v9" />
                       </svg>
                     </span>
@@ -899,7 +1110,10 @@ const Home: React.FC = () => {
                     {article.title}
                   </h3>
                   <p className="text-muted text-[13px] leading-relaxed line-clamp-2">
-                    {article?.content || article?.subtitle || article?.description || ""}
+                    {article?.content ||
+                      article?.subtitle ||
+                      article?.description ||
+                      ""}
                   </p>
                 </div>
               </div>
@@ -926,7 +1140,7 @@ const Home: React.FC = () => {
         <div className="home-blob-br absolute bottom-0 right-0 w-56 h-56 rounded-full opacity-10" />
 
         <div className="relative max-w-3xl mx-auto">
-          <blockquote className="text-white/90 font-newsreader text-[clamp(1.4rem,3vw,2rem)] italic leading-[1.4]">
+          <blockquote className="text-white/90 font-serif text-[clamp(1.4rem,3vw,2rem)] italic leading-[1.4]">
             Your skin is a living mirror of your internal garden. Tend to it
             with gentleness and nature's quiet whispers.
           </blockquote>
@@ -939,15 +1153,11 @@ const Home: React.FC = () => {
       {/* ════════════════════════════════════════
           FAQ SECTION
       ════════════════════════════════════════ */}
-      <section className="home-reveal py-16 bg-paper">
+      <section className="home-reveal py-20 bg-paper">
         <div className="max-w-3xl mx-auto px-6">
-          <div className="text-center mb-10">
-            <span className="block mb-3 home-eyebrow">
-              Support
-            </span>
-            <h2 className="font-serif text-[clamp(1.8rem,3.5vw,2.5rem)] font-bold text-ink">
-              Common Questions
-            </h2>
+          <div className="text-center mb-12">
+            <span className="block mb-3 home-eyebrow">Support</span>
+            <h2 className="home-h2">Common Questions</h2>
           </div>
 
           <div className="space-y-3">
@@ -973,7 +1183,7 @@ const Home: React.FC = () => {
                   className="w-full text-left flex justify-between items-center p-5 gap-4"
                 >
                   <span
-                    className={`font-bold text-[1.05rem] ${openFAQ === index ? "text-ink" : "text-ink/85"}`}
+                    className={`font-bold text-lg ${openFAQ === index ? "text-ink" : "text-ink/85"}`}
                   >
                     {faq.q}
                   </span>

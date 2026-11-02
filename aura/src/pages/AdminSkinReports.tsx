@@ -79,7 +79,7 @@ const AdminSkinReports = () => {
 
   const totalReports = useMemo(
     () => rows.reduce((sum, r) => sum + (r.reportCount || 0), 0),
-    [rows]
+    [rows],
   );
 
   const filtered = useMemo(() => {
@@ -88,7 +88,7 @@ const AdminSkinReports = () => {
     return rows.filter((r) =>
       [r.userName, r.userEmail, r.latestSkinType, r.latestTopConcern]
         .filter(Boolean)
-        .some((v) => String(v).toLowerCase().includes(q))
+        .some((v) => String(v).toLowerCase().includes(q)),
     );
   }, [rows, search]);
 
@@ -127,7 +127,9 @@ const AdminSkinReports = () => {
               <span className="material-icons-round text-base">arrow_back</span>
               Back
             </button>
-            <h1 className="text-3xl font-bold text-mocha">Skin Analysis Reports</h1>
+            <h1 className="text-3xl font-bold text-mocha">
+              Skin Analysis Reports
+            </h1>
             <p className="text-mocha/60 mt-1">
               Every user's AI skin-analysis results.
             </p>
@@ -178,8 +180,12 @@ const AdminSkinReports = () => {
                   <tr className="text-left text-mocha/50 uppercase text-[11px] tracking-wider border-b border-primary/10">
                     <th className="px-5 py-3 font-semibold">Remedy</th>
                     <th className="px-4 py-3 font-semibold">Recommended for</th>
-                    <th className="px-4 py-3 font-semibold text-center">Uses</th>
-                    <th className="px-4 py-3 font-semibold text-center">Users</th>
+                    <th className="px-4 py-3 font-semibold text-center">
+                      Uses
+                    </th>
+                    <th className="px-4 py-3 font-semibold text-center">
+                      Users
+                    </th>
                     <th className="px-4 py-3 font-semibold">Last used</th>
                   </tr>
                 </thead>
@@ -224,7 +230,9 @@ const AdminSkinReports = () => {
 
         {error && (
           <div className="mb-6 bg-[#b4413c]/8 border border-[#b4413c]/20 text-[#8f322e] rounded-2xl p-4 text-sm flex gap-2">
-            <span className="material-icons-round text-[#b4413c]">error_outline</span>
+            <span className="material-icons-round text-[#b4413c]">
+              error_outline
+            </span>
             <span>{error}</span>
           </div>
         )}
@@ -252,7 +260,9 @@ const AdminSkinReports = () => {
               <thead>
                 <tr className="text-left text-mocha/50 uppercase text-[11px] tracking-wider border-b border-primary/10">
                   <th className="px-4 py-3 font-semibold">User</th>
-                  <th className="px-4 py-3 font-semibold text-center">Reports</th>
+                  <th className="px-4 py-3 font-semibold text-center">
+                    Reports
+                  </th>
                   <th className="px-4 py-3 font-semibold">Latest skin type</th>
                   <th className="px-4 py-3 font-semibold">Latest concern</th>
                   <th className="px-4 py-3 font-semibold">Last analyzed</th>

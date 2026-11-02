@@ -1,9 +1,9 @@
 /* ─── Contact page — brand aesthetic (sage/forest on warm cream) ─── */
 .contact-root {
-  --c-ink: #2D2A26;
-  --c-sage: #3D5B4F;
-  --c-sage-dark: #4B695A;
-  --c-cream: #F6F2EC; /* = --ae-paper-2 */
+  --c-ink: #2d2a26;
+  --c-sage: #3d5b4f;
+  --c-sage-dark: #4b695a;
+  --c-cream: #f6f2ec; /* = --ae-paper-2 */
   background: var(--c-cream);
   color: var(--c-ink);
   font-family: var(--ae-font-sans);
@@ -100,7 +100,9 @@
   cursor: pointer;
   border: none;
   text-decoration: none;
-  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    background-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
 }
 .contact-btn--primary:hover {
   background: var(--c-sage-dark);
@@ -239,7 +241,9 @@
   color: var(--c-ink);
   font-family: inherit;
   font-size: 0.92rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   box-sizing: border-box;
 }
 .contact-input::placeholder {

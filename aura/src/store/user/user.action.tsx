@@ -11,10 +11,10 @@ export const googleLogin = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "Google sign-in failed"
+        error.response?.data?.message || "Google sign-in failed",
       );
     }
-  }
+  },
 );
 
 export const signupUser = createAsyncThunk(
@@ -81,19 +81,21 @@ export const logoutUser = createAsyncThunk(
     try {
       const state = getState() as any;
       const token = state.user.currentUser?.AccessToken;
-      
-      const response = await API.post("/auth/logout", null, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const refreshToken = state.user.currentUser?.RefreshToken;
+
+      // Send the refresh token so the server ends THIS device only. An account
+      // can now hold several live sessions, and logging out of the laptop must
+      // not sign the phone out too; omitting it is the server's "end them all".
+      const response = await API.post(
+        "/auth/logout",
+        { refreshToken },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
       return response.data;
     } catch (error: any) {
-      return rejectWithValue(
-        error.response?.data?.message || "Logout failed"
-      );
+      return rejectWithValue(error.response?.data?.message || "Logout failed");
     }
-  }
+  },
 );
 
 // PATCH /v1/users/:id/profile — updates FirstName, LastName, ProfilePicture, Bio
@@ -130,7 +132,7 @@ export const fetchUserSettings = createAsyncThunk(
         error.response?.data?.message || "Fetching settings failed",
       );
     }
-  }
+  },
 );
 
 // PATCH /v1/settings/user/:userId — updates (upserts) user settings
@@ -155,5 +157,5 @@ export const updateUserSettings = createAsyncThunk(
         error.response?.data?.message || "Updating settings failed",
       );
     }
-  }
+  },
 );

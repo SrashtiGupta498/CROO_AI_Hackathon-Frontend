@@ -105,7 +105,7 @@
   }
 }
 .article-view-shimmer-text {
-  background: linear-gradient(110deg, #DCE5DD 20%, #fff 40%, #DCE5DD 60%);
+  background: linear-gradient(110deg, #dce5dd 20%, #fff 40%, #dce5dd 60%);
   background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -129,7 +129,11 @@
 /* TL;DR card background — was an inline style using the module
    constant DARK (#2D2A26 = --ae-ink) and #2d4a3e (= --ae-ink-soft). */
 .article-view-tldr-card {
-  background: linear-gradient(135deg, var(--ae-ink) 0%, var(--ae-ink-soft) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--ae-ink) 0%,
+    var(--ae-ink-soft) 100%
+  );
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -147,12 +151,16 @@
 /* ============================================================
    READING MODE — a focus overlay toggled from the article nav.
    Strips ambience and chrome, widens the leading, and clamps the
-   measure to a comfortable ~68ch. Theme + size are driven by
-   data attributes set on the root by ArticleView.
+   measure to a comfortable ~68 characters. Theme + size are driven
+   by data attributes set on the root by ArticleView.
    ============================================================ */
 
 .article-view-reading {
-  --ar-measure: 68ch;
+  /* 60ch, not 68ch: the `ch` unit is the width of "0", which is narrower
+     than Hanken Grotesk's average glyph, so 68ch actually renders ~77
+     characters per line — past the comfortable range. Measured in the
+     browser: 52ch->59, 60ch->68, 68ch->77. */
+  --ar-measure: 60ch;
   background: var(--ae-paper-2);
 }
 
@@ -188,8 +196,100 @@
   font-size: calc(1.06rem * var(--ar-scale, 1));
   line-height: 1.85;
 }
-.article-view-reading .article-view-body .prose {
+.article-view-reading .article-view-body .article-view-prose {
   max-width: none;
+}
+
+/* ── Article body prose ──────────────────────────────────────
+   The public body used to carry Tailwind Typography `prose-*`
+   classes, but @tailwindcss/typography is not installed, so
+   preflight's `h1..h6 { font-size: inherit; font-weight: inherit }`
+   left every <h2> rendering exactly like a paragraph. These rules
+   are the house equivalent of `.article-editor-rich-content` in
+   ArticleEditor.css, which the admin preview has always had.
+   Dark reading mode recolours these headings further down. */
+.article-view-prose {
+  /* The default view used to run the full 672px column at 16px, which is
+     ~86 characters per line — only reading mode got a measure, and the
+     `max-width: none` here is what kept it out. Same token both ways now.
+
+     Weight was 300 (Hanken Light) against rgba(ink, .9): thin strokes and
+     reduced contrast at once, and lighter than the 400 of the headings.
+
+     Leading was 1.9, which existed to make 86-character lines survivable.
+     At a 68-character measure 1.7 holds the paragraph together instead.
+
+     Left-aligned, not centred: every sibling block in the body (the TL;DR
+     card, the flag grid, the CTA) starts at the column's left edge, so
+     centring the prose inset it 50px from all of them and read as a
+     mistake rather than as an editorial inset. The slack goes right.
+     Reading mode is unaffected — there the body carries the measure and
+     this max-width is overridden to none. */
+  max-width: var(--ar-measure, 60ch);
+  color: rgba(var(--ae-ink-rgb), 0.9);
+  font-size: 1.0625rem;
+  font-weight: 400;
+  line-height: 1.7;
+}
+.article-view-prose h2,
+.article-view-prose h3,
+.article-view-prose h4 {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ae-ink);
+  line-height: 1.25;
+  margin-top: 2.5rem;
+  margin-bottom: 1.25rem;
+}
+.article-view-prose h2 {
+  font-size: 1.875rem;
+}
+.article-view-prose h3 {
+  font-size: 1.5rem;
+}
+.article-view-prose h4 {
+  font-size: 1.25rem;
+}
+/* Each section is its own div and the list is spaced by `space-y-8`,
+   so the heading that opens a section must not add a second gap. */
+.article-view-prose > :first-child {
+  margin-top: 0;
+}
+.article-view-prose p {
+  margin-bottom: 1.35rem;
+  line-height: 1.7;
+}
+.article-view-prose p:last-child {
+  margin-bottom: 0;
+}
+.article-view-prose ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+.article-view-prose ol {
+  list-style: decimal;
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+.article-view-prose li {
+  margin-bottom: 0.5rem;
+}
+.article-view-prose b,
+.article-view-prose strong {
+  font-weight: 600;
+}
+.article-view-prose a {
+  color: var(--ae-sage-dark);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.article-view-prose blockquote {
+  margin: 1.5rem 0;
+  padding-left: 1.25rem;
+  border-left: 3px solid rgba(var(--ae-ink-rgb), 0.15);
+  font-style: italic;
 }
 
 /* ── Themes ─────────────────────────────────────────────────── */

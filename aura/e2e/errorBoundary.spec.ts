@@ -28,8 +28,15 @@ test.describe("Error boundary", () => {
     await expect(alert).toContainText(/didn't load properly/i);
 
     // The whole point: the chrome survives, so the user is not stranded.
-    await expect(page.getByTestId("desktop-nav").or(page.getByTestId("mobile-bottom-nav")).first()).toBeAttached();
-    await expect(page.getByRole("button", { name: /back home/i })).toBeVisible();
+    await expect(
+      page
+        .getByTestId("desktop-nav")
+        .or(page.getByTestId("mobile-bottom-nav"))
+        .first(),
+    ).toBeAttached();
+    await expect(
+      page.getByRole("button", { name: /back home/i }),
+    ).toBeVisible();
   });
 
   test("navigating away from a crashed route recovers", async ({ page }) => {

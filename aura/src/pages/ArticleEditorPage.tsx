@@ -22,7 +22,6 @@ export default function ArticleEditorPage() {
     }
   })();
 
-
   useEffect(() => {
     if (!currentUser) {
       navigate("/Login");

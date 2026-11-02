@@ -157,7 +157,11 @@ export const InstructionsEditor: React.FC<{
         </div>
       ))}
 
-      <button type="button" className="sbe-add" onClick={() => onChange([...rows, ""])}>
+      <button
+        type="button"
+        className="sbe-add"
+        onClick={() => onChange([...rows, ""])}
+      >
         <Plus size={15} /> Add step
       </button>
     </div>
@@ -178,7 +182,9 @@ export const ReelPicker: React.FC<{
   onChange: (patch: { reelId?: string; caption?: string }) => void;
 }> = ({ reelId, caption, onChange }) => {
   const [reels, setReels] = useState<ReelOption[]>([]);
-  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [status, setStatus] = useState<"loading" | "ready" | "error">(
+    "loading",
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -192,8 +198,9 @@ export const ReelPicker: React.FC<{
             title: r.title || "Untitled reel",
             /* The video lives in a `video` section, not on the post. */
             src:
-              r.sections?.find((s: any) => s.type === "video" || s.type === "reel")
-                ?.videoUrl || r.thumbnailUrl,
+              r.sections?.find(
+                (s: any) => s.type === "video" || s.type === "reel",
+              )?.videoUrl || r.thumbnailUrl,
           })),
         );
         setStatus("ready");
@@ -204,11 +211,18 @@ export const ReelPicker: React.FC<{
     };
   }, []);
 
-  const selected = useMemo(() => reels.find((r) => r.id === reelId), [reels, reelId]);
+  const selected = useMemo(
+    () => reels.find((r) => r.id === reelId),
+    [reels, reelId],
+  );
 
   if (status === "loading") return <p className="sbe-hint">Loading reels…</p>;
   if (status === "error")
-    return <p className="sbe-hint sbe-hint-error">Couldn’t load reels. Check the backend is running.</p>;
+    return (
+      <p className="sbe-hint sbe-hint-error">
+        Couldn’t load reels. Check the backend is running.
+      </p>
+    );
   if (!reels.length)
     return (
       <p className="sbe-hint">

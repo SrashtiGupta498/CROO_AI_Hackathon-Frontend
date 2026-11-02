@@ -12,8 +12,21 @@ export const CARD_GRADIENTS = [
   "linear-gradient(135deg, #4a3e2e 0%, #3a2e1e 100%)",
 ];
 
-export const LeafIcon = ({ size = 22, color = "white" }: { size?: number; color?: string }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.6">
+export const LeafIcon = ({
+  size = 22,
+  color = "white",
+}: {
+  size?: number;
+  color?: string;
+}) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={color}
+    strokeWidth="1.6"
+  >
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
   </svg>
 );
@@ -51,7 +64,9 @@ const CategoryFlashCard: React.FC<{
           src={cat.coverImage}
           alt=""
           aria-hidden
-          onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
+          onError={(e) =>
+            ((e.currentTarget as HTMLImageElement).style.display = "none")
+          }
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-50"
         />
       )}

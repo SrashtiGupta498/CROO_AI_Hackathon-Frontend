@@ -9,12 +9,12 @@
   max-width: 80rem; /* 1280px / max-w-7xl */
   margin-left: auto;
   margin-right: auto;
-  padding-left: 1.5rem;  /* 24px — matches `px-6` used inline on Home/Header/Footer */
+  padding-left: 1.5rem; /* 24px — matches `px-6` used inline on Home/Header/Footer */
   padding-right: 1.5rem;
 }
 @media (min-width: 768px) {
   .ae-container {
-    padding-left: 3rem;  /* 48px — matches `md:px-12` */
+    padding-left: 3rem; /* 48px — matches `md:px-12` */
     padding-right: 3rem;
   }
 }
@@ -22,9 +22,15 @@
   padding-top: 6rem;
   padding-bottom: 6rem;
 }
-.ae-bg-paper { background: var(--ae-paper); }
-.ae-bg-paper-2 { background: var(--ae-paper-2); }
-.ae-bg-ink { background: var(--ae-ink); }
+.ae-bg-paper {
+  background: var(--ae-paper);
+}
+.ae-bg-paper-2 {
+  background: var(--ae-paper-2);
+}
+.ae-bg-ink {
+  background: var(--ae-ink);
+}
 
 /* Eyebrow label (uppercase tracked sage) */
 .ae-eyebrow {
@@ -43,8 +49,12 @@
 /* Site-wide: serif headings render regular + tight-tracked even where the
    markup still carries ad-hoc `font-bold` utilities. Unlayered on purpose so
    it outranks Tailwind's layered utility classes. */
-h1.font-serif, h2.font-serif, h3.font-serif,
-h1.font-newsreader, h2.font-newsreader, h3.font-newsreader {
+h1.font-serif,
+h2.font-serif,
+h3.font-serif,
+h1.font-newsreader,
+h2.font-newsreader,
+h3.font-newsreader {
   font-weight: 400;
   letter-spacing: -0.03em;
 }
@@ -77,8 +87,11 @@ h1.font-newsreader, h2.font-newsreader, h3.font-newsreader {
   padding: 0.95rem 2.1rem;
   border-radius: var(--ae-r-pill);
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
-    border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    background-color 0.2s ease-in-out,
+    color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
   white-space: nowrap;
 }
 .ae-btn-primary {
@@ -152,8 +165,11 @@ h1.font-newsreader, h2.font-newsreader, h3.font-newsreader {
   color: rgba(45, 42, 38, 0.6);
   border: 1px solid var(--ae-line);
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out,
-    border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    background-color 0.2s ease-in-out,
+    color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
 }
 .ae-pill:hover {
   color: var(--ae-ink);
@@ -202,10 +218,14 @@ h1.font-newsreader, h2.font-newsreader, h3.font-newsreader {
   background: var(--ae-surface);
   border: 1px solid var(--ae-line);
   outline: none;
-  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out,
+  transition:
+    border-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out,
     background-color 0.2s ease-in-out;
 }
-.ae-input::placeholder { color: rgba(45, 42, 38, 0.4); }
+.ae-input::placeholder {
+  color: rgba(45, 42, 38, 0.4);
+}
 .ae-input:focus {
   border-color: var(--ae-sage);
   box-shadow: 0 0 0 3px rgba(61, 91, 79, 0.15);

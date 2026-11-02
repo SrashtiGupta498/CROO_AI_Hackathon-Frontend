@@ -9,8 +9,13 @@
 // a callback that wasn't initiated by this browser is rejected.
 const STATE_KEY = "google_oauth_state";
 
-const GOOGLE_CLIENT_ID =
-  "8993578499-0dffgdlfiso4qt35m4gvj6g0bgofpm3g.apps.googleusercontent.com";
+// The client ID is public (it travels in the auth URL), but it must differ
+// between a dev OAuth client and the production one — and it was hardcoded
+// here, so switching meant editing source. Vite inlines VITE_-prefixed vars at
+// build time, so set this per environment the same way as VITE_API_URL.
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID as
+  | string
+  | undefined;
 // Derive the redirect URI from wherever the app is actually served (e.g.
 // http://localhost:4000). Hardcoding a port broke sign-in whenever the dev
 // server ran on a different port than the one baked in here. This exact origin
@@ -19,6 +24,15 @@ const GOOGLE_CLIENT_ID =
 const REDIRECT_URI = `${window.location.origin}/auth-callback.html`;
 
 export function startGoogleSignIn(): void {
+  // Loud and early: without it Google answers with its own "invalid client"
+  // page, which says nothing about a missing build variable.
+  if (!GOOGLE_CLIENT_ID) {
+    throw new Error(
+      "VITE_GOOGLE_CLIENT_ID is not set — Google sign-in cannot start. Set it " +
+        "in .env.local for dev, and in the host's build environment for deploys.",
+    );
+  }
+
   const state = crypto.randomUUID();
   sessionStorage.setItem(STATE_KEY, state);
 

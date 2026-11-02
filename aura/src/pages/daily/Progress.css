@@ -7,6 +7,6 @@
 /* Night → morning, matching PALETTE in shared.ts. Keep these two stops in sync
    with `night.soft` / `morning.soft` if that palette is retuned. */
 .daily-progress-achievements {
-  background: linear-gradient(135deg, #E5EDE9 0%, #F7EFE0 100%);
+  background: linear-gradient(135deg, #e5ede9 0%, #f7efe0 100%);
   box-shadow: var(--ae-shadow-md);
 }

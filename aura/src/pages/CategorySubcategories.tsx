@@ -9,7 +9,6 @@ import {
 import CategoryFlashCard, { LeafIcon } from "../components/CategoryFlashCard";
 import "./CategorySubcategories.css";
 
-
 import { ACCENT } from "../styles/brand";
 const CardSkeleton = () => (
   <div className="rounded-[20px] bg-line animate-pulse min-h-[150px]" />
@@ -22,7 +21,7 @@ const CategorySubcategories: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { categories, subByParent, subLoading } = useSelector(
-    (state: RootState) => state.category
+    (state: RootState) => state.category,
   );
 
   // Need the categories list to resolve the current category's name.
@@ -53,14 +52,32 @@ const CategorySubcategories: React.FC = () => {
             >
               Home
             </button>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="rgba(255,255,255,0.3)"
+              strokeWidth="2"
+            >
+              <path d="M9 18l6-6-6-6" />
+            </svg>
             <button
               onClick={() => navigate("/categories")}
               className="text-[11px] font-semibold text-white/70 bg-transparent border-none cursor-pointer p-0"
             >
               Categories
             </button>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="2"><path d="M9 18l6-6-6-6" /></svg>
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="rgba(255,255,255,0.3)"
+              strokeWidth="2"
+            >
+              <path d="M9 18l6-6-6-6" />
+            </svg>
             <span className="text-[11px] font-bold text-white">
               {currentCategory?.name || "Category"}
             </span>
@@ -71,7 +88,16 @@ const CategorySubcategories: React.FC = () => {
             onClick={() => navigate("/categories")}
             className="flex items-center gap-2 mb-5 category-subs-back-btn"
           >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M19 12H5M12 5l-7 7 7 7" /></svg>
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+            >
+              <path d="M19 12H5M12 5l-7 7 7 7" />
+            </svg>
             All Categories
           </button>
 
@@ -87,7 +113,8 @@ const CategorySubcategories: React.FC = () => {
             <div className="inline-flex items-center gap-2 mt-5 bg-white/10 border border-white/15 rounded-[100px] px-4 py-[6px]">
               <span className="w-1.5 h-1.5 rounded-full bg-sage-light inline-block" />
               <span className="text-[11px] font-bold text-white/75 tracking-[0.05em]">
-                {(subs || []).length} {(subs || []).length === 1 ? "topic" : "topics"}
+                {(subs || []).length}{" "}
+                {(subs || []).length === 1 ? "topic" : "topics"}
               </span>
             </div>
           )}
@@ -114,7 +141,8 @@ const CategorySubcategories: React.FC = () => {
               No subcategories yet
             </h3>
             <p className="text-ink/50 text-[0.9rem] mb-6">
-              Browse all articles in {currentCategory?.name || "this category"} instead.
+              Browse all articles in {currentCategory?.name || "this category"}{" "}
+              instead.
             </p>
             <button
               onClick={() => navigate(`/category/${id}`)}

@@ -19,7 +19,9 @@ const StoryEditorPage: React.FC = () => {
   const { id } = useParams<{ id?: string }>();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const returnTo = decodeURIComponent(searchParams.get("returnTo") || "/admin/content-editor");
+  const returnTo = decodeURIComponent(
+    searchParams.get("returnTo") || "/admin/content-editor",
+  );
 
   const editor = useStoryEditor(id);
   const [activeSection, setActiveSection] = useState("details");
@@ -29,7 +31,9 @@ const StoryEditorPage: React.FC = () => {
     setActiveSection(sectionId);
     if (viewMode === "preview") setViewMode("split");
     requestAnimationFrame(() => {
-      document.getElementById(`section-${sectionId}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      document
+        .getElementById(`section-${sectionId}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
     });
   };
 
@@ -63,7 +67,10 @@ const StoryEditorPage: React.FC = () => {
     <div className="story-editor-page">
       {/* ── Top bar ── */}
       <header className="story-editor-topbar">
-        <button onClick={() => navigate(returnTo)} className="story-editor-back-btn">
+        <button
+          onClick={() => navigate(returnTo)}
+          className="story-editor-back-btn"
+        >
           ← Back
         </button>
 
@@ -85,8 +92,16 @@ const StoryEditorPage: React.FC = () => {
 
         {/* Save actions */}
         <div className="flex items-center gap-2">
-          {editor.savedFlash && <span className="text-[12.5px] font-bold text-[#3FA66A]">✓ Saved</span>}
-          {editor.dirty && !editor.savedFlash && <span className="text-[12px] text-[rgba(47,39,68,0.35)]">Unsaved changes</span>}
+          {editor.savedFlash && (
+            <span className="text-[12.5px] font-bold text-[#3FA66A]">
+              ✓ Saved
+            </span>
+          )}
+          {editor.dirty && !editor.savedFlash && (
+            <span className="text-[12px] text-[rgba(47,39,68,0.35)]">
+              Unsaved changes
+            </span>
+          )}
           {!editor.isNew && (
             <button
               onClick={handleDelete}
@@ -128,9 +143,7 @@ const StoryEditorPage: React.FC = () => {
         </div>
       )}
       {editor.loading && (
-        <div className="story-editor-loading-banner">
-          Loading story…
-        </div>
+        <div className="story-editor-loading-banner">Loading story…</div>
       )}
 
       {/* ── Body ── */}

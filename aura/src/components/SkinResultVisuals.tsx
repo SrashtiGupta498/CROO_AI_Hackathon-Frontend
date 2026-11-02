@@ -74,7 +74,10 @@ export const computeSkinScore = (concerns: ConcernItem[]): number => {
     (sum, c) => sum + c.score_0_100 * SEVERITY_RANK[c.severity],
     0,
   );
-  const weight = concerns.reduce((sum, c) => sum + SEVERITY_RANK[c.severity], 0);
+  const weight = concerns.reduce(
+    (sum, c) => sum + SEVERITY_RANK[c.severity],
+    0,
+  );
   return Math.max(0, Math.min(100, Math.round(100 - weighted / weight)));
 };
 
@@ -89,8 +92,12 @@ export const SkinScoreGauge: React.FC<{ score: number; caption?: string }> = ({
 
   return (
     <div className={`sv-gauge sv-gauge--${band}`}>
-      <svg viewBox="0 0 160 160" className="sv-gauge-svg" role="img"
-        aria-label={`Overall skin score ${score} out of 100`}>
+      <svg
+        viewBox="0 0 160 160"
+        className="sv-gauge-svg"
+        role="img"
+        aria-label={`Overall skin score ${score} out of 100`}
+      >
         <circle cx="80" cy="80" r={r} className="sv-gauge-track" />
         <circle
           cx="80"
@@ -141,7 +148,9 @@ const buildZoneMap = (concerns: ConcernItem[]): Record<string, ZoneHit> => {
   return zones;
 };
 
-export const FaceConcernMap: React.FC<{ concerns: ConcernItem[] }> = ({ concerns }) => {
+export const FaceConcernMap: React.FC<{ concerns: ConcernItem[] }> = ({
+  concerns,
+}) => {
   const zones = buildZoneMap(concerns);
   const hits = Object.entries(zones);
 
@@ -153,7 +162,10 @@ export const FaceConcernMap: React.FC<{ concerns: ConcernItem[] }> = ({ concerns
 
   return (
     <div className="sv-facemap">
-      <svg viewBox="0 0 200 260" className="sv-facemap-svg" role="img"
+      <svg
+        viewBox="0 0 200 260"
+        className="sv-facemap-svg"
+        role="img"
         aria-label={
           hits.length
             ? `Face map: concerns found in ${hits.map(([r]) => REGION_LABELS[r]).join(", ")}`
@@ -196,13 +208,16 @@ export const FaceConcernMap: React.FC<{ concerns: ConcernItem[] }> = ({ concerns
                 aria-hidden
               />
               <span className="sv-legend-zone">{REGION_LABELS[region]}</span>
-              <span className="sv-legend-concerns">{hit.concerns.join(" · ")}</span>
+              <span className="sv-legend-concerns">
+                {hit.concerns.join(" · ")}
+              </span>
             </li>
           ))}
         </ul>
       ) : (
         <p className="sv-facemap-empty">
-          Nothing localised to a specific zone — your skin read evenly across the face.
+          Nothing localised to a specific zone — your skin read evenly across
+          the face.
         </p>
       )}
     </div>
@@ -213,8 +228,12 @@ export const FaceConcernMap: React.FC<{ concerns: ConcernItem[] }> = ({ concerns
 
 /** The result card shows only the winning type; this shows how close the
  *  runner-ups were, which matters when confidence is low. */
-export const SkinTypeSpread: React.FC<{ skinType: SkinTypeResult }> = ({ skinType }) => {
-  const entries = Object.entries(skinType.probs || {}).sort((a, b) => b[1] - a[1]);
+export const SkinTypeSpread: React.FC<{ skinType: SkinTypeResult }> = ({
+  skinType,
+}) => {
+  const entries = Object.entries(skinType.probs || {}).sort(
+    (a, b) => b[1] - a[1],
+  );
   if (!entries.length) return null;
 
   return (

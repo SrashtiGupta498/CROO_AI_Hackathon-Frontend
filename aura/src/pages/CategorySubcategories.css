@@ -11,17 +11,34 @@
    definition also lives in Categories.css — the only other page
    that renders CategoryFlashCard. */
 @keyframes cardFadeUp {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes category-subs-hero-fade-in {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .category-subs-hero {
-  background: linear-gradient(135deg, var(--ae-ink-soft) 0%, #1e3329 50%, var(--ae-ink) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--ae-ink-soft) 0%,
+    #1e3329 50%,
+    var(--ae-ink) 100%
+  );
   padding: 48px 0 56px;
   position: relative;
   overflow: hidden;
@@ -33,7 +50,11 @@
   width: 280px;
   height: 280px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(168, 197, 171, 0.16) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(168, 197, 171, 0.16) 0%,
+    transparent 70%
+  );
   pointer-events: none;
 }
 .category-subs-hero-fade {

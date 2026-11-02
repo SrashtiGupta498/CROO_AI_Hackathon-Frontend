@@ -13,8 +13,8 @@ export class GeminiService {
    * so the page can show its own fallback text.
    */
   async getChatReply(
-    history: { role: 'user' | 'bot'; text: string }[],
-    reportSummary?: string | null
+    history: { role: "user" | "bot"; text: string }[],
+    reportSummary?: string | null,
   ): Promise<string | null> {
     try {
       const res = await API.post("/ai/chat", {

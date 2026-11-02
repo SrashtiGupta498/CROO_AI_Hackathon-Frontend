@@ -11,11 +11,11 @@
    ============================================================ */
 
 .ai-page {
-  --ai-deep: #5C382C;   /* deep cocoa — gradient base                       */
-  --ai-warm: #8B5A44;   /* warm clay — links & icons on ivory (6.2:1)       */
-  --ai-flame: #C08063;  /* brand clay — tiles, accents, gradient end        */
-  --ai-gold: #E9CFAE;   /* warm sand — highlights on the dark gradient only */
-  --ai-scan: #3D5B4F;   /* the scan's forest — imported-report card only    */
+  --ai-deep: #5c382c; /* deep cocoa — gradient base                       */
+  --ai-warm: #8b5a44; /* warm clay — links & icons on ivory (6.2:1)       */
+  --ai-flame: #c08063; /* brand clay — tiles, accents, gradient end        */
+  --ai-gold: #e9cfae; /* warm sand — highlights on the dark gradient only */
+  --ai-scan: #3d5b4f; /* the scan's forest — imported-report card only    */
 }
 
 /* ─── LEFT: identity panel ─── */
@@ -36,7 +36,7 @@
 
 .ai-panel-left::before,
 .ai-panel-left::after {
-  content: '';
+  content: "";
   position: absolute;
   border-radius: 9999px;
   filter: blur(70px);
@@ -65,9 +65,16 @@
 }
 
 @keyframes ai-drift {
-  0%, 100% { transform: translate(0, 0); }
-  33%      { transform: translate(24px, -20px); }
-  66%      { transform: translate(-20px, 18px); }
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(24px, -20px);
+  }
+  66% {
+    transform: translate(-20px, 18px);
+  }
 }
 
 /* Frosted element sitting ON the gradient */
@@ -76,7 +83,10 @@
   border: 1px solid rgba(255, 255, 255, 0.22);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  transition: background 0.3s ease, transform 0.25s ease, border-color 0.3s ease;
+  transition:
+    background 0.3s ease,
+    transform 0.25s ease,
+    border-color 0.3s ease;
 }
 
 .ai-chip:hover {
@@ -90,9 +100,11 @@
    goes there" rather than as another chat control. */
 .ai-entry {
   background: #fff;
-  color: #24463A;
+  color: #24463a;
   box-shadow: 0 16px 40px -14px rgba(0, 0, 0, 0.45);
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+  transition:
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.25s ease;
 }
 
 .ai-entry:hover {
@@ -100,17 +112,29 @@
   box-shadow: 0 24px 54px -16px rgba(0, 0, 0, 0.5);
 }
 
-.ai-tile-flame { background: linear-gradient(135deg, var(--ai-warm), var(--ai-flame)); }
+.ai-tile-flame {
+  background: linear-gradient(135deg, var(--ai-warm), var(--ai-flame));
+}
 /* Green tile — used only on the cross-link out to the scan. */
-.ai-tile-scan { background: linear-gradient(135deg, #24463A, var(--ai-scan)); }
+.ai-tile-scan {
+  background: linear-gradient(135deg, #24463a, var(--ai-scan));
+}
 
 /* ─── RIGHT: conversation surface ─── */
 
 .ai-panel-right {
   background:
-    radial-gradient(circle at 100% 0%, rgba(198, 125, 99, 0.07) 0%, transparent 42%),
-    radial-gradient(circle at 0% 100%, rgba(198, 166, 107, 0.07) 0%, transparent 42%),
-    #FCFAF7;
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(198, 125, 99, 0.07) 0%,
+      transparent 42%
+    ),
+    radial-gradient(
+      circle at 0% 100%,
+      rgba(198, 166, 107, 0.07) 0%,
+      transparent 42%
+    ),
+    #fcfaf7;
 }
 
 /* User bubble */
@@ -130,17 +154,26 @@
 .ai-send {
   background: linear-gradient(120deg, var(--ai-deep), var(--ai-warm));
   box-shadow: 0 8px 20px -8px rgba(92, 56, 44, 0.45);
-  transition: filter 0.25s ease, transform 0.15s ease;
+  transition:
+    filter 0.25s ease,
+    transform 0.15s ease;
 }
 
-.ai-send:not(:disabled):hover { filter: brightness(1.08); }
-.ai-send:disabled { background: rgba(45, 42, 38, 0.15); box-shadow: none; }
+.ai-send:not(:disabled):hover {
+  filter: brightness(1.08);
+}
+.ai-send:disabled {
+  background: rgba(45, 42, 38, 0.15);
+  box-shadow: none;
+}
 
 /* Suggestion chip inside the conversation column */
 .ai-suggest {
   background: rgba(139, 90, 68, 0.1);
   color: var(--ai-warm);
-  transition: background 0.25s ease, transform 0.2s ease;
+  transition:
+    background 0.25s ease,
+    transform 0.2s ease;
 }
 
 .ai-suggest:hover {
@@ -154,12 +187,23 @@
 }
 
 @keyframes ai-fade-up {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ai-panel-left::before,
-  .ai-panel-left::after { animation: none; }
-  .ai-fade-up { animation-duration: 0.01ms; opacity: 1; }
+  .ai-panel-left::after {
+    animation: none;
+  }
+  .ai-fade-up {
+    animation-duration: 0.01ms;
+    opacity: 1;
+  }
 }

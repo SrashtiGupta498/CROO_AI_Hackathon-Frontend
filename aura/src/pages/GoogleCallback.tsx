@@ -4,8 +4,9 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store/store";
 import { googleLogin } from "../store/user/user.action";
 import { consumeGoogleOAuthState } from "../utils/googleOAuth";
-import { Loader2, AlertCircle, Leaf } from "lucide-react";
+import { Loader2, AlertCircle } from "lucide-react";
 import "./GoogleCallback.css";
+import Logo from "../components/Logo";
 
 const GoogleCallback: React.FC = () => {
   const navigate = useNavigate();
@@ -61,13 +62,12 @@ const GoogleCallback: React.FC = () => {
         setTimeout(() => navigate("/Login"), 3000);
       }
     });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-ink font-sans">
       <div className="gcb-glow-card rounded-[2.5rem] p-14 flex flex-col items-center gap-8 max-w-sm w-full mx-4">
-
         {/* Animated ring icon */}
         <div className="relative flex items-center justify-center w-20 h-20">
           {status === "loading" && (
@@ -88,14 +88,8 @@ const GoogleCallback: React.FC = () => {
           </div>
         </div>
 
-        {/* Brand tag */}
-        <div className="flex items-center gap-2">
-          <Leaf size={12} className="text-sage-light" />
-          <span className="text-[10px] tracking-[0.3em] font-bold text-sage-light uppercase">
-            Aura &amp; Earth
-          </span>
-          <Leaf size={12} className="text-sage-light scale-x-[-1]" />
-        </div>
+        {/* Brand tag — the same lockup the header and the auth panels use. */}
+        <Logo tone="dark" size="sm" />
 
         {/* Message */}
         <div className="text-center space-y-2">

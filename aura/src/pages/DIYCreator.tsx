@@ -79,13 +79,22 @@ const normalizeRecipe = (post: any, index: number): Recipe => {
     title: post?.title || hero?.title || "Untitled Recipe",
     subtitle: post?.subtitle || "",
     category:
-      post?.category?.name || post?.category || post?.subtitle || post?.tags?.[0] || "",
+      post?.category?.name ||
+      post?.category ||
+      post?.subtitle ||
+      post?.tags?.[0] ||
+      "",
     level: post?.level || "",
     description:
-      post?.description || post?.excerpt || hero?.subtitle || post?.subtitle || "",
+      post?.description ||
+      post?.excerpt ||
+      hero?.subtitle ||
+      post?.subtitle ||
+      "",
     time: post?.time || post?.readTime || "",
     servings: post?.servings || "",
-    videoUrl: post?.videoUrl || post?.video || post?.videoURL || hero?.video || "",
+    videoUrl:
+      post?.videoUrl || post?.video || post?.videoURL || hero?.video || "",
     highlights: Array.isArray(post?.highlights)
       ? post.highlights
       : Array.isArray(post?.tags)
@@ -108,7 +117,8 @@ const normalizeRecipe = (post: any, index: number): Recipe => {
    bundled stock photo. Covers may be a photograph or a short clip, so they go
    through PostCover; the path is resolved because uploads come back relative
    ("/uploads/…") and must be served from the API host. */
-const getRecipeImage = (recipe: Recipe) => toAbsoluteUrl(recipe.hero?.trim() || "");
+const getRecipeImage = (recipe: Recipe) =>
+  toAbsoluteUrl(recipe.hero?.trim() || "");
 
 const getLevelLabel = (value?: string) => value?.trim() || "Beginner";
 const getCategoryLabel = (value?: string) => value?.trim() || "DIY";
@@ -119,14 +129,17 @@ const cleanValue = (value?: string) => value?.trim() || "";
 
 /// A recipe's own how-to video, or "" — the section is dropped when there is
 // none rather than playing an unrelated sample clip.
-const getRecipeVideo = (recipe: Recipe) => toAbsoluteUrl(recipe.videoUrl?.trim() || "");
-const getTimeLabel = (value?: string) => value?.trim() || "Time not specified";
-const getServingLabel = (value?: string) => value?.trim() || "Servings not specified";
+const getRecipeVideo = (recipe: Recipe) =>
+  toAbsoluteUrl(recipe.videoUrl?.trim() || "");
 
 const normalizeSteps = (steps?: RecipeStep[]) => {
   const parsed = (steps || []).map((entry) => {
     if (typeof entry === "string") return entry.trim();
-    if (entry && typeof entry === "object" && typeof entry.instruction === "string")
+    if (
+      entry &&
+      typeof entry === "object" &&
+      typeof entry.instruction === "string"
+    )
       return entry.instruction.trim();
     return "";
   });
@@ -135,7 +148,9 @@ const normalizeSteps = (steps?: RecipeStep[]) => {
   return filtered.length > 0 ? filtered : FALLBACK_STEPS;
 };
 
-const normalizeIngredients = (ingredients: Array<RecipeIngredient | string> = []) => {
+const normalizeIngredients = (
+  ingredients: Array<RecipeIngredient | string> = [],
+) => {
   return ingredients.map((item, index): NormalizedIngredient => {
     if (typeof item === "string") {
       // A bare string ingredient carries no picture of its own.
@@ -190,10 +205,19 @@ const SectionBlock = ({ section }: { section: RecipeSection }) => {
   // Photos uploaded via the Story Editor's Image block — previously fell
   // through to the generic text branch below (which has nothing to show
   // for an image section: no title, no body) and silently rendered blank.
-  if (type === "image" || type === "hero" || type === "gallery" || type === "images") {
-    const urls = (section.images?.length ? section.images : section.image ? [section.image] : []).map(
-      toAbsoluteUrl,
-    );
+  if (
+    type === "image" ||
+    type === "hero" ||
+    type === "gallery" ||
+    type === "images"
+  ) {
+    const urls = (
+      section.images?.length
+        ? section.images
+        : section.image
+          ? [section.image]
+          : []
+    ).map(toAbsoluteUrl);
     if (!urls.length) return null;
     // `gallery`/`images` is what the editor's Carousel layout saves as; a
     // plain `image` section is a single plate. ImageCarousel handles both and
@@ -204,7 +228,9 @@ const SectionBlock = ({ section }: { section: RecipeSection }) => {
     return (
       <section className="mb-12">
         {section.title && (
-          <h3 className="font-serif text-2xl md:text-3xl text-ink mb-4">{section.title}</h3>
+          <h3 className="font-serif text-2xl md:text-3xl text-ink mb-4">
+            {section.title}
+          </h3>
         )}
         <div className="diy-card rounded-[24px] overflow-hidden">
           <ImageCarousel
@@ -213,7 +239,11 @@ const SectionBlock = ({ section }: { section: RecipeSection }) => {
             aspect="16 / 10"
           />
         </div>
-        {section.caption && <p className="mt-3 text-sm italic text-muted text-center">{section.caption}</p>}
+        {section.caption && (
+          <p className="mt-3 text-sm italic text-muted text-center">
+            {section.caption}
+          </p>
+        )}
       </section>
     );
   }
@@ -223,7 +253,9 @@ const SectionBlock = ({ section }: { section: RecipeSection }) => {
     return (
       <section className="mb-12">
         {section.title && (
-          <h3 className="font-serif text-2xl md:text-3xl text-ink mb-4">{section.title}</h3>
+          <h3 className="font-serif text-2xl md:text-3xl text-ink mb-4">
+            {section.title}
+          </h3>
         )}
         <div className="rounded-[24px] overflow-hidden diy-card bg-black">
           <video
@@ -234,7 +266,11 @@ const SectionBlock = ({ section }: { section: RecipeSection }) => {
             className="w-full h-auto max-h-[520px] object-cover"
           />
         </div>
-        {section.caption && <p className="mt-3 text-sm italic text-muted text-center">{section.caption}</p>}
+        {section.caption && (
+          <p className="mt-3 text-sm italic text-muted text-center">
+            {section.caption}
+          </p>
+        )}
       </section>
     );
   }
@@ -264,7 +300,11 @@ const SectionBlock = ({ section }: { section: RecipeSection }) => {
             />
           )}
         </div>
-        {section.caption && <p className="mt-3 text-sm italic text-muted text-center">{section.caption}</p>}
+        {section.caption && (
+          <p className="mt-3 text-sm italic text-muted text-center">
+            {section.caption}
+          </p>
+        )}
       </section>
     );
   }
@@ -283,7 +323,9 @@ const SectionBlock = ({ section }: { section: RecipeSection }) => {
           </p>
         )}
         {section.author && (
-          <p className="mt-4 text-sm font-bold text-muted">— {section.author}</p>
+          <p className="mt-4 text-sm font-bold text-muted">
+            — {section.author}
+          </p>
         )}
       </section>
     );
@@ -294,7 +336,9 @@ const SectionBlock = ({ section }: { section: RecipeSection }) => {
   return (
     <section className="mb-12">
       {section.title && (
-        <h3 className="font-serif text-2xl md:text-3xl text-ink mb-2">{section.title}</h3>
+        <h3 className="font-serif text-2xl md:text-3xl text-ink mb-2">
+          {section.title}
+        </h3>
       )}
       {section.subtitle && (
         <p className="italic text-muted mb-5">{section.subtitle}</p>
@@ -313,7 +357,9 @@ const SectionBlock = ({ section }: { section: RecipeSection }) => {
                       <p className="text-[11px] uppercase tracking-[0.2em] font-bold text-sage mb-2">
                         Step {String(i + 1).padStart(2, "0")}
                       </p>
-                      <p className="text-lg leading-relaxed text-[#231a11]">{text}</p>
+                      <p className="text-lg leading-relaxed text-[#231a11]">
+                        {text}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -325,7 +371,10 @@ const SectionBlock = ({ section }: { section: RecipeSection }) => {
             return (
               <ul key={index} className="space-y-2">
                 {block.items.map((text, i) => (
-                  <li key={i} className="flex items-start gap-3 text-[#231a11] leading-relaxed">
+                  <li
+                    key={i}
+                    className="flex items-start gap-3 text-[#231a11] leading-relaxed"
+                  >
                     <span className="mt-2 w-1.5 h-1.5 rounded-full bg-sage flex-shrink-0" />
                     <span>{text}</span>
                   </li>
@@ -335,7 +384,10 @@ const SectionBlock = ({ section }: { section: RecipeSection }) => {
           }
 
           return block.items.map((text, i) => (
-            <p key={`${index}-${i}`} className="text-lg leading-relaxed text-[#231a11]">
+            <p
+              key={`${index}-${i}`}
+              className="text-lg leading-relaxed text-[#231a11]"
+            >
               {text}
             </p>
           ));
@@ -354,49 +406,58 @@ const RecipeBlock = ({
 }) => {
   const cover = getRecipeImage(recipe);
   return (
-  <button onClick={onOpen} className="group text-left">
-    <article className="bg-paper rounded-[20px] overflow-hidden border border-ink/5 card-shadow hover:-translate-y-1 transition-all">
-      <div className="aspect-[16/10] overflow-hidden">
-        {cover ? (
-          <PostCover
-            src={cover}
-            alt={recipe.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-          />
-        ) : (
-          // A recipe with no cover of its own gets the quiet branded tile —
-          // the same "no cover" language PostCover itself falls back to.
-          <div
-            className="w-full h-full"
-            style={{ background: "linear-gradient(135deg, var(--color-sage) 0%, var(--color-ink) 100%)" }}
-          />
-        )}
-      </div>
-      <div className="p-4 space-y-2">
-        <p className="text-[11px] uppercase tracking-[0.2em] font-bold text-sage">
-          {getCategoryLabel(recipe.category)}
-        </p>
-        <h2 className="font-serif text-2xl text-ink group-hover:text-sage">{recipe.title}</h2>
-        <p className="text-sm text-muted leading-relaxed">{recipe.description}</p>
-        <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] font-bold text-muted">
-          {/* Promised a video guide unconditionally before, including for the
-              many recipes that have no clip at all. */}
-          {getRecipeVideo(recipe) && (
-            <span className="flex items-center gap-1">
-              <span className="material-icons-round text-sm">play_circle</span>
-              Video guide
-            </span>
-          )}
-          {cleanValue(recipe.time) && (
-            <span className="flex items-center gap-1">
-              <span className="material-icons-round text-sm">schedule</span>
-              {cleanValue(recipe.time)}
-            </span>
+    <button onClick={onOpen} className="group text-left">
+      <article className="bg-paper rounded-[20px] overflow-hidden border border-ink/5 card-shadow hover:-translate-y-1 transition-all">
+        <div className="aspect-[16/10] overflow-hidden">
+          {cover ? (
+            <PostCover
+              src={cover}
+              alt={recipe.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+            />
+          ) : (
+            // A recipe with no cover of its own gets the quiet branded tile —
+            // the same "no cover" language PostCover itself falls back to.
+            <div
+              className="w-full h-full"
+              style={{
+                background:
+                  "linear-gradient(135deg, var(--color-sage) 0%, var(--color-ink) 100%)",
+              }}
+            />
           )}
         </div>
-      </div>
-    </article>
-  </button>
+        <div className="p-4 space-y-2">
+          <p className="text-[11px] uppercase tracking-[0.2em] font-bold text-sage">
+            {getCategoryLabel(recipe.category)}
+          </p>
+          <h2 className="font-serif text-2xl text-ink group-hover:text-sage">
+            {recipe.title}
+          </h2>
+          <p className="text-sm text-muted leading-relaxed">
+            {recipe.description}
+          </p>
+          <div className="flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] font-bold text-muted">
+            {/* Promised a video guide unconditionally before, including for the
+              many recipes that have no clip at all. */}
+            {getRecipeVideo(recipe) && (
+              <span className="flex items-center gap-1">
+                <span className="material-icons-round text-sm">
+                  play_circle
+                </span>
+                Video guide
+              </span>
+            )}
+            {cleanValue(recipe.time) && (
+              <span className="flex items-center gap-1">
+                <span className="material-icons-round text-sm">schedule</span>
+                {cleanValue(recipe.time)}
+              </span>
+            )}
+          </div>
+        </div>
+      </article>
+    </button>
   );
 };
 
@@ -448,7 +509,13 @@ const SaveRecipeButton = ({ recipeId }: { recipeId: string }) => {
       onClick={toggle}
       disabled={busy}
       className="p-2 rounded-full hover:bg-black/5 transition-colors disabled:opacity-50"
-      title={signedIn ? (saved ? "Saved — tap to remove" : "Save recipe") : "Sign in to save"}
+      title={
+        signedIn
+          ? saved
+            ? "Saved — tap to remove"
+            : "Save recipe"
+          : "Sign in to save"
+      }
       aria-label={saved ? "Remove from saved" : "Save recipe"}
       aria-pressed={saved}
     >
@@ -470,9 +537,10 @@ const RecipeDetails = ({
   const hasSections = sections.length > 0;
   const steps = normalizeSteps(recipe.steps);
   const ingredients = normalizeIngredients(recipe.ingredients || []);
-  const highlights = recipe.highlights && recipe.highlights.length > 0
-    ? recipe.highlights
-    : ["No highlights added for this recipe."];
+  const highlights =
+    recipe.highlights && recipe.highlights.length > 0
+      ? recipe.highlights
+      : ["No highlights added for this recipe."];
   const heroImage = getRecipeImage(recipe);
   const heroVideo = getRecipeVideo(recipe);
 
@@ -481,10 +549,17 @@ const RecipeDetails = ({
       <div className="diy-page-paper">
         <header className="max-w-4xl mx-auto px-4 md:px-6 pt-4">
           <div className="h-16 rounded-[20px] bg-paper/85 backdrop-blur-sm border border-ink/10 flex items-center justify-between px-4">
-            <button onClick={onBack} className="p-2 rounded-full hover:bg-black/5 transition-colors">
-              <span className="material-icons-round text-primary">arrow_back</span>
+            <button
+              onClick={onBack}
+              className="p-2 rounded-full hover:bg-black/5 transition-colors"
+            >
+              <span className="material-icons-round text-primary">
+                arrow_back
+              </span>
             </button>
-            <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-primary">Recipe</h1>
+            <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-primary">
+              Recipe
+            </h1>
             <SaveRecipeButton recipeId={recipe.id} />
           </div>
         </header>
@@ -497,7 +572,12 @@ const RecipeDetails = ({
           {heroImage && (
             <section className="mb-8">
               <div className="overflow-hidden rounded-[24px] diy-card aspect-[1.34/1] w-full">
-                <PostCover src={heroImage} alt={recipe.title} className="w-full h-full object-cover" />
+                <PostCover
+                  src={heroImage}
+                  alt={recipe.title}
+                  loading="eager"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </section>
           )}
@@ -505,8 +585,12 @@ const RecipeDetails = ({
           {heroVideo && (
             <section className="mb-12">
               <div className="flex items-center gap-2 mb-3">
-                <span className="material-icons-round text-sage">play_circle</span>
-                <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-sage">Watch &amp; make it</h3>
+                <span className="material-icons-round text-sage">
+                  play_circle
+                </span>
+                <h3 className="text-[11px] font-bold uppercase tracking-[0.2em] text-sage">
+                  Watch &amp; make it
+                </h3>
               </div>
               <div className="overflow-hidden rounded-[24px] diy-card bg-black aspect-video w-full">
                 <video
@@ -532,18 +616,24 @@ const RecipeDetails = ({
                 {getLevelLabel(recipe.level)}
               </span>
             </div>
-            <h2 className="font-serif text-3xl md:text-5xl leading-tight text-[#231a11] mb-3">{recipe.title}</h2>
+            <h2 className="font-serif text-3xl md:text-5xl leading-tight text-[#231a11] mb-3">
+              {recipe.title}
+            </h2>
             <p className="italic text-muted mb-8">{recipe.description}</p>
             <div className="flex items-center gap-8 border-t border-muted/20 pt-6">
               <div className="flex items-center gap-2">
-                <span className="material-icons-round text-sage text-base">spa</span>
+                <span className="material-icons-round text-sage text-base">
+                  spa
+                </span>
                 <span className="text-[11px] uppercase tracking-[0.2em] font-bold text-muted">
                   {getLevelLabel(recipe.level)}
                 </span>
               </div>
               {cleanValue(recipe.time) && (
                 <div className="flex items-center gap-2">
-                  <span className="material-icons-round text-sage text-base">schedule</span>
+                  <span className="material-icons-round text-sage text-base">
+                    schedule
+                  </span>
                   <span className="text-[11px] uppercase tracking-[0.2em] font-bold text-muted">
                     {cleanValue(recipe.time)}
                   </span>
@@ -551,7 +641,9 @@ const RecipeDetails = ({
               )}
               {cleanValue(recipe.servings) && (
                 <div className="flex items-center gap-2">
-                  <span className="material-icons-round text-sage text-base">restaurant</span>
+                  <span className="material-icons-round text-sage text-base">
+                    restaurant
+                  </span>
                   <span className="text-[11px] uppercase tracking-[0.2em] font-bold text-muted">
                     {cleanValue(recipe.servings)}
                   </span>
@@ -563,24 +655,40 @@ const RecipeDetails = ({
           {hasSections ? (
             <div className="mb-20">
               {sections.map((section, index) => (
-                <SectionBlock key={`${recipe.id}-section-${index}`} section={section} />
+                <SectionBlock
+                  key={`${recipe.id}-section-${index}`}
+                  section={section}
+                />
               ))}
             </div>
           ) : (
             <>
               <section className="mb-20">
-                <h3 className="font-serif text-3xl text-ink mb-8">Ingredients</h3>
+                <h3 className="font-serif text-3xl text-ink mb-8">
+                  Ingredients
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                   {ingredients.map((item, index) => (
-                    <article key={`${item.name}-${index}`} className="bg-paper rounded-[20px] p-4 flex items-center gap-4 diy-card">
+                    <article
+                      key={`${item.name}-${index}`}
+                      className="bg-paper rounded-[20px] p-4 flex items-center gap-4 diy-card"
+                    >
                       {item.img && (
                         <div className="w-24 h-24 rounded-full overflow-hidden flex-shrink-0">
-                          <img src={item.img} alt={item.name} className="w-full h-full object-cover" />
+                          <img
+                            src={item.img}
+                            alt={item.name}
+                            className="w-full h-full object-cover"
+                          />
                         </div>
                       )}
                       <div>
-                        <h4 className="font-serif text-xl text-ink mb-1">{item.name}</h4>
-                        <p className="text-sm text-muted leading-relaxed">{item.note || "No notes added."}</p>
+                        <h4 className="font-serif text-xl text-ink mb-1">
+                          {item.name}
+                        </h4>
+                        <p className="text-sm text-muted leading-relaxed">
+                          {item.note || "No notes added."}
+                        </p>
                       </div>
                     </article>
                   ))}
@@ -588,10 +696,15 @@ const RecipeDetails = ({
               </section>
 
               <section className="mb-20">
-                <h3 className="font-serif text-3xl text-ink mb-10">How to make</h3>
+                <h3 className="font-serif text-3xl text-ink mb-10">
+                  How to make
+                </h3>
                 <div className="space-y-12">
                   {steps.map((text, index) => (
-                    <div key={`${recipe.id}-step-${index}`} className="diy-step-item relative flex gap-6">
+                    <div
+                      key={`${recipe.id}-step-${index}`}
+                      className="diy-step-item relative flex gap-6"
+                    >
                       <div className="diy-step-line relative">
                         <div className="w-4 h-4 rounded-full bg-sage ring-4 ring-sage-light mt-1.5 relative z-10" />
                       </div>
@@ -599,7 +712,9 @@ const RecipeDetails = ({
                         <p className="text-[11px] uppercase tracking-[0.2em] font-bold text-sage mb-2">
                           Step {String(index + 1).padStart(2, "0")}
                         </p>
-                        <p className="text-lg leading-relaxed text-[#231a11]">{text}</p>
+                        <p className="text-lg leading-relaxed text-[#231a11]">
+                          {text}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -607,7 +722,9 @@ const RecipeDetails = ({
               </section>
 
               <section className="mb-20 bg-paper rounded-[24px] diy-card p-8 md:p-10">
-                <h3 className="font-serif text-3xl text-ink mb-6">Why You'll Love It</h3>
+                <h3 className="font-serif text-3xl text-ink mb-6">
+                  Why You'll Love It
+                </h3>
                 <div className="flex flex-wrap gap-3">
                   {highlights.map((item) => (
                     <span
@@ -625,11 +742,15 @@ const RecipeDetails = ({
           <footer className="border-t border-muted/20 pt-8 pb-6 space-y-4">
             <div className="flex items-start gap-4 text-muted">
               <span className="material-icons-round mt-[2px]">inventory_2</span>
-              <p className="leading-relaxed">Store in a cool, dry place away from direct sunlight.</p>
+              <p className="leading-relaxed">
+                Store in a cool, dry place away from direct sunlight.
+              </p>
             </div>
             <div className="flex items-start gap-4 text-muted">
               <span className="material-icons-round mt-[2px]">history</span>
-              <p className="leading-relaxed">Shelf life: approximately 6 months.</p>
+              <p className="leading-relaxed">
+                Shelf life: approximately 6 months.
+              </p>
             </div>
           </footer>
         </main>
@@ -709,7 +830,8 @@ const DIYCreator: React.FC = () => {
       .then((res) => {
         if (!active) return;
         const raw = res.data?.data ?? res.data;
-        if (raw && (raw._id || raw.id)) setFetchedRecipe(normalizeRecipe(raw, 0));
+        if (raw && (raw._id || raw.id))
+          setFetchedRecipe(normalizeRecipe(raw, 0));
       })
       .catch(() => {
         /* keep whatever list-derived fallback we already have, if any */
@@ -719,7 +841,8 @@ const DIYCreator: React.FC = () => {
     };
   }, [id]);
 
-  const selected = fetchedRecipe || (id ? recipes.find((recipe) => recipe.id === id) : null);
+  const selected =
+    fetchedRecipe || (id ? recipes.find((recipe) => recipe.id === id) : null);
 
   if (selected) {
     return <RecipeDetails recipe={selected} onBack={() => navigate("/diy")} />;
@@ -729,8 +852,12 @@ const DIYCreator: React.FC = () => {
     <div className="min-h-screen bg-paper-2 text-mocha px-4 md:px-8 pb-28">
       <div className="diy-page-paper min-h-full max-w-6xl mx-auto">
         <header className="pt-6 pb-8">
-          <h1 className="font-serif text-4xl md:text-5xl text-ink">DIY Recipes</h1>
-          <p className="mt-2 text-muted">Choose a recipe card and open step-by-step instructions.</p>
+          <h1 className="font-serif text-4xl md:text-5xl text-ink">
+            DIY Recipes
+          </h1>
+          <p className="mt-2 text-muted">
+            Choose a recipe card and open step-by-step instructions.
+          </p>
         </header>
 
         {loading && (
@@ -764,13 +891,15 @@ const DIYCreator: React.FC = () => {
         )}
 
         {!loading && !error && recipes.length === 0 && (
-          <div className="py-20 text-center text-muted">No DIY recipes found.</div>
+          <div className="py-20 text-center text-muted">
+            No DIY recipes found.
+          </div>
         )}
 
         {!loading && !error && recipes.length > 0 && (
           <>
             <section className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6">
-              {recipes.map((recipe, index) => (
+              {recipes.map((recipe) => (
                 <RecipeBlock
                   key={recipe.id}
                   recipe={recipe}
@@ -778,7 +907,11 @@ const DIYCreator: React.FC = () => {
                 />
               ))}
             </section>
-            <Pagination page={page} totalPages={totalPages} onChange={goToPage} />
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onChange={goToPage}
+            />
           </>
         )}
       </div>

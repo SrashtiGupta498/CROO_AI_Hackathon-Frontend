@@ -40,7 +40,6 @@ import {
 import { vid1, vid2, vid3, vid4, vid5 } from "../assets/index";
 import "./ArticleView.css";
 
-import { ACCENT, DARK } from "../styles/brand";
 import { sanitizeHtml } from "../utils/sanitize";
 import { useToast } from "../components/Toast";
 import { describeError } from "../services/errorMessage";
@@ -49,7 +48,8 @@ import { describeError } from "../services/errorMessage";
 const SIDEBAR_VIDEOS = [vid1, vid2, vid3, vid4, vid5];
 const pickSidebarVideo = (key: string): string => {
   let hash = 0;
-  for (let i = 0; i < key.length; i++) hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+  for (let i = 0; i < key.length; i++)
+    hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
   return SIDEBAR_VIDEOS[hash % SIDEBAR_VIDEOS.length];
 };
 
@@ -64,10 +64,6 @@ const getArticleVideo = (post: any, key: string): string => {
   const ownVideo = fromSection || post?.videoUrl;
   return ownVideo ? toAbsoluteUrl(ownVideo) : pickSidebarVideo(key);
 };
-
-/* ─── Theme tokens ─── */
-const PEACH = "#FFF4E8";    // warm highlight
-const OFF_WHITE = "#F6F2EC"; // = --color-paper-2
 
 /* GenZ universal fallbacks so "do's & don'ts" always render fully. */
 const DEFAULT_DOS = [
@@ -107,13 +103,27 @@ const PremiumCarousel: React.FC<{ images: string[] }> = ({ images }) => {
       <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
       {total > 1 && (
         <>
-          <button onClick={prevSlide} className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/15 backdrop-blur-xl border border-white/20 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 hover:bg-white/25">←</button>
-          <button onClick={nextSlide} className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/15 backdrop-blur-xl border border-white/20 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 hover:bg-white/25">→</button>
+          <button
+            onClick={prevSlide}
+            className="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/15 backdrop-blur-xl border border-white/20 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 hover:bg-white/25"
+          >
+            ←
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/15 backdrop-blur-xl border border-white/20 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 hover:bg-white/25"
+          >
+            →
+          </button>
         </>
       )}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10">
         {images.map((_, i) => (
-          <button key={i} onClick={() => setCurrentIndex(i)} className={`h-1.5 transition-all duration-500 rounded-full ${i === currentIndex ? "w-8 bg-white" : "w-2 bg-white/40 hover:bg-white/60"}`} />
+          <button
+            key={i}
+            onClick={() => setCurrentIndex(i)}
+            className={`h-1.5 transition-all duration-500 rounded-full ${i === currentIndex ? "w-8 bg-white" : "w-2 bg-white/40 hover:bg-white/60"}`}
+          />
         ))}
       </div>
     </div>
@@ -127,9 +137,18 @@ type ArticleAIMetadata = {
   keyTakeaways?: string[];
   steps?: { stepLabel?: string; title?: string; body?: string }[];
 };
-type ArticleSection = { type?: string; body?: string; images?: string[]; title?: string };
+type ArticleSection = {
+  type?: string;
+  body?: string;
+  images?: string[];
+  title?: string;
+};
 
-const stripHtmlText = (value = "") => value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+const stripHtmlText = (value = "") =>
+  value
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 /* ─── Comment display helpers ─── */
 const commentAuthor = (c: any) => {
@@ -140,7 +159,8 @@ const commentAuthor = (c: any) => {
   }
   return { name: "Reader", avatar: "" };
 };
-const commentInitial = (name: string) => (name?.trim()?.[0] || "R").toUpperCase();
+const commentInitial = (name: string) =>
+  (name?.trim()?.[0] || "R").toUpperCase();
 const relativeTime = (iso?: string) => {
   if (!iso) return "";
   const then = new Date(iso).getTime();
@@ -158,14 +178,24 @@ const relativeTime = (iso?: string) => {
 
 const normalizeAiMetadata = (raw: any = {}): ArticleAIMetadata => ({
   summary: typeof raw?.summary === "string" ? raw.summary.trim() : "",
-  highlights: Array.isArray(raw?.highlights) ? raw.highlights.map((h: any) => String(h).trim()).filter(Boolean) : [],
-  keyTakeaways: Array.isArray(raw?.keyTakeaways) ? raw.keyTakeaways.map((k: any) => String(k).trim()).filter(Boolean) : [],
+  highlights: Array.isArray(raw?.highlights)
+    ? raw.highlights.map((h: any) => String(h).trim()).filter(Boolean)
+    : [],
+  keyTakeaways: Array.isArray(raw?.keyTakeaways)
+    ? raw.keyTakeaways.map((k: any) => String(k).trim()).filter(Boolean)
+    : [],
   steps: Array.isArray(raw?.steps)
     ? raw.steps
         .map((s: any) => ({
           stepLabel: typeof s?.stepLabel === "string" ? s.stepLabel : "",
-          title: typeof s?.title === "string" && s.title.trim() ? s.title.trim() : "Step",
-          body: typeof s?.body === "string" ? s.body.trim() : String(s?.body || "").trim(),
+          title:
+            typeof s?.title === "string" && s.title.trim()
+              ? s.title.trim()
+              : "Step",
+          body:
+            typeof s?.body === "string"
+              ? s.body.trim()
+              : String(s?.body || "").trim(),
         }))
         .filter((s: any) => s.body.length > 0)
     : [],
@@ -173,25 +203,43 @@ const normalizeAiMetadata = (raw: any = {}): ArticleAIMetadata => ({
 
 const isTextSection = (type?: string) => {
   const n = (type || "").toLowerCase();
-  return n === "text" || n === "paragraph" || n === "title" || n === "intro" || n === "highlight" || n === "conclusion";
+  return (
+    n === "text" ||
+    n === "paragraph" ||
+    n === "title" ||
+    n === "intro" ||
+    n === "highlight" ||
+    n === "conclusion"
+  );
 };
 
 const extractArticleParagraphs = (sections: ArticleSection[] = []) =>
   sections
     .filter((s) => isTextSection(s.type) && typeof s.body === "string")
-    .map((s) => stripHtmlText(`${s.title ? `${s.title}. ` : ""}${s.body || ""}`))
+    .map((s) =>
+      stripHtmlText(`${s.title ? `${s.title}. ` : ""}${s.body || ""}`),
+    )
     .filter(Boolean);
 
 const inferStepsFromText = (paragraphs: string[]) => {
-  const regex = /^(?:\s*(?:step\s*\d+|first|then|next|finally)\s*[:.\-]?\s*)(.+)/i;
+  const regex =
+    /^(?:\s*(?:step\s*\d+|first|then|next|finally)\s*[:.-]?\s*)(.+)/i;
   const explicit: ArticleAIMetadata["steps"] = [];
   paragraphs.forEach((paragraph, idx) => {
     if (explicit!.length >= 4) return;
     const match = paragraph.match(regex);
     if (match) {
-      explicit!.push({ stepLabel: `0${explicit!.length + 1}`, title: (match[1] || `Step ${explicit!.length + 1}`).slice(0, 60), body: paragraph });
+      explicit!.push({
+        stepLabel: `0${explicit!.length + 1}`,
+        title: (match[1] || `Step ${explicit!.length + 1}`).slice(0, 60),
+        body: paragraph,
+      });
     } else if (idx < 4 && paragraph.length > 40) {
-      explicit!.push({ stepLabel: `0${explicit!.length + 1}`, title: `Step ${explicit!.length + 1}`, body: paragraph });
+      explicit!.push({
+        stepLabel: `0${explicit!.length + 1}`,
+        title: `Step ${explicit!.length + 1}`,
+        body: paragraph,
+      });
     }
   });
   return explicit!.slice(0, 4);
@@ -199,21 +247,66 @@ const inferStepsFromText = (paragraphs: string[]) => {
 
 const detectIngredientSpotlight = (paragraphs: string[]) => {
   const haystack = paragraphs.join(" ").toLowerCase();
-  const keywords = ["aloe", "niacinamide", "hyaluronic", "ceramide", "retinol", "vitamin c", "vitamin e", "rosehip", "centella", "tea tree", "squalane", "panthenol", "milk", "honey", "turmeric"];
+  const keywords = [
+    "aloe",
+    "niacinamide",
+    "hyaluronic",
+    "ceramide",
+    "retinol",
+    "vitamin c",
+    "vitamin e",
+    "rosehip",
+    "centella",
+    "tea tree",
+    "squalane",
+    "panthenol",
+    "milk",
+    "honey",
+    "turmeric",
+  ];
   const found = keywords.find((k) => haystack.includes(k));
   if (!found) return null;
   const sentence = paragraphs.find((p) => p.toLowerCase().includes(found));
-  return { name: found[0].toUpperCase() + found.slice(1), quote: sentence?.slice(0, 180) || "A powerhouse ingredient to anchor this ritual." };
+  return {
+    name: found[0].toUpperCase() + found.slice(1),
+    quote:
+      sentence?.slice(0, 180) ||
+      "A powerhouse ingredient to anchor this ritual.",
+  };
 };
 
 /* ─── Decorative: hand-drawn sprig flourish used between sections ─── */
 const SprigDivider: React.FC<{ className?: string }> = ({ className = "" }) => (
-  <div className={`flex items-center justify-center gap-4 my-16 ${className}`} aria-hidden>
+  <div
+    className={`flex items-center justify-center gap-4 my-16 ${className}`}
+    aria-hidden
+  >
     <span className="h-px w-16 bg-gradient-to-r from-transparent to-[#3D5B4F]/40" />
-    <svg width="40" height="24" viewBox="0 0 40 24" fill="none" className="text-[#3D5B4F] article-view-sway-slow">
-      <path d="M20 2C20 8 20 16 20 22" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M20 8C16 6 13 7 11 4M20 8C24 6 27 7 29 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
-      <path d="M20 14C15 12 11 13 8 10M20 14C25 12 29 13 32 10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+    <svg
+      width="40"
+      height="24"
+      viewBox="0 0 40 24"
+      fill="none"
+      className="text-[#3D5B4F] article-view-sway-slow"
+    >
+      <path
+        d="M20 2C20 8 20 16 20 22"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M20 8C16 6 13 7 11 4M20 8C24 6 27 7 29 4"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
+      <path
+        d="M20 14C15 12 11 13 8 10M20 14C25 12 29 13 32 10"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+      />
       <circle cx="20" cy="2" r="2" fill="currentColor" />
     </svg>
     <span className="h-px w-16 bg-gradient-to-l from-transparent to-[#3D5B4F]/40" />
@@ -222,7 +315,10 @@ const SprigDivider: React.FC<{ className?: string }> = ({ className = "" }) => (
 
 /* ─── Decorative: floating ambient orbs + drifting petals behind content ─── */
 const AmbientDecor: React.FC = () => (
-  <div className="article-view-ambient pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden>
+  <div
+    className="article-view-ambient pointer-events-none fixed inset-0 z-0 overflow-hidden"
+    aria-hidden
+  >
     <div className="absolute -top-32 -left-24 w-[28rem] h-[28rem] rounded-full bg-[#3D5B4F]/10 blur-[90px] article-view-float-orb" />
     <div className="absolute top-1/3 -right-32 w-[32rem] h-[32rem] rounded-full bg-[#FFD9B0]/20 blur-[100px] article-view-float-orb-slow" />
     <div className="absolute bottom-0 left-1/4 w-[24rem] h-[24rem] rounded-full bg-[#DCE5DD]/15 blur-[90px] article-view-float-orb" />
@@ -233,8 +329,19 @@ const AmbientDecor: React.FC = () => (
       { left: "70%", top: "74%", size: 9, delay: "1s", dur: "18s" },
       { left: "46%", top: "40%", size: 8, delay: "3s", dur: "14s" },
     ].map((p, i) => (
-      <svg key={i} width={p.size} height={p.size} viewBox="0 0 24 24" className="absolute text-[#3D5B4F]/25 article-view-petal-drift"
-        style={{ left: p.left, top: p.top, animationDelay: p.delay, animationDuration: p.dur }}>
+      <svg
+        key={i}
+        width={p.size}
+        height={p.size}
+        viewBox="0 0 24 24"
+        className="absolute text-[#3D5B4F]/25 article-view-petal-drift"
+        style={{
+          left: p.left,
+          top: p.top,
+          animationDelay: p.delay,
+          animationDuration: p.dur,
+        }}
+      >
         <path d="M12 2C7 7 7 14 12 22C17 14 17 7 12 2Z" fill="currentColor" />
       </svg>
     ))}
@@ -298,7 +405,9 @@ const ArticleView: React.FC = () => {
     };
   }, [reading, readingTheme]);
 
-  const { currentPost, posts, loading } = useSelector((state: RootState) => state.articles);
+  const { currentPost, posts, loading } = useSelector(
+    (state: RootState) => state.articles,
+  );
   const { currentUser } = useSelector((state: RootState) => state.user);
   const { reels: liveReels } = useSelector((state: RootState) => state.reels);
 
@@ -321,7 +430,8 @@ const ArticleView: React.FC = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const totalHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
       setScrolled(totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0);
     };
     window.addEventListener("scroll", handleScroll);
@@ -337,7 +447,10 @@ const ArticleView: React.FC = () => {
   }, [dispatch, id]);
 
   /* Fallback to the bundled ARTICLES so the page renders without a backend. */
-  const fallback = useMemo(() => ARTICLES.find((a) => String(a.id) === String(id)), [id]);
+  const fallback = useMemo(
+    () => ARTICLES.find((a) => String(a.id) === String(id)),
+    [id],
+  );
   const post: any = currentPost || fallback;
 
   /* ── Save / bookmark this ritual via the engagement API ── */
@@ -382,9 +495,7 @@ const ArticleView: React.FC = () => {
         setSaved(true);
       } else {
         console.error(err);
-        toast.error(
-          describeError(err, "Couldn't update your saved rituals."),
-        );
+        toast.error(describeError(err, "Couldn't update your saved rituals."));
       }
     } finally {
       setSavingBookmark(false);
@@ -399,16 +510,21 @@ const ArticleView: React.FC = () => {
   const [likeCount, setLikeCount] = useState(0);
   const [shareCount, setShareCount] = useState(0);
   const [sharing, setSharing] = useState(false);
-  const [commentCountOverride, setCommentCountOverride] = useState<number | null>(
-    null,
-  );
+  const [commentCountOverride, setCommentCountOverride] = useState<
+    number | null
+  >(null);
 
   // Seed the counts from the post whenever it loads/changes.
   useEffect(() => {
     setLikeCount(Number(post?.stats?.likes) || 0);
     setShareCount(Number(post?.stats?.shares) || 0);
     setCommentCountOverride(null);
-  }, [post?._id, post?.stats?.likes, post?.stats?.shares, post?.stats?.comments]);
+  }, [
+    post?._id,
+    post?.stats?.likes,
+    post?.stats?.shares,
+    post?.stats?.comments,
+  ]);
 
   const viewCount = Number(post?.stats?.views) || 0;
   const commentCount =
@@ -475,7 +591,7 @@ const ArticleView: React.FC = () => {
         await navigator.clipboard.writeText(url);
         toast.success("Link copied to your clipboard.");
       }
-    } catch (err) {
+    } catch {
       // User dismissing the native share sheet is not an error worth surfacing.
     } finally {
       setSharing(false);
@@ -554,7 +670,13 @@ const ArticleView: React.FC = () => {
     }
   };
 
-  const heroImage = useMemo(() => getPostCover(post), [post]);
+  // The author's photo is the last resort before the bare gradient. Not folded
+  // into getPostCover, which the explore cards also call — a grid of author
+  // faces is a different design decision from one hero.
+  const heroImage = useMemo(
+    () => getPostCover(post) || toAbsoluteUrl(post?.author?.avatar, 1600),
+    [post],
+  );
 
   const aiMetadata = useMemo(() => normalizeAiMetadata(post?.ai), [post?.ai]);
   // When the post already has an `ai` object, respect it exactly — empty fields
@@ -565,12 +687,17 @@ const ArticleView: React.FC = () => {
     const fromSections = extractArticleParagraphs(post?.sections || []);
     if (fromSections.length) return fromSections;
     const raw = stripHtmlText(post?.content || post?.subtitle || "");
-    return raw ? raw.split(/(?<=[.!?])\s+/).filter((p) => p.trim().length > 0) : [];
+    return raw
+      ? raw.split(/(?<=[.!?])\s+/).filter((p) => p.trim().length > 0)
+      : [];
   }, [post]);
 
   const readTime = useMemo(() => {
     if (post?.readTime) return parseInt(String(post.readTime), 10) || 1;
-    const words = articleParagraphs.join(" ").split(/\s+/).filter(Boolean).length;
+    const words = articleParagraphs
+      .join(" ")
+      .split(/\s+/)
+      .filter(Boolean).length;
     return Math.max(1, Math.ceil(words / 200));
   }, [post, articleParagraphs]);
 
@@ -578,14 +705,20 @@ const ArticleView: React.FC = () => {
     () =>
       hasAi
         ? aiMetadata.summary || ""
-        : aiMetadata.summary || post?.content || articleParagraphs.slice(0, 2).join(" ") || "A quick, glow-worthy read on natural skincare.",
+        : aiMetadata.summary ||
+          post?.content ||
+          articleParagraphs.slice(0, 2).join(" ") ||
+          "A quick, glow-worthy read on natural skincare.",
     [hasAi, aiMetadata.summary, post, articleParagraphs],
   );
 
   const highlights = useMemo(() => {
     if (aiMetadata.highlights?.length) return aiMetadata.highlights.slice(0, 4);
     if (hasAi) return [];
-    return articleParagraphs.slice(1).map((p) => p.slice(0, 110)).slice(0, 3);
+    return articleParagraphs
+      .slice(1)
+      .map((p) => p.slice(0, 110))
+      .slice(0, 3);
   }, [hasAi, aiMetadata.highlights, articleParagraphs]);
 
   const timelineSteps = useMemo(
@@ -608,16 +741,27 @@ const ArticleView: React.FC = () => {
     [hasAi, aiMetadata.keyTakeaways, articleParagraphs],
   );
 
-  const DONT_RE = /\b(avoid|avoidance|mistake|don't|do not|never|skip|warning|caution|stop)\b/i;
-  const derivedDonts = useMemo(() => takeaways.filter((i) => DONT_RE.test(i)).slice(0, 4), [takeaways]);
-  const derivedDos = useMemo(() => takeaways.filter((i) => !DONT_RE.test(i)).slice(0, 4), [takeaways]);
+  const DONT_RE =
+    /\b(avoid|avoidance|mistake|don't|do not|never|skip|warning|caution|stop)\b/i;
+  const derivedDonts = useMemo(
+    () => takeaways.filter((i) => DONT_RE.test(i)).slice(0, 4),
+    [takeaways],
+  );
+  const derivedDos = useMemo(
+    () => takeaways.filter((i) => !DONT_RE.test(i)).slice(0, 4),
+    [takeaways],
+  );
   const dos = derivedDos.length ? derivedDos : DEFAULT_DOS;
   const donts = derivedDonts.length ? derivedDonts : DEFAULT_DONTS;
 
-  const ingredientSpotlight = useMemo(() => detectIngredientSpotlight(articleParagraphs), [articleParagraphs]);
+  const ingredientSpotlight = useMemo(
+    () => detectIngredientSpotlight(articleParagraphs),
+    [articleParagraphs],
+  );
 
   const vibes = useMemo(() => {
-    if (Array.isArray(post?.tags) && post.tags.length) return post.tags.slice(0, 5);
+    if (Array.isArray(post?.tags) && post.tags.length)
+      return post.tags.slice(0, 5);
     return ["glow", "self-care", "clean girl", "soft life"];
   }, [post]);
 
@@ -638,7 +782,8 @@ const ArticleView: React.FC = () => {
   const renderArticleSection = (section: any, idx: number) => {
     if (!section || typeof section !== "object") return null;
     const sectionType = String(section.type || "").toLowerCase();
-    const hasBody = typeof section.body === "string" && section.body.trim().length > 0;
+    const hasBody =
+      typeof section.body === "string" && section.body.trim().length > 0;
     const bodyContent = section.body || "";
     // Prefer the array: a carousel section carries every slide in `images`
     // and only its first in `image`, so checking `image` first collapsed
@@ -653,9 +798,22 @@ const ArticleView: React.FC = () => {
 
     if (sectionType === "video" && section.videoUrl) {
       return (
-        <div key={idx} className="my-12 rounded-[32px] overflow-hidden shadow-2xl bg-black">
-          <video src={section.videoUrl} controls playsInline preload="metadata" className="w-full h-full object-cover" />
-          {section.caption && <p className="text-center text-xs text-[#2D2A26]/50 italic py-3">{section.caption}</p>}
+        <div
+          key={idx}
+          className="my-12 rounded-[32px] overflow-hidden shadow-2xl bg-black"
+        >
+          <video
+            src={section.videoUrl}
+            controls
+            playsInline
+            preload="metadata"
+            className="w-full h-full object-cover"
+          />
+          {section.caption && (
+            <p className="text-center text-xs text-[#2D2A26]/50 italic py-3">
+              {section.caption}
+            </p>
+          )}
         </div>
       );
     }
@@ -665,13 +823,33 @@ const ArticleView: React.FC = () => {
        GIF without the file weight. Never has controls — that's the point. */
     if (sectionType === "gif" && (section.videoUrl || section.image)) {
       return (
-        <div key={idx} className="my-12 rounded-[32px] overflow-hidden shadow-2xl bg-black">
+        <div
+          key={idx}
+          className="my-12 rounded-[32px] overflow-hidden shadow-2xl bg-black"
+        >
           {section.videoUrl ? (
-            <video src={section.videoUrl} autoPlay muted loop playsInline preload="metadata" className="w-full h-full object-cover" />
+            <video
+              src={section.videoUrl}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="w-full h-full object-cover"
+            />
           ) : (
-            <img src={section.image} alt={section.caption || ""} loading="lazy" className="w-full h-full object-cover" />
+            <img
+              src={section.image}
+              alt={section.caption || ""}
+              loading="lazy"
+              className="w-full h-full object-cover"
+            />
           )}
-          {section.caption && <p className="text-center text-xs text-[#2D2A26]/50 italic py-3">{section.caption}</p>}
+          {section.caption && (
+            <p className="text-center text-xs text-[#2D2A26]/50 italic py-3">
+              {section.caption}
+            </p>
+          )}
         </div>
       );
     }
@@ -714,49 +892,73 @@ const ArticleView: React.FC = () => {
       return <HeroTextBlock key={idx} section={section} />;
     }
 
-    if (sectionType === "image" || sectionType === "hero" || sectionType === "images" || sectionType === "gallery") {
+    if (
+      sectionType === "image" ||
+      sectionType === "hero" ||
+      sectionType === "images" ||
+      sectionType === "gallery"
+    ) {
       if (!media.length) return null;
       return (
         <div key={idx}>
           <PremiumCarousel images={media} />
-          {section.caption && <p className="text-center text-xs text-[#2D2A26]/50 italic -mt-6 mb-6">{section.caption}</p>}
+          {section.caption && (
+            <p className="text-center text-xs text-[#2D2A26]/50 italic -mt-6 mb-6">
+              {section.caption}
+            </p>
+          )}
         </div>
       );
     }
 
     if (isTextSection(sectionType)) {
       return (
-        <div
-          key={idx}
-          className="prose prose-stone prose-lg max-w-none text-[#2D2A26]/90 leading-[1.9] font-light
-                     prose-h2:font-serif prose-h2:italic prose-h2:text-3xl prose-h2:text-[#2D2A26] prose-h2:mt-10 prose-h2:mb-5
-                     prose-p:leading-[1.9] prose-ul:list-disc prose-ul:pl-6 prose-li:mb-2"
-        >
-          {section.title && sectionType !== "text" ? <h3 className="font-serif text-2xl mt-0">{section.title}</h3> : null}
-          <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(bodyContent) }} />
+        <div key={idx} className="article-view-prose">
+          {section.title && sectionType !== "text" ? (
+            <h3 className="font-serif text-2xl mt-0">{section.title}</h3>
+          ) : null}
+          <div
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(bodyContent) }}
+          />
         </div>
       );
     }
 
     if (sectionType === "quote" && hasBody) {
       return (
-        <div key={idx} className="my-16 text-center px-8 py-12 relative rounded-[28px] bg-[#faf8f4] border border-[#3D5B4F]/15">
-          <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-[7rem] font-serif leading-none text-[#3D5B4F]/15 select-none">“</span>
-          <blockquote className="text-3xl md:text-4xl font-serif italic leading-tight text-[#2D2A26] [&_mark]:rounded [&_mark]:px-1" dangerouslySetInnerHTML={{ __html: sanitizeHtml(bodyContent) }} />
-          <p className="mt-6 text-[10px] font-black uppercase tracking-[0.3em] text-[#3D5B4F]">{section.author ? `— ${section.author}` : "Wisdom from the Earth"}</p>
+        <div
+          key={idx}
+          className="my-16 text-center px-8 py-12 relative rounded-[28px] bg-[#faf8f4] border border-[#3D5B4F]/15"
+        >
+          <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-[7rem] font-serif leading-none text-[#3D5B4F]/15 select-none">
+            “
+          </span>
+          <blockquote
+            className="text-3xl md:text-4xl font-serif italic leading-tight text-[#2D2A26] [&_mark]:rounded [&_mark]:px-1"
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(bodyContent) }}
+          />
+          <p className="mt-6 text-[10px] font-black uppercase tracking-[0.3em] text-[#3D5B4F]">
+            {section.author ? `— ${section.author}` : "Wisdom from the Earth"}
+          </p>
         </div>
       );
     }
 
     if (sectionType === "callout" && hasBody) {
       return (
-        <div key={idx} className="my-10 p-8 bg-[#3D5B4F]/8 rounded-[28px] border border-[#3D5B4F]/15 flex gap-5">
+        <div
+          key={idx}
+          className="my-10 p-8 bg-[#3D5B4F]/8 rounded-[28px] border border-[#3D5B4F]/15 flex gap-5"
+        >
           <div className="w-11 h-11 rounded-2xl bg-[#3D5B4F] flex items-center justify-center shrink-0 shadow-lg shadow-[#3D5B4F]/20">
             <span className="text-white text-xl">✨</span>
           </div>
           <div>
             <h4 className="font-serif text-xl italic mb-2">Ritual Tip</h4>
-            <div className="text-[#2D2A26]/70 leading-relaxed font-light [&_mark]:rounded [&_mark]:px-1 [&_a]:text-[#3D5B4F] [&_a]:underline [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5" dangerouslySetInnerHTML={{ __html: sanitizeHtml(bodyContent) }} />
+            <div
+              className="text-[#2D2A26]/70 leading-relaxed font-light [&_mark]:rounded [&_mark]:px-1 [&_a]:text-[#3D5B4F] [&_a]:underline [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5"
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(bodyContent) }}
+            />
           </div>
         </div>
       );
@@ -769,13 +971,16 @@ const ArticleView: React.FC = () => {
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-4 border-[#3D5B4F]/20 border-t-[#3D5B4F] rounded-full animate-spin" />
-          <p className="font-serif italic text-[#2D2A26]/60">Preparing your ritual…</p>
+          <p className="font-serif italic text-[#2D2A26]/60">
+            Preparing your ritual…
+          </p>
         </div>
       </div>
     );
   }
 
-  if (!post) return <div className="p-10 text-center font-serif">Article not found</div>;
+  if (!post)
+    return <div className="p-10 text-center font-serif">Article not found</div>;
 
   const categoryLabel = getCategoryName(post) || "Ritual";
   const subcategoryNames = getSubcategoryNames(post);
@@ -787,7 +992,11 @@ const ArticleView: React.FC = () => {
         reading ? "article-view-reading" : ""
       }`}
       data-reading-theme={reading ? readingTheme : undefined}
-      style={reading ? ({ "--ar-scale": readingScale } as React.CSSProperties) : undefined}
+      style={
+        reading
+          ? ({ "--ar-scale": readingScale } as React.CSSProperties)
+          : undefined
+      }
     >
       <AmbientDecor />
 
@@ -802,7 +1011,11 @@ const ArticleView: React.FC = () => {
 
       {/* ── Reading mode control bar (replaces the nav while active) ── */}
       {reading && (
-        <div className="article-view-reading-bar" role="toolbar" aria-label="Reading mode controls">
+        <div
+          className="article-view-reading-bar"
+          role="toolbar"
+          aria-label="Reading mode controls"
+        >
           <button
             className="article-view-reading-btn"
             onClick={() => setReading(false)}
@@ -815,7 +1028,9 @@ const ArticleView: React.FC = () => {
 
           <button
             className="article-view-reading-btn"
-            onClick={() => setReadingScale((s) => Math.max(0.9, +(s - 0.1).toFixed(2)))}
+            onClick={() =>
+              setReadingScale((s) => Math.max(0.9, +(s - 0.1).toFixed(2)))
+            }
             disabled={readingScale <= 0.9}
             aria-label="Decrease text size"
           >
@@ -823,7 +1038,9 @@ const ArticleView: React.FC = () => {
           </button>
           <button
             className="article-view-reading-btn"
-            onClick={() => setReadingScale((s) => Math.min(1.5, +(s + 0.1).toFixed(2)))}
+            onClick={() =>
+              setReadingScale((s) => Math.min(1.5, +(s + 0.1).toFixed(2)))
+            }
             disabled={readingScale >= 1.5}
             aria-label="Increase text size"
           >
@@ -859,13 +1076,24 @@ const ArticleView: React.FC = () => {
           true zero minimum, so `truncate` on the title can actually engage and
           the two auto-sized side columns are guaranteed to fit. */}
       <nav className="article-view-hide-in-reading fixed top-[68px] left-0 w-full z-50 grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-4 sm:px-6 py-4 backdrop-blur-md bg-white/80 border-b border-black/5">
-        <button onClick={() => navigate(-1)} className="group flex items-center gap-2 px-2.5 sm:px-4 py-2 rounded-full hover:bg-black/5 transition-all">
-          <span className="transition-transform group-hover:-translate-x-1">←</span>
-          <span className="text-xs font-bold uppercase tracking-widest hidden sm:inline">Back</span>
+        <button
+          onClick={() => navigate(-1)}
+          className="group flex items-center gap-2 px-2.5 sm:px-4 py-2 rounded-full hover:bg-black/5 transition-all"
+        >
+          <span className="transition-transform group-hover:-translate-x-1">
+            ←
+          </span>
+          <span className="text-xs font-bold uppercase tracking-widest hidden sm:inline">
+            Back
+          </span>
         </button>
         <div className="flex flex-col items-center min-w-0">
-          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#3D5B4F] truncate max-w-full">The Journal</span>
-          <span className="text-sm font-serif italic truncate max-w-full">{post.title}</span>
+          <span className="text-[10px] font-black uppercase tracking-[0.3em] text-[#3D5B4F] truncate max-w-full">
+            The Journal
+          </span>
+          <span className="text-sm font-serif italic truncate max-w-full">
+            {post.title}
+          </span>
         </div>
         <div className="flex gap-1.5 sm:gap-3 items-center">
           <button
@@ -874,30 +1102,69 @@ const ArticleView: React.FC = () => {
             title="Reading mode — hide everything but the article"
           >
             <BookOpen size={15} />
-            <span className="text-[10px] font-bold uppercase tracking-widest hidden md:inline">Read</span>
+            <span className="text-[10px] font-bold uppercase tracking-widest hidden md:inline">
+              Read
+            </span>
           </button>
           {isAdminUser(currentUser) && (post?._id || post?.id || id) && (
             <button
-              onClick={() => navigate(`/admin/article-editor/${post?._id || post?.id || id}`)}
+              onClick={() =>
+                navigate(`/admin/article-editor/${post?._id || post?.id || id}`)
+              }
               className="flex items-center gap-2 px-3 sm:px-5 py-2 rounded-full bg-[#3D5B4F] text-white text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all active:scale-95 shadow-lg shadow-[#3D5B4F]/30"
               title="Edit this post"
             >
               ✎ Edit
             </button>
           )}
-          <button onClick={toggleLike} disabled={liking} className={`flex items-center gap-1.5 px-3 py-2 rounded-full transition-all ${liked ? "bg-[#C0584F]/15 text-[#C0584F]" : "hover:bg-black/5"}`} title={liked ? "Liked — click to remove" : "Like this ritual"}>
-            <span>{liked ? "❤️" : "🤍"}</span>
+          <button
+            onClick={toggleLike}
+            disabled={liking}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-full transition-all ${liked ? "bg-[#C0584F]/15 text-[#C0584F]" : "hover:bg-black/5"}`}
+            title={liked ? "Liked — click to remove" : "Like this ritual"}
+            aria-pressed={liked}
+            aria-label={liked ? "Liked — click to remove" : "Like this ritual"}
+          >
+            {/* The emoji is the whole visual, so it has to be hidden from the
+                accessibility tree: left exposed it reads as "white heart" /
+                "red heart", which says nothing about what the button does. */}
+            <span aria-hidden="true">{liked ? "❤️" : "🤍"}</span>
             <span className="text-xs font-bold tabular-nums">{likeCount}</span>
           </button>
-          <button onClick={toggleSaved} disabled={savingBookmark} className={`p-2 rounded-full transition-all ${saved ? "bg-[#3D5B4F]/15" : "hover:bg-black/5"}`} title={saved ? "Saved — click to remove" : "Save to profile"}>{saved ? "🔖" : "🏷️"}</button>
-          <button onClick={handleShare} disabled={sharing} className="hidden sm:flex items-center gap-2 px-5 py-2 rounded-full bg-[#2D2A26] text-white text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all active:scale-95 shadow-lg shadow-[#2D2A26]/20 disabled:opacity-60">Share{shareCount > 0 ? ` · ${shareCount}` : ""}</button>
+          <button
+            onClick={toggleSaved}
+            disabled={savingBookmark}
+            className={`p-2 rounded-full transition-all ${saved ? "bg-[#3D5B4F]/15" : "hover:bg-black/5"}`}
+            title={saved ? "Saved — click to remove" : "Save to profile"}
+            aria-pressed={saved}
+            aria-label={saved ? "Saved — click to remove" : "Save to profile"}
+          >
+            <span aria-hidden="true">{saved ? "🔖" : "🏷️"}</span>
+          </button>
+          <button
+            onClick={handleShare}
+            disabled={sharing}
+            className="hidden sm:flex items-center gap-2 px-5 py-2 rounded-full bg-[#2D2A26] text-white text-[10px] font-bold uppercase tracking-widest hover:scale-105 transition-all active:scale-95 shadow-lg shadow-[#2D2A26]/20 disabled:opacity-60"
+          >
+            Share{shareCount > 0 ? ` · ${shareCount}` : ""}
+          </button>
         </div>
       </nav>
 
       {/* Hero */}
-      <div className="relative w-full h-[78vh] overflow-hidden">
-        <PostCover src={heroImage} alt="" className="w-full h-full object-cover" style={{ transform: `scale(1.1) translateY(${scrolled * 0.2}px)` }} />
+      <div className="relative w-full h-[52vh] min-h-[380px] md:h-[60vh] overflow-hidden">
+        <PostCover
+          src={heroImage}
+          alt=""
+          loading="eager"
+          className="w-full h-full object-cover"
+          style={{ transform: `scale(1.1) translateY(${scrolled * 0.2}px)` }}
+        />
         <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-paper-2" />
+        {/* The title block is charcoal on whatever the cover shows. The hero is
+            short enough now that the gradient above no longer reaches paper by
+            the time the title starts, so this scrim lifts the lower part. */}
+        <div className="absolute inset-x-0 bottom-0 h-[78%] bg-gradient-to-t from-paper-2 via-paper-2/85 to-transparent" />
         {/* twinkling sparkles over the hero */}
         {[
           { left: "12%", top: "22%", d: "0s" },
@@ -905,31 +1172,74 @@ const ArticleView: React.FC = () => {
           { left: "30%", top: "16%", d: "2.1s" },
           { left: "74%", top: "18%", d: "0.6s" },
         ].map((s, i) => (
-          <span key={i} className="absolute text-white article-view-twinkle text-lg select-none" style={{ left: s.left, top: s.top, animationDelay: s.d }} aria-hidden>✦</span>
+          <span
+            key={i}
+            className="absolute text-white article-view-twinkle text-lg select-none"
+            style={{ left: s.left, top: s.top, animationDelay: s.d }}
+            aria-hidden
+          >
+            ✦
+          </span>
         ))}
         <div className="absolute inset-x-0 bottom-0 max-w-5xl mx-auto px-6 pb-16">
           <div className="flex flex-wrap items-center gap-3 mb-5 article-view-float-up">
-            <span className="px-4 py-1.5 rounded-full bg-[#3D5B4F] text-white text-[10px] font-bold uppercase tracking-[0.2em] shadow-lg shadow-[#3D5B4F]/30">{categoryLabel}</span>
+            <span className="px-4 py-1.5 rounded-full bg-[#3D5B4F] text-white text-[10px] font-bold uppercase tracking-[0.2em] shadow-lg shadow-[#3D5B4F]/30">
+              {categoryLabel}
+            </span>
             {subcategoryNames.map((name) => (
-              <span key={name} className="px-3 py-1.5 rounded-full bg-white/70 backdrop-blur text-[#3D5B4F] text-[10px] font-bold uppercase tracking-widest border border-[#3D5B4F]/30">{name}</span>
+              <span
+                key={name}
+                className="px-3 py-1.5 rounded-full bg-white/70 backdrop-blur text-[#3D5B4F] text-[10px] font-bold uppercase tracking-widest border border-[#3D5B4F]/30"
+              >
+                {name}
+              </span>
             ))}
-            <span className="px-3 py-1.5 rounded-full bg-white/80 backdrop-blur text-[#2D2A26] text-[10px] font-bold uppercase tracking-widest">⏱ {readTime} min</span>
-            <span className="px-3 py-1.5 rounded-full bg-white/80 backdrop-blur text-[#2D2A26] text-[10px] font-bold uppercase tracking-widest">🔥 trending</span>
+            <span className="px-3 py-1.5 rounded-full bg-white/80 backdrop-blur text-[#2D2A26] text-[10px] font-bold uppercase tracking-widest">
+              ⏱ {readTime} min
+            </span>
+            <span className="px-3 py-1.5 rounded-full bg-white/80 backdrop-blur text-[#2D2A26] text-[10px] font-bold uppercase tracking-widest">
+              🔥 trending
+            </span>
           </div>
-          <h1 className="text-4xl md:text-7xl font-serif leading-[0.98] tracking-tight text-[#2D2A26] mb-6 max-w-4xl article-view-float-up-1">{post.title}</h1>
+          <h1 className="text-4xl md:text-7xl font-serif leading-[0.98] tracking-tight text-[#2D2A26] mb-6 max-w-4xl article-view-float-up-1">
+            {post.title}
+          </h1>
           <div className="flex items-center gap-4 article-view-float-up-2">
-            <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-white shadow-xl bg-[#3D5B4F]">
-              <img src={post.author?.avatar || "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200"} alt="" className="w-full h-full object-cover" />
+            {/* The fallback used to be a hot-linked Unsplash portrait, so every
+                article without an author carried the same stranger's face from
+                a third-party CDN. Initials instead — UserAvatar's own pattern. */}
+            <div className="w-11 h-11 rounded-full overflow-hidden border-2 border-white shadow-xl bg-[#3D5B4F] grid place-items-center text-[#FCFAF7] text-sm font-bold">
+              {post.author?.avatar ? (
+                <img
+                  src={toAbsoluteUrl(post.author.avatar, 96)}
+                  alt=""
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                (post.author?.name || "Aura Editor")
+                  .trim()
+                  .charAt(0)
+                  .toUpperCase()
+              )}
             </div>
             <div>
-              <p className="text-sm font-bold">By {post.author?.name || "Aura Editor"}</p>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-[#3D5B4F]">{post.author?.role || "Beauty Anthropologist"}</p>
+              <p className="text-sm font-bold">
+                By {post.author?.name || "Aura Editor"}
+              </p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#3D5B4F]">
+                {post.author?.role || "Beauty Anthropologist"}
+              </p>
             </div>
           </div>
         </div>
         {/* scroll cue */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-[#2D2A26]/50 article-view-bob" aria-hidden>
-          <span className="text-[9px] font-black uppercase tracking-[0.3em]">Scroll</span>
+        <div
+          className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-[#2D2A26]/50 article-view-bob"
+          aria-hidden
+        >
+          <span className="text-[9px] font-black uppercase tracking-[0.3em]">
+            Scroll
+          </span>
           <span className="text-lg leading-none">↓</span>
         </div>
       </div>
@@ -939,38 +1249,72 @@ const ArticleView: React.FC = () => {
         <article className="article-view-body max-w-2xl mx-auto lg:mx-0 w-full">
           {/* TL;DR card — hidden when the author removed the summary */}
           {tldr && (
-          <div className="article-view-tldr-card relative overflow-hidden rounded-[28px] p-8 mb-10 text-white shadow-xl article-view-float-up">
-            <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[#3D5B4F]/40 blur-3xl" />
-            {/* decorative corner sprig */}
-            <svg className="absolute top-4 right-5 text-white/15 article-view-sway-slow" width="46" height="46" viewBox="0 0 24 24" fill="none" aria-hidden>
-              <path d="M12 3v18M12 8C9 6 6 7 5 4M12 8c3-2 6-1 7-4M12 14c-3-2-7-1-8-4M12 14c3-2 7-1 8-4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
-            </svg>
-            <p className="relative z-10 text-[10px] font-black uppercase tracking-[0.3em] mb-3 article-view-shimmer-text inline-block">⚡ The TL;DR</p>
-            <p className="relative z-10 text-lg md:text-xl leading-relaxed font-light">{tldr}</p>
-          </div>
+            <div className="article-view-tldr-card relative overflow-hidden rounded-[28px] p-8 mb-10 text-white shadow-xl article-view-float-up">
+              <div className="absolute -top-10 -right-10 w-40 h-40 rounded-full bg-[#3D5B4F]/40 blur-3xl" />
+              {/* decorative corner sprig */}
+              <svg
+                className="absolute top-4 right-5 text-white/15 article-view-sway-slow"
+                width="46"
+                height="46"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden
+              >
+                <path
+                  d="M12 3v18M12 8C9 6 6 7 5 4M12 8c3-2 6-1 7-4M12 14c-3-2-7-1-8-4M12 14c3-2 7-1 8-4"
+                  stroke="currentColor"
+                  strokeWidth="1.3"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <p className="relative z-10 text-[10px] font-black uppercase tracking-[0.3em] mb-3 article-view-shimmer-text inline-block">
+                ⚡ The TL;DR
+              </p>
+              <p className="relative z-10 text-lg md:text-xl leading-relaxed font-light">
+                {tldr}
+              </p>
+            </div>
           )}
 
           {/* Vibe chips */}
           <div className="flex flex-wrap gap-2 mb-12 article-view-float-up-1">
             {vibes.map((v: string) => (
-              <span key={v} className="px-4 py-1.5 rounded-full bg-[#3D5B4F]/10 text-[#4B695A] text-xs font-bold lowercase tracking-wide transition-all hover:bg-[#3D5B4F]/20 hover:-translate-y-0.5">#{String(v).replace(/\s+/g, "")}</span>
+              <span
+                key={v}
+                className="px-4 py-1.5 rounded-full bg-[#3D5B4F]/10 text-[#4B695A] text-xs font-bold lowercase tracking-wide transition-all hover:bg-[#3D5B4F]/20 hover:-translate-y-0.5"
+              >
+                #{String(v).replace(/\s+/g, "")}
+              </span>
             ))}
           </div>
 
           {post.subtitle && (
-            <h2 className="text-2xl md:text-3xl font-serif italic text-[#2D2A26] leading-tight mb-12 opacity-80 border-l-4 border-[#3D5B4F] pl-6">{post.subtitle}</h2>
+            <h2 className="text-2xl md:text-3xl font-serif italic text-[#2D2A26] leading-tight mb-12 opacity-80 border-l-4 border-[#3D5B4F] pl-6">
+              {post.subtitle}
+            </h2>
           )}
 
           {/* Highlights */}
           {highlights.length > 0 && (
             <section className="mb-14">
-              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#3D5B4F] mb-4">✨ Key Highlights</h3>
+              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#3D5B4F] mb-4">
+                ✨ Key Highlights
+              </h3>
               <div className="grid sm:grid-cols-2 gap-4">
                 {highlights.map((item, idx) => (
-                  <div key={`${item}-${idx}`} className="group relative overflow-hidden rounded-2xl p-5 border border-[#3D5B4F]/15 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#3D5B4F]/10 bg-[#FFF4E8]">
-                    <span className="pointer-events-none absolute -bottom-4 -right-2 text-6xl font-serif italic text-[#3D5B4F]/10 select-none">{idx + 1}</span>
-                    <span className="relative inline-flex w-7 h-7 rounded-full bg-[#3D5B4F] text-white text-xs font-bold items-center justify-center mb-3 transition-transform group-hover:scale-110">{idx + 1}</span>
-                    <p className="relative text-sm leading-relaxed font-medium text-[#2D2A26]">{item}</p>
+                  <div
+                    key={`${item}-${idx}`}
+                    className="group relative overflow-hidden rounded-2xl p-5 border border-[#3D5B4F]/15 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#3D5B4F]/10 bg-[#FFF4E8]"
+                  >
+                    <span className="pointer-events-none absolute -bottom-4 -right-2 text-6xl font-serif italic text-[#3D5B4F]/10 select-none">
+                      {idx + 1}
+                    </span>
+                    <span className="relative inline-flex w-7 h-7 rounded-full bg-[#3D5B4F] text-white text-xs font-bold items-center justify-center mb-3 transition-transform group-hover:scale-110">
+                      {idx + 1}
+                    </span>
+                    <p className="relative text-sm leading-relaxed font-medium text-[#2D2A26]">
+                      {item}
+                    </p>
                   </div>
                 ))}
               </div>
@@ -982,14 +1326,27 @@ const ArticleView: React.FC = () => {
           {/* Glow-Up Steps */}
           {timelineSteps.length > 0 && (
             <section className="mb-14">
-              <h3 className="text-2xl font-serif italic mb-6">The Glow-Up Steps 🌿</h3>
+              <h3 className="text-2xl font-serif italic mb-6">
+                The Glow-Up Steps 🌿
+              </h3>
               <div className="relative space-y-4 before:absolute before:left-5 before:top-6 before:bottom-6 before:w-px before:bg-gradient-to-b before:from-[#3D5B4F]/40 before:via-[#3D5B4F]/25 before:to-transparent">
                 {timelineSteps.map((step, idx) => (
-                  <div key={`${step.title}-${idx}`} className="relative flex gap-4 items-start p-5 rounded-2xl bg-white border border-black/5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all">
-                    <span className="relative z-10 w-10 h-10 rounded-full bg-[#3D5B4F] text-white text-sm font-bold flex items-center justify-center shrink-0 ring-4 ring-paper-2 shadow-md shadow-[#3D5B4F]/30">{(step.stepLabel || `0${idx + 1}`).replace(/[^0-9]/g, "").slice(0, 2) || idx + 1}</span>
+                  <div
+                    key={`${step.title}-${idx}`}
+                    className="relative flex gap-4 items-start p-5 rounded-2xl bg-white border border-black/5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+                  >
+                    <span className="relative z-10 w-10 h-10 rounded-full bg-[#3D5B4F] text-white text-sm font-bold flex items-center justify-center shrink-0 ring-4 ring-paper-2 shadow-md shadow-[#3D5B4F]/30">
+                      {(step.stepLabel || `0${idx + 1}`)
+                        .replace(/[^0-9]/g, "")
+                        .slice(0, 2) || idx + 1}
+                    </span>
                     <div>
-                      <p className="font-bold text-[#2D2A26] mb-1">{step.title}</p>
-                      <p className="text-sm leading-relaxed text-[#2D2A26]/70">{step.body}</p>
+                      <p className="font-bold text-[#2D2A26] mb-1">
+                        {step.title}
+                      </p>
+                      <p className="text-sm leading-relaxed text-[#2D2A26]/70">
+                        {step.body}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -1004,12 +1361,19 @@ const ArticleView: React.FC = () => {
             <div className="rounded-[26px] p-7 border bg-[#EAF3EC] border-[rgba(61,91,79,0.3)]">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">✅</span>
-                <h4 className="text-lg font-black uppercase tracking-wide text-[#4B695A]">Green Flags</h4>
+                <h4 className="text-lg font-black uppercase tracking-wide text-[#4B695A]">
+                  Green Flags
+                </h4>
               </div>
               <ul className="space-y-3">
                 {dos.map((item, idx) => (
-                  <li key={idx} className="flex gap-3 text-sm leading-relaxed text-[#2D2A26]/85">
-                    <span className="text-[#4B695A] font-bold shrink-0">do</span>
+                  <li
+                    key={idx}
+                    className="flex gap-3 text-sm leading-relaxed text-[#2D2A26]/85"
+                  >
+                    <span className="text-[#4B695A] font-bold shrink-0">
+                      do
+                    </span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -1018,12 +1382,19 @@ const ArticleView: React.FC = () => {
             <div className="rounded-[26px] p-7 border bg-[#FBEDED] border-[rgba(192,88,79,0.3)]">
               <div className="flex items-center gap-2 mb-4">
                 <span className="text-2xl">🚩</span>
-                <h4 className="text-lg font-black uppercase tracking-wide text-[#C0584F]">Red Flags</h4>
+                <h4 className="text-lg font-black uppercase tracking-wide text-[#C0584F]">
+                  Red Flags
+                </h4>
               </div>
               <ul className="space-y-3">
                 {donts.map((item, idx) => (
-                  <li key={idx} className="flex gap-3 text-sm leading-relaxed text-[#2D2A26]/85">
-                    <span className="text-[#C0584F] font-bold shrink-0">no</span>
+                  <li
+                    key={idx}
+                    className="flex gap-3 text-sm leading-relaxed text-[#2D2A26]/85"
+                  >
+                    <span className="text-[#C0584F] font-bold shrink-0">
+                      no
+                    </span>
                     <span>{item}</span>
                   </li>
                 ))}
@@ -1035,17 +1406,28 @@ const ArticleView: React.FC = () => {
           {ingredientSpotlight && (
             <section className="mb-14 rounded-[26px] border border-[#3D5B4F]/15 p-7 bg-white relative overflow-hidden">
               <div className="absolute -top-8 -right-8 w-28 h-28 rounded-full bg-[#3D5B4F]/10 blur-2xl" />
-              <p className="text-[10px] tracking-[0.3em] text-[#3D5B4F] uppercase font-black mb-1">🌿 Ingredient Spotlight</p>
-              <h3 className="text-2xl font-serif italic mb-2">{ingredientSpotlight.name}</h3>
-              <p className="text-sm leading-relaxed text-[#2D2A26]/80">{ingredientSpotlight.quote}</p>
+              <p className="text-[10px] tracking-[0.3em] text-[#3D5B4F] uppercase font-black mb-1">
+                🌿 Ingredient Spotlight
+              </p>
+              <h3 className="text-2xl font-serif italic mb-2">
+                {ingredientSpotlight.name}
+              </h3>
+              <p className="text-sm leading-relaxed text-[#2D2A26]/80">
+                {ingredientSpotlight.quote}
+              </p>
             </section>
           )}
 
           {/* Full body sections */}
           <div className="space-y-8">
-            {visibleSections?.map((section: any, idx: number) => renderArticleSection(section, idx))}
+            {visibleSections?.map((section: any, idx: number) =>
+              renderArticleSection(section, idx),
+            )}
             {!showFullBody && articleParagraphs.length > 3 && (
-              <button onClick={() => setShowFullBody(true)} className="w-full py-3.5 rounded-full bg-[#2D2A26] text-white text-sm font-bold hover:scale-[1.01] transition-all">
+              <button
+                onClick={() => setShowFullBody(true)}
+                className="w-full py-3.5 rounded-full bg-[#2D2A26] text-white text-sm font-bold hover:scale-[1.01] transition-all"
+              >
                 Read the full story ↓
               </button>
             )}
@@ -1054,15 +1436,24 @@ const ArticleView: React.FC = () => {
           {/* FAQ (if provided) */}
           {Array.isArray(post.faq) && post.faq.length > 0 && (
             <section className="mt-14">
-              <h3 className="text-2xl font-serif italic mb-6">Real Questions 💬</h3>
+              <h3 className="text-2xl font-serif italic mb-6">
+                Real Questions 💬
+              </h3>
               <div className="space-y-3">
                 {post.faq.map((f: any, idx: number) => (
-                  <details key={f.id || idx} className="group rounded-2xl bg-white border border-black/5 p-5">
+                  <details
+                    key={f.id || idx}
+                    className="group rounded-2xl bg-white border border-black/5 p-5"
+                  >
                     <summary className="cursor-pointer font-bold text-[#2D2A26] list-none flex justify-between items-center">
                       {f.question}
-                      <span className="text-[#3D5B4F] group-open:rotate-45 transition-transform">+</span>
+                      <span className="text-[#3D5B4F] group-open:rotate-45 transition-transform">
+                        +
+                      </span>
                     </summary>
-                    <p className="mt-3 text-sm leading-relaxed text-[#2D2A26]/70">{f.answer}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-[#2D2A26]/70">
+                      {f.answer}
+                    </p>
                   </details>
                 ))}
               </div>
@@ -1074,14 +1465,37 @@ const ArticleView: React.FC = () => {
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div className="flex items-center gap-5">
                 <div className="w-14 h-14 rounded-full bg-[#3D5B4F] flex items-center justify-center p-4 shrink-0">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+                  <svg
+                    width="28"
+                    height="28"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  </svg>
                 </div>
                 <div>
-                  <h4 className="font-serif text-xl md:text-2xl italic">Obsessed? Same.</h4>
-                  <p className="text-white/60 text-sm">Save this glow guide or send it to a bestie who needs it.</p>
+                  <h4 className="font-serif text-xl md:text-2xl italic">
+                    Obsessed? Same.
+                  </h4>
+                  <p className="text-white/60 text-sm">
+                    Save this glow guide or send it to a bestie who needs it.
+                  </p>
                 </div>
               </div>
-              <button onClick={toggleSaved} disabled={savingBookmark} className="px-8 py-3.5 rounded-full bg-white text-[#2D2A26] text-sm font-bold hover:scale-105 active:scale-95 transition-all whitespace-nowrap disabled:opacity-60">{savingBookmark ? "Saving…" : saved ? "✓ Saved Ritual" : "Save Ritual"}</button>
+              <button
+                onClick={toggleSaved}
+                disabled={savingBookmark}
+                className="px-8 py-3.5 rounded-full bg-white text-[#2D2A26] text-sm font-bold hover:scale-105 active:scale-95 transition-all whitespace-nowrap disabled:opacity-60"
+              >
+                {savingBookmark
+                  ? "Saving…"
+                  : saved
+                    ? "✓ Saved Ritual"
+                    : "Save Ritual"}
+              </button>
             </div>
           </div>
 
@@ -1089,7 +1503,9 @@ const ArticleView: React.FC = () => {
           <section id="comments" className="mt-16">
             <h3 className="text-2xl font-serif italic mb-6">
               Join the conversation 💬{" "}
-              <span className="text-base not-italic text-[#2D2A26]/40 font-sans">({commentCount})</span>
+              <span className="text-base not-italic text-[#2D2A26]/40 font-sans">
+                ({commentCount})
+              </span>
             </h3>
 
             {/* Composer */}
@@ -1099,7 +1515,11 @@ const ArticleView: React.FC = () => {
                   <div className="flex items-start gap-3">
                     <div className="w-10 h-10 rounded-full overflow-hidden bg-[#3D5B4F] text-white flex items-center justify-center font-bold shrink-0">
                       {(currentUser as any)?.ProfilePicture ? (
-                        <img src={(currentUser as any).ProfilePicture} alt="" className="w-full h-full object-cover" />
+                        <img
+                          src={(currentUser as any).ProfilePicture}
+                          alt=""
+                          className="w-full h-full object-cover"
+                        />
                       ) : (
                         commentInitial((currentUser as any)?.FirstName || "You")
                       )}
@@ -1125,17 +1545,28 @@ const ArticleView: React.FC = () => {
                 </>
               ) : (
                 <div className="flex items-center justify-between gap-4">
-                  <p className="text-sm text-[#2D2A26]/60">Log in to share your thoughts.</p>
-                  <button onClick={() => navigate("/Login")} className="px-6 py-2.5 rounded-full bg-[#3D5B4F] text-white text-sm font-bold hover:scale-105 active:scale-95 transition-all whitespace-nowrap">Log in</button>
+                  <p className="text-sm text-[#2D2A26]/60">
+                    Log in to share your thoughts.
+                  </p>
+                  <button
+                    onClick={() => navigate("/Login")}
+                    className="px-6 py-2.5 rounded-full bg-[#3D5B4F] text-white text-sm font-bold hover:scale-105 active:scale-95 transition-all whitespace-nowrap"
+                  >
+                    Log in
+                  </button>
                 </div>
               )}
             </div>
 
             {/* List */}
             {loadingComments ? (
-              <p className="text-sm text-[#2D2A26]/50 italic">Loading comments…</p>
+              <p className="text-sm text-[#2D2A26]/50 italic">
+                Loading comments…
+              </p>
             ) : comments.length === 0 ? (
-              <p className="text-sm text-[#2D2A26]/50 italic">No comments yet — be the first to share. ✨</p>
+              <p className="text-sm text-[#2D2A26]/50 italic">
+                No comments yet — be the first to share. ✨
+              </p>
             ) : (
               <ul className="space-y-4">
                 {comments.map((c) => {
@@ -1146,20 +1577,33 @@ const ArticleView: React.FC = () => {
                       : String(c.userId || "");
                   const isMine = !!myUserId && ownerId === myUserId;
                   return (
-                    <li key={c._id} className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-black/5">
+                    <li
+                      key={c._id}
+                      className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-black/5"
+                    >
                       <div className="w-10 h-10 rounded-full overflow-hidden bg-[#3D5B4F] text-white flex items-center justify-center font-bold shrink-0">
                         {author.avatar ? (
-                          <img src={author.avatar} alt="" className="w-full h-full object-cover" />
+                          <img
+                            src={author.avatar}
+                            alt=""
+                            className="w-full h-full object-cover"
+                          />
                         ) : (
                           commentInitial(author.name)
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-sm text-[#2D2A26] truncate">{author.name}</span>
-                          <span className="text-[11px] text-[#2D2A26]/40">{relativeTime(c.createdAt)}</span>
+                          <span className="font-bold text-sm text-[#2D2A26] truncate">
+                            {author.name}
+                          </span>
+                          <span className="text-[11px] text-[#2D2A26]/40">
+                            {relativeTime(c.createdAt)}
+                          </span>
                         </div>
-                        <p className="text-sm leading-relaxed text-[#2D2A26]/80 mt-1 whitespace-pre-wrap break-words">{c.content}</p>
+                        <p className="text-sm leading-relaxed text-[#2D2A26]/80 mt-1 whitespace-pre-wrap break-words">
+                          {c.content}
+                        </p>
                       </div>
                       {isMine && (
                         <button
@@ -1184,7 +1628,10 @@ const ArticleView: React.FC = () => {
             {/* Ambient ritual clip — auto-plays on every article */}
             <div className="rounded-3xl overflow-hidden border border-black/5 shadow-lg relative">
               <video
-                src={getArticleVideo(post, String(post?._id || post?.id || id || "aura"))}
+                src={getArticleVideo(
+                  post,
+                  String(post?._id || post?.id || id || "aura"),
+                )}
                 autoPlay
                 muted
                 loop
@@ -1192,31 +1639,77 @@ const ArticleView: React.FC = () => {
                 className="w-full h-56 object-cover"
               />
               <div className="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                <span className="text-white text-[10px] font-black uppercase tracking-[0.3em]">Ritual in Motion</span>
+                <span className="text-white text-[10px] font-black uppercase tracking-[0.3em]">
+                  Ritual in Motion
+                </span>
               </div>
             </div>
 
             <div className="p-6 rounded-3xl bg-white border border-black/5">
-              <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#3D5B4F] mb-4">Quick Stats</h5>
+              <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#3D5B4F] mb-4">
+                Quick Stats
+              </h5>
               <div className="space-y-3 text-sm">
-                <div className="flex justify-between"><span className="text-[#2D2A26]/55 font-medium">👁 Views</span><span className="font-bold tabular-nums">{viewCount.toLocaleString()}</span></div>
-                <div className="flex justify-between"><span className="text-[#2D2A26]/55 font-medium">❤️ Likes</span><span className="font-bold tabular-nums">{likeCount.toLocaleString()}</span></div>
-                <div className="flex justify-between"><span className="text-[#2D2A26]/55 font-medium">💬 Comments</span><span className="font-bold tabular-nums">{commentCount.toLocaleString()}</span></div>
-                <div className="flex justify-between"><span className="text-[#2D2A26]/55 font-medium">🔗 Shares</span><span className="font-bold tabular-nums">{shareCount.toLocaleString()}</span></div>
-                <div className="flex justify-between"><span className="text-[#2D2A26]/55 font-medium">Read time</span><span className="font-bold">{readTime} min</span></div>
-                <div className="flex justify-between"><span className="text-[#2D2A26]/55 font-medium">Category</span><span className="font-bold">{categoryLabel}</span></div>
+                <div className="flex justify-between">
+                  <span className="text-[#2D2A26]/55 font-medium">👁 Views</span>
+                  <span className="font-bold tabular-nums">
+                    {viewCount.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[#2D2A26]/55 font-medium">
+                    ❤️ Likes
+                  </span>
+                  <span className="font-bold tabular-nums">
+                    {likeCount.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[#2D2A26]/55 font-medium">
+                    💬 Comments
+                  </span>
+                  <span className="font-bold tabular-nums">
+                    {commentCount.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[#2D2A26]/55 font-medium">
+                    🔗 Shares
+                  </span>
+                  <span className="font-bold tabular-nums">
+                    {shareCount.toLocaleString()}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[#2D2A26]/55 font-medium">
+                    Read time
+                  </span>
+                  <span className="font-bold">{readTime} min</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-[#2D2A26]/55 font-medium">
+                    Category
+                  </span>
+                  <span className="font-bold">{categoryLabel}</span>
+                </div>
               </div>
             </div>
 
             <div>
-              <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#3D5B4F] mb-4">The Vibe</h5>
+              <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-[#3D5B4F] mb-4">
+                The Vibe
+              </h5>
               <div className="space-y-3">
-                {["Luminous Skin", "Internal Balance", "Gentle Care"].map((m) => (
-                  <div key={m} className="flex items-center gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#3D5B4F]" />
-                    <span className="text-sm font-bold text-[#2D2A26]/60">{m}</span>
-                  </div>
-                ))}
+                {["Luminous Skin", "Internal Balance", "Gentle Care"].map(
+                  (m) => (
+                    <div key={m} className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#3D5B4F]" />
+                      <span className="text-sm font-bold text-[#2D2A26]/60">
+                        {m}
+                      </span>
+                    </div>
+                  ),
+                )}
               </div>
             </div>
 
@@ -1232,19 +1725,43 @@ const ArticleView: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h3 className="text-4xl md:text-5xl font-serif italic mb-2">More to Glow For</h3>
-              <p className="text-[#3D5B4F] font-bold uppercase tracking-widest text-[10px]">Keep the streak going</p>
+              <h3 className="text-4xl md:text-5xl font-serif italic mb-2">
+                More to Glow For
+              </h3>
+              <p className="text-[#3D5B4F] font-bold uppercase tracking-widest text-[10px]">
+                Keep the streak going
+              </p>
             </div>
-            <button onClick={() => navigate("/explore")} className="text-sm font-bold border-b-2 border-[#3D5B4F] pb-1 hover:text-[#3D5B4F] transition-all">View All</button>
+            <button
+              onClick={() => navigate("/explore")}
+              className="text-sm font-bold border-b-2 border-[#3D5B4F] pb-1 hover:text-[#3D5B4F] transition-all"
+            >
+              View All
+            </button>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {relatedSource.slice(0, 3).map((p: any) => (
-              <div key={p.id || p._id} onClick={() => navigate(`/article/${p.id || p._id}`)} className="group cursor-pointer">
+              <div
+                key={p.id || p._id}
+                onClick={() => navigate(`/article/${p.id || p._id}`)}
+                className="group cursor-pointer"
+              >
                 <div className="relative aspect-[3/4] rounded-[28px] overflow-hidden mb-5 shadow-xl transition-all duration-500 group-hover:shadow-2xl group-hover:-translate-y-2">
-                  <PostCover src={getPostCover(p) || `https://picsum.photos/seed/${p.id || p._id}/800/600`} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="" />
+                  <PostCover
+                    src={
+                      getPostCover(p) ||
+                      `https://picsum.photos/seed/${p.id || p._id}/800/600`
+                    }
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    alt=""
+                  />
                   <div className="absolute inset-x-0 bottom-0 p-7 bg-gradient-to-t from-black/70 to-transparent">
-                    <span className="text-white/60 text-[10px] font-bold uppercase tracking-widest mb-2 block">{getCategoryName(p) || "Ritual"}</span>
-                    <h4 className="text-white text-xl font-serif italic leading-tight">{p.title}</h4>
+                    <span className="text-white/60 text-[10px] font-bold uppercase tracking-widest mb-2 block">
+                      {getCategoryName(p) || "Ritual"}
+                    </span>
+                    <h4 className="text-white text-xl font-serif italic leading-tight">
+                      {p.title}
+                    </h4>
                   </div>
                 </div>
               </div>
@@ -1252,7 +1769,6 @@ const ArticleView: React.FC = () => {
           </div>
         </div>
       </section>
-
     </div>
   );
 };

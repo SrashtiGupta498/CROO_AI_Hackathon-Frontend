@@ -69,7 +69,9 @@ test.describe("Article top bar clears the site header", () => {
 
     // The nav's top edge must be at or below the header's bottom edge — this
     // is the geometric fact the click-reachability above depends on.
-    expect(navBox!.y).toBeGreaterThanOrEqual(headerBox!.y + headerBox!.height - 1);
+    expect(navBox!.y).toBeGreaterThanOrEqual(
+      headerBox!.y + headerBox!.height - 1,
+    );
   });
 });
 
@@ -91,7 +93,12 @@ test.describe("Article top bar fits narrow viewports", () => {
     await mockBackend(page, {
       // A realistically long title is the actual squeeze case — a short one
       // would pass even with the old, unbounded centre column.
-      posts: [{ ...POST, title: "The 5-Step Morning Glow Routine for Every Skin Type" }],
+      posts: [
+        {
+          ...POST,
+          title: "The 5-Step Morning Glow Routine for Every Skin Type",
+        },
+      ],
     });
     await gotoApp(page, "article/p1");
 
@@ -109,9 +116,9 @@ test.describe("Article top bar fits narrow viewports", () => {
     // The bookmark toggle has no accessible name — this is the control that
     // was actually measured off-screen, so it gets a direct DOM check rather
     // than relying on getByRole.
-    const bookmark = nav.locator("button", { hasText: "🏷️" }).or(
-      nav.locator("button", { hasText: "🔖" }),
-    );
+    const bookmark = nav
+      .locator("button", { hasText: "🏷️" })
+      .or(nav.locator("button", { hasText: "🔖" }));
     await expect(bookmark).toBeVisible();
     const bmBox = await bookmark.boundingBox();
     expect(bmBox).not.toBeNull();

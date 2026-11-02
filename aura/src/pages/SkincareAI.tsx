@@ -1,10 +1,9 @@
+import React, { useState, useRef, useEffect, useMemo } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { GeminiService } from "../services/geminiService";
+import "./SkincareAI.css";
 
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { GeminiService } from '../services/geminiService';
-import './SkincareAI.css';
-
-type Msg = { role: 'user' | 'bot'; text: string; report?: boolean };
+type Msg = { role: "user" | "bot"; text: string; report?: boolean };
 
 const GREETING =
   "Hello! I'm your Aura & Earth botanical assistant. How can I help you with your natural skincare journey today?";
@@ -15,14 +14,14 @@ const MAX_TURNS = 16;
 
 /** One-tap openers, so the empty state isn't a blank box asking for effort. */
 const QUICK_PROMPTS = [
-  { icon: 'water_drop', label: 'What helps dry, flaky skin?' },
-  { icon: 'brightness_4', label: 'How do I fade dark spots naturally?' },
-  { icon: 'nightlight', label: 'Build me a simple night routine' },
-  { icon: 'eco', label: 'Is neem good for acne?' },
+  { icon: "water_drop", label: "What helps dry, flaky skin?" },
+  { icon: "brightness_4", label: "How do I fade dark spots naturally?" },
+  { icon: "nightlight", label: "Build me a simple night routine" },
+  { icon: "eco", label: "Is neem good for acne?" },
 ];
 
 const SkincareAI: React.FC = () => {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -30,31 +29,36 @@ const SkincareAI: React.FC = () => {
 
   // A finished scan arrives as router state from SkinAnalysis, so the chat
   // opens already knowing the results instead of asking the user to retype them.
-  const report = (location.state as { report?: { summary: string; date: string } } | null)?.report ?? null;
+  const report =
+    (location.state as { report?: { summary: string; date: string } } | null)
+      ?.report ?? null;
 
   const [messages, setMessages] = useState<Msg[]>(() =>
     report
       ? [
-          { role: 'bot', text: GREETING },
-          { role: 'bot', text: report.summary, report: true },
+          { role: "bot", text: GREETING },
+          { role: "bot", text: report.summary, report: true },
           {
-            role: 'bot',
+            role: "bot",
             text: "I've got your scan in front of me. Ask me anything about it — why a concern showed up, how to layer the routine, or what to avoid.",
           },
         ]
-      : [{ role: 'bot', text: GREETING }]
+      : [{ role: "bot", text: GREETING }],
   );
 
   const gemini = useMemo(() => new GeminiService(), []);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
+    scrollRef.current?.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: "smooth",
+    });
   }, [messages, loading]);
 
   // Drop the report out of history once consumed, so a browser refresh or a
   // back-then-forward doesn't silently re-inject a stale scan.
   useEffect(() => {
-    if (report) navigate('.', { replace: true, state: null });
+    if (report) navigate(".", { replace: true, state: null });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -66,8 +70,8 @@ const SkincareAI: React.FC = () => {
     const userMsg = raw.trim();
     if (!userMsg || loading) return;
 
-    setInput('');
-    const next: Msg[] = [...messages, { role: 'user', text: userMsg }];
+    setInput("");
+    const next: Msg[] = [...messages, { role: "user", text: userMsg }];
     setMessages(next);
     setLoading(true);
 
@@ -81,7 +85,7 @@ const SkincareAI: React.FC = () => {
     setMessages((prev) => [
       ...prev,
       {
-        role: 'bot',
+        role: "bot",
         text:
           reply ||
           "I'm having trouble reaching my botanical database right now. Please try again in a moment.",
@@ -111,7 +115,7 @@ const SkincareAI: React.FC = () => {
           same affordances in the header and inside the thread. */}
       <aside
         className={`ai-panel-left shrink-0 lg:w-[40%] lg:max-w-lg lg:h-full lg:overflow-y-auto no-scrollbar
-                    px-6 py-5 sm:px-8 lg:px-10 lg:py-12 ${started ? 'hidden lg:block' : 'block'}`}
+                    px-6 py-5 sm:px-8 lg:px-10 lg:py-12 ${started ? "hidden lg:block" : "block"}`}
       >
         <div className="max-w-md mx-auto lg:mx-0 ai-fade-up">
           <div className="inline-flex items-center gap-2 px-3.5 py-1 lg:px-4 lg:py-1.5 rounded-full ai-chip mb-3 lg:mb-7">
@@ -122,14 +126,16 @@ const SkincareAI: React.FC = () => {
           </div>
 
           <h2 className="font-serif text-2xl sm:text-3xl lg:text-5xl leading-[1.08] mb-0 lg:mb-4">
-            Ask anything{' '}
-            <span className="italic text-[var(--ai-gold)]">about your skin</span>
+            Ask anything{" "}
+            <span className="italic text-[var(--ai-gold)]">
+              about your skin
+            </span>
           </h2>
 
           <p className="hidden lg:block text-white/75 leading-relaxed font-newsreader italic text-lg max-w-sm mb-8">
             Pure, organic, evidence-aware guidance — ingredients, routines and
-            what to actually avoid. Or let the scan read your skin first, and the
-            answers get personal.
+            what to actually avoid. Or let the scan read your skin first, and
+            the answers get personal.
           </p>
 
           {/* Primary entry: the scan */}
@@ -144,13 +150,15 @@ const SkincareAI: React.FC = () => {
             </span>
             <span className="flex-1 min-w-0">
               <span className="block font-serif text-lg leading-tight">
-                {report ? 'Run a new scan' : 'Analyze my skin'}
+                {report ? "Run a new scan" : "Analyze my skin"}
               </span>
               <span className="block text-[11px] opacity-60 mt-0.5">
                 Selfie → skin type, tone &amp; a personalized ritual
               </span>
             </span>
-            <span className="material-icons-round opacity-40">chevron_right</span>
+            <span className="material-icons-round opacity-40">
+              chevron_right
+            </span>
           </Link>
 
           {/* Secondary entry: past reports */}
@@ -158,9 +166,15 @@ const SkincareAI: React.FC = () => {
             to="/my-reports"
             className="ai-chip mt-3 hidden lg:flex items-center gap-3 rounded-2xl px-4 py-3 active:scale-[0.98]"
           >
-            <span className="material-icons-round text-[var(--ai-gold)] text-xl">history</span>
-            <span className="flex-1 text-sm font-semibold">My past reports</span>
-            <span className="material-icons-round text-white/40 text-lg">chevron_right</span>
+            <span className="material-icons-round text-[var(--ai-gold)] text-xl">
+              history
+            </span>
+            <span className="flex-1 text-sm font-semibold">
+              My past reports
+            </span>
+            <span className="material-icons-round text-white/40 text-lg">
+              chevron_right
+            </span>
           </Link>
 
           {/* Openers — horizontal scroll on phones, stacked on desktop */}
@@ -181,7 +195,9 @@ const SkincareAI: React.FC = () => {
                     <span className="material-icons-round text-base text-[var(--ai-gold)]">
                       {q.icon}
                     </span>
-                    <span className="whitespace-nowrap lg:whitespace-normal">{q.label}</span>
+                    <span className="whitespace-nowrap lg:whitespace-normal">
+                      {q.label}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -218,7 +234,9 @@ const SkincareAI: React.FC = () => {
               aria-label="Switch to the skin scan"
               className="p-2 -mr-2 text-mocha/40 rounded-full hover:text-mocha/70 transition-colors"
             >
-              <span className="material-icons-round">face_retouching_natural</span>
+              <span className="material-icons-round">
+                face_retouching_natural
+              </span>
             </Link>
           </div>
         </header>
@@ -237,7 +255,9 @@ const SkincareAI: React.FC = () => {
                   className="rounded-3xl border border-[var(--ai-scan)]/30 bg-[var(--ai-warm)]/10 p-4 shadow-sm"
                 >
                   <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--ai-warm)] mb-2">
-                    <span className="material-icons-round text-sm">description</span>
+                    <span className="material-icons-round text-sm">
+                      description
+                    </span>
                     Your skin report
                   </p>
                   <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-mocha">
@@ -247,19 +267,21 @@ const SkincareAI: React.FC = () => {
               ) : (
                 <div
                   key={i}
-                  className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                  className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
                     className={`max-w-[85%] p-4 rounded-3xl ${
-                      m.role === 'user'
-                        ? 'ai-bubble-user rounded-br-md'
-                        : 'ai-bubble-bot rounded-bl-md text-mocha'
+                      m.role === "user"
+                        ? "ai-bubble-user rounded-br-md"
+                        : "ai-bubble-bot rounded-bl-md text-mocha"
                     }`}
                   >
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{m.text}</p>
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                      {m.text}
+                    </p>
                   </div>
                 </div>
-              )
+              ),
             )}
 
             {loading && (
@@ -296,17 +318,19 @@ const SkincareAI: React.FC = () => {
             instead of leaving the bar floating in dead space. */}
         <div
           className="shrink-0 bg-white/70 backdrop-blur-xl border-t border-line px-4 sm:px-5 pt-3"
-          style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}
+          style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
         >
           <div className="mx-auto w-full max-w-2xl">
             <div className="relative flex items-center bg-white border border-line rounded-2xl p-1.5 shadow-lg">
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                onKeyDown={(e) => e.key === "Enter" && handleSend()}
                 disabled={loading}
                 className="flex-grow bg-transparent border-none focus:ring-0 focus:outline-none text-mocha placeholder-mocha/40 py-3 font-medium text-sm px-3 disabled:opacity-60"
-                placeholder={report ? 'Ask about your results...' : 'Ask your concern...'}
+                placeholder={
+                  report ? "Ask about your results..." : "Ask your concern..."
+                }
               />
               <button
                 onClick={handleSend}
@@ -318,7 +342,8 @@ const SkincareAI: React.FC = () => {
               </button>
             </div>
             <p className="text-[10px] text-center mt-2.5 opacity-40 uppercase tracking-widest px-8">
-              Results focus on natural ingredients. Consult a professional for medical conditions.
+              Results focus on natural ingredients. Consult a professional for
+              medical conditions.
             </p>
           </div>
         </div>

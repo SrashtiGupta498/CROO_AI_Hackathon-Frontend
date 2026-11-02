@@ -32,7 +32,10 @@ async function failOnDialog(page: Page) {
  *  the viewport by Playwright's default scroll-into-view alignment. */
 async function clickCentred(target: Locator) {
   await target.evaluate((el) =>
-    el.scrollIntoView({ block: "center", behavior: "instant" as ScrollBehavior }),
+    el.scrollIntoView({
+      block: "center",
+      behavior: "instant" as ScrollBehavior,
+    }),
   );
   await target.click();
 }
@@ -55,7 +58,10 @@ test.describe("Toasts replace native dialogs", () => {
 
     await gotoApp(page, "article/p1");
 
-    await page.getByRole("button", { name: /^share$/i }).first().click();
+    await page
+      .getByRole("button", { name: /^share$/i })
+      .first()
+      .click();
 
     const toast = page.locator(".ae-toast");
     await expect(toast).toBeVisible();
@@ -64,7 +70,9 @@ test.describe("Toasts replace native dialogs", () => {
 
     // Announced through the shared polite live region, not one per toast.
     await expect(
-      page.locator('[data-testid="toast-viewport"] [aria-live="polite"] .ae-toast'),
+      page.locator(
+        '[data-testid="toast-viewport"] [aria-live="polite"] .ae-toast',
+      ),
     ).toHaveCount(1);
 
     // Successes time out; nothing is lost if one is missed.

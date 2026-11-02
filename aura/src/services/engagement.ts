@@ -13,12 +13,14 @@ export interface PostComment {
   content: string;
   createdAt?: string;
   parentId?: string | null;
-  userId?: {
-    _id?: string;
-    FirstName?: string;
-    LastName?: string;
-    ProfilePicture?: string;
-  } | string;
+  userId?:
+    | {
+        _id?: string;
+        FirstName?: string;
+        LastName?: string;
+        ProfilePicture?: string;
+      }
+    | string;
 }
 
 /* The API serializes Mongo `_id` as `id` (toJSON transform). Normalize back to
@@ -27,8 +29,7 @@ export interface PostComment {
 const normalizeComment = (c: any): PostComment => {
   if (!c || typeof c !== "object") return c;
   const u = c.userId;
-  const userId =
-    u && typeof u === "object" ? { ...u, _id: u._id ?? u.id } : u;
+  const userId = u && typeof u === "object" ? { ...u, _id: u._id ?? u.id } : u;
   return { ...c, _id: c._id ?? c.id, userId };
 };
 

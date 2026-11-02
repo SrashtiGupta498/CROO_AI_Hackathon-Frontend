@@ -11,7 +11,7 @@ import { SkinIntake } from "../data/skinIntake";
 
 export function buildSkinContext(
   skinType: SkinTypeResult | null | undefined,
-  intake: SkinIntake | null | undefined
+  intake: SkinIntake | null | undefined,
 ): string | null {
   if (!skinType || skinType.basis !== "measurement") return null;
 

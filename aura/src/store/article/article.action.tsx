@@ -50,7 +50,10 @@ export const fetchAllPosts = createAsyncThunk(
   "articles/fetchAllPosts",
   async (
     // `append` is read off action.meta.arg by the reducer, not used here.
-    { limit = 10, page = 1 }: {
+    {
+      limit = 10,
+      page = 1,
+    }: {
       limit?: number;
       page?: number;
       append?: boolean;

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { fetchCategories } from "../store/categories/categories.action";
 import { fetchPostsByCategory } from "../store/article/article.action";
-import { ArticleCard } from "./ArticleCard";
+import { ArticleCard } from "../components/ArticleCard";
 import "./Article.css";
 
 import { ACCENT } from "../styles/brand";
@@ -39,13 +39,13 @@ const Article = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const { categories, loading: catLoading } = useSelector(
-    (state: RootState) => state.category
+    (state: RootState) => state.category,
   );
   // No `|| { posts: [] }` fallback: configureStore always mounts the slice, so
   // the fallback was unreachable — and it widened the selector's type to a
   // union, which is what made `loading` unreadable.
   const { posts = [], loading: postsLoading = false } = useSelector(
-    (state: RootState) => state.articles
+    (state: RootState) => state.articles,
   );
 
   const [activeFilter, setActiveFilter] = useState<string>("All");
@@ -69,7 +69,7 @@ const Article = () => {
   /* Derived data */
   const currentCategory = categories.find((cat) => cat.id === categoryId);
   const subCategories = categories.filter(
-    (cat) => cat.parentCategory?.toString() === categoryId
+    (cat) => cat.parentCategory?.toString() === categoryId,
   );
 
   const catIndex = categories.findIndex((c) => c.id === categoryId);
@@ -119,13 +119,27 @@ const Article = () => {
             >
               Home
             </button>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="2">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="rgba(255,255,255,0.3)"
+              strokeWidth="2"
+            >
               <path d="M9 18l6-6-6-6" />
             </svg>
             <span className="text-[11px] font-semibold text-white/50">
               Articles
             </span>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="2">
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="rgba(255,255,255,0.3)"
+              strokeWidth="2"
+            >
               <path d="M9 18l6-6-6-6" />
             </svg>
             <span className="text-[11px] font-bold text-white">
@@ -151,7 +165,14 @@ const Article = () => {
                   el.style.color = "rgba(255,255,255,0.6)";
                 }}
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
                   <path d="M19 12H5M12 5l-7 7 7 7" />
                 </svg>
                 Back
@@ -186,8 +207,18 @@ const Article = () => {
             </div>
 
             {/* Search */}
-            <div className={`article-page-search-box ${searchFocused ? "focused" : ""}`}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="2" strokeLinecap="round">
+            <div
+              className={`article-page-search-box ${searchFocused ? "focused" : ""}`}
+            >
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="rgba(255,255,255,0.6)"
+                strokeWidth="2"
+                strokeLinecap="round"
+              >
                 <circle cx="11" cy="11" r="7" />
                 <path d="m21 21-4.35-4.35" />
               </svg>
@@ -224,7 +255,9 @@ const Article = () => {
                 onClick={() => {
                   setActiveFilter("All");
                   if (categoryId)
-                    dispatch(fetchPostsByCategory({ categoryId, limit: 50, page: 1 }));
+                    dispatch(
+                      fetchPostsByCategory({ categoryId, limit: 50, page: 1 }),
+                    );
                 }}
               >
                 All
@@ -237,7 +270,13 @@ const Article = () => {
                   style={{ animationDelay: `${(i + 1) * 0.05}s` }}
                   onClick={() => {
                     setActiveFilter(sub.id);
-                    dispatch(fetchPostsByCategory({ categoryId: sub.id, limit: 50, page: 1 }));
+                    dispatch(
+                      fetchPostsByCategory({
+                        categoryId: sub.id,
+                        limit: 50,
+                        page: 1,
+                      }),
+                    );
                   }}
                 >
                   {sub.name}
@@ -265,7 +304,14 @@ const Article = () => {
         {!isLoading && filteredPosts.length === 0 && (
           <div className="text-center py-24">
             <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 bg-sage/8">
-              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="1.5">
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke={ACCENT}
+                strokeWidth="1.5"
+              >
                 <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z" />
                 <path d="M7 7h10M7 12h10M7 17h7" />
               </svg>
@@ -304,7 +350,14 @@ const Article = () => {
                   ` in ${subCategories.find((s) => s.id === activeFilter)?.name || activeFilter}`}
               </p>
               <div className="hidden sm:flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-[rgba(0,0,0,0.07)]">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={ACCENT} strokeWidth="2">
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke={ACCENT}
+                  strokeWidth="2"
+                >
                   <line x1="8" y1="6" x2="21" y2="6" />
                   <line x1="8" y1="12" x2="21" y2="12" />
                   <line x1="8" y1="18" x2="21" y2="18" />

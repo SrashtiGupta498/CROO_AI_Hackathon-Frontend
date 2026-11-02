@@ -161,7 +161,10 @@ const Contact: React.FC = () => {
             hear from you. Reach out and let's create something intentional.
           </p>
           <div className="contact-hero-actions">
-            <a href={`mailto:${COLLAB_EMAIL}`} className="contact-btn contact-btn--primary">
+            <a
+              href={`mailto:${COLLAB_EMAIL}`}
+              className="contact-btn contact-btn--primary"
+            >
               Email the team
             </a>
             <a href="#contact-form" className="contact-btn contact-btn--ghost">
@@ -188,10 +191,17 @@ const Contact: React.FC = () => {
       </section>
 
       {/* ─── Form + sidebar ─── */}
-      <section className="contact-section contact-form-section" id="contact-form">
+      <section
+        className="contact-section contact-form-section"
+        id="contact-form"
+      >
         <div className="contact-form-wrap">
           {/* Form */}
-          <form className="contact-form-card" onSubmit={handleSubmit} noValidate>
+          <form
+            className="contact-form-card"
+            onSubmit={handleSubmit}
+            noValidate
+          >
             <p className="contact-section-eyebrow">Start a conversation</p>
             <h2 className="contact-form-title">Tell us about your idea</h2>
 
@@ -204,7 +214,9 @@ const Contact: React.FC = () => {
                   onChange={(e) => update("name", e.target.value)}
                   placeholder="Jane Doe"
                 />
-                {errors.name && <span className="contact-err">{errors.name}</span>}
+                {errors.name && (
+                  <span className="contact-err">{errors.name}</span>
+                )}
               </label>
               <label className="contact-field">
                 <span className="contact-label">Email *</span>
@@ -215,7 +227,9 @@ const Contact: React.FC = () => {
                   placeholder="you@brand.com"
                   type="email"
                 />
-                {errors.email && <span className="contact-err">{errors.email}</span>}
+                {errors.email && (
+                  <span className="contact-err">{errors.email}</span>
+                )}
               </label>
             </div>
 
@@ -269,14 +283,16 @@ const Contact: React.FC = () => {
               )}
             </label>
 
-            <button type="submit" className="contact-btn contact-btn--primary contact-submit">
+            <button
+              type="submit"
+              className="contact-btn contact-btn--primary contact-submit"
+            >
               Send message
             </button>
             <p className="contact-form-note">
               This opens your email app with everything pre-filled — or write us
-              directly at{" "}
-              <a href={`mailto:${COLLAB_EMAIL}`}>{COLLAB_EMAIL}</a>. We usually
-              reply within 2 business days.
+              directly at <a href={`mailto:${COLLAB_EMAIL}`}>{COLLAB_EMAIL}</a>.
+              We usually reply within 2 business days.
             </p>
           </form>
 
@@ -333,7 +349,9 @@ const Contact: React.FC = () => {
       {/* ─── Collaboration types ─── */}
       <section className="contact-section">
         <p className="contact-section-eyebrow">Ways to work together</p>
-        <h2 className="contact-section-title">What we love to collaborate on</h2>
+        <h2 className="contact-section-title">
+          What we love to collaborate on
+        </h2>
         <div className="contact-tags">
           {COLLAB_TYPES.map((t) => (
             <span key={t} className="contact-tag">
@@ -374,7 +392,10 @@ const Contact: React.FC = () => {
             partnership begins with a simple hello.
           </p>
           <div className="contact-cta-actions">
-            <a href={`mailto:${GENERAL_EMAIL}`} className="contact-btn contact-btn--primary">
+            <a
+              href={`mailto:${GENERAL_EMAIL}`}
+              className="contact-btn contact-btn--primary"
+            >
               Say hello
             </a>
             <button

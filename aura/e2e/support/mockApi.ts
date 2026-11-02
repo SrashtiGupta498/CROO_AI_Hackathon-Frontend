@@ -27,6 +27,10 @@ export const TEST_USER = {
   RefreshToken: "test-refresh-token",
 };
 
+/** URL the mocked /upload/image hands back. */
+export const UPLOADED_IMAGE_URL =
+  "https://res.cloudinary.com/demo/image/upload/v1/aura/avatar.png";
+
 export const TEST_SETTINGS = {
   id: "s_test_1",
   userId: "u_test_1",
@@ -51,6 +55,16 @@ const CORS_HEADERS: Record<string, string> = {
   "Access-Control-Allow-Methods": "GET,POST,PATCH,PUT,DELETE,OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type,Authorization",
 };
+
+/**
+ * The real backend puts every response through Nest's ResponseInterceptor:
+ * { status, message, data }. Mocking endpoints bare is what let a bug where
+ * the client could not read that envelope pass the whole suite, so responses
+ * that the real API wraps are wrapped here too.
+ */
+function envelope(data: unknown, message = "Success") {
+  return { status: 200, message, data };
+}
 
 function json(route: Route, status: number, body: unknown) {
   return route.fulfill({
@@ -84,7 +98,11 @@ export interface MockOptions {
  * received so tests can assert on outgoing writes.
  */
 export async function mockBackend(page: Page, opts: MockOptions = {}) {
-  const received = { settingsPatch: null as any, profilePatch: null as any };
+  const received = {
+    settingsPatch: null as any,
+    profilePatch: null as any,
+    uploads: 0,
+  };
   const user = { ...TEST_USER, ...opts.user };
 
   // Block external media/fonts so navigation's `load` event never waits on a
@@ -117,7 +135,7 @@ export async function mockBackend(page: Page, opts: MockOptions = {}) {
       if (opts.loginError) {
         return json(route, 401, { message: opts.loginError });
       }
-      return json(route, 200, user);
+      return json(route, 200, envelope(user));
     }
     if (path.endsWith("/auth/logout")) {
       return json(route, 200, { message: "ok" });
@@ -149,10 +167,38 @@ export async function mockBackend(page: Page, opts: MockOptions = {}) {
     if (/\/users\/[^/]+\/profile$/.test(path) && method === "PATCH") {
       received.profilePatch = body;
       opts.onProfilePatch?.(body);
-      return json(route, 200, { ...user, ...body });
+      // PATCH /users/:id/profile — the service returns { message, user },
+      // which the interceptor then wraps.
+      Object.assign(user, body);
+      return json(
+        route,
+        200,
+        envelope(
+          { message: "Profile updated successfully", user: { ...user } },
+          "Profile updated successfully",
+        ),
+      );
     }
     if (/\/users\/[^/]+$/.test(path) && method === "GET") {
-      return json(route, 200, user);
+      return json(route, 200, envelope({ ...user }));
+    }
+
+    // ── Uploads ─────────────────────────────────────────────────────────
+    // Real shape: the controller returns { filename, originalname, mimetype,
+    // size, url } and the interceptor wraps it.
+    if (path.endsWith("/upload/image") && method === "POST") {
+      received.uploads += 1;
+      return json(
+        route,
+        200,
+        envelope({
+          filename: "mock",
+          originalname: "avatar.png",
+          mimetype: "image/png",
+          size: 123,
+          url: UPLOADED_IMAGE_URL,
+        }),
+      );
     }
 
     // ── Posts feed ──────────────────────────────────────────────────────

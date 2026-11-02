@@ -32,7 +32,10 @@ const ResetPassword: React.FC = () => {
       setDone(true);
       setTimeout(() => navigate("/Login"), 2200);
     } catch (err: any) {
-      setError(err?.response?.data?.message || "This reset link is invalid or expired.");
+      setError(
+        err?.response?.data?.message ||
+          "This reset link is invalid or expired.",
+      );
     } finally {
       setLoading(false);
     }
@@ -46,16 +49,27 @@ const ResetPassword: React.FC = () => {
         {!token ? (
           <div className="text-center py-4">
             <div className="text-4xl mb-5">⚠️</div>
-            <h1 className="text-white mb-3 font-serif text-[1.8rem] font-bold">Invalid reset link</h1>
-            <p className="text-white/50 text-sm mb-8">This link is missing its token. Please request a new one.</p>
-            <button onClick={() => navigate("/forgot-password")} className="reset-btn w-full py-4 rounded-2xl text-white font-bold text-sm tracking-widest uppercase">
+            <h1 className="text-white mb-3 font-serif text-[1.8rem] font-bold">
+              Invalid reset link
+            </h1>
+            <p className="text-white/50 text-sm mb-8">
+              This link is missing its token. Please request a new one.
+            </p>
+            <button
+              onClick={() => navigate("/forgot-password")}
+              className="reset-btn w-full py-4 rounded-2xl text-white font-bold text-sm tracking-widest uppercase"
+            >
               Request new link
             </button>
           </div>
         ) : done ? (
           <div className="text-center py-4">
-            <div className="w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl bg-sage/15">✅</div>
-            <h1 className="text-white mb-3 font-serif text-[1.9rem] font-bold">Password updated</h1>
+            <div className="w-16 h-16 rounded-full mx-auto mb-6 flex items-center justify-center text-3xl bg-sage/15">
+              ✅
+            </div>
+            <h1 className="text-white mb-3 font-serif text-[1.9rem] font-bold">
+              Password updated
+            </h1>
             <p className="text-white/50 text-sm">Redirecting you to sign in…</p>
           </div>
         ) : (
@@ -63,7 +77,9 @@ const ResetPassword: React.FC = () => {
             <h1 className="text-white mb-3 font-serif text-[2.1rem] font-bold leading-[1.1]">
               Set a new password
             </h1>
-            <p className="text-white/50 text-sm leading-relaxed mb-8">Choose a strong password you haven't used before.</p>
+            <p className="text-white/50 text-sm leading-relaxed mb-8">
+              Choose a strong password you haven't used before.
+            </p>
 
             {error && (
               <div className="reset-alert mb-5 px-4 py-3 rounded-2xl text-sm text-[#ffb4a8]">
@@ -72,7 +88,9 @@ const ResetPassword: React.FC = () => {
             )}
 
             <form onSubmit={submit}>
-              <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-sage-light mb-2">New password</label>
+              <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-sage-light mb-2">
+                New password
+              </label>
               <div className="relative mb-5">
                 <input
                   type={show ? "text" : "password"}
@@ -82,12 +100,18 @@ const ResetPassword: React.FC = () => {
                   placeholder="••••••••"
                   className="reset-input w-full px-5 py-4 rounded-2xl text-white placeholder-white/30 outline-none transition-all focus:border-sage"
                 />
-                <button type="button" onClick={() => setShow((s) => !s)} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 text-xs font-bold uppercase tracking-wider">
+                <button
+                  type="button"
+                  onClick={() => setShow((s) => !s)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white/70 text-xs font-bold uppercase tracking-wider"
+                >
                   {show ? "Hide" : "Show"}
                 </button>
               </div>
 
-              <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-sage-light mb-2">Confirm password</label>
+              <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-sage-light mb-2">
+                Confirm password
+              </label>
               <input
                 type={show ? "text" : "password"}
                 required

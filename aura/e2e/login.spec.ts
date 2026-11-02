@@ -21,7 +21,9 @@ test.describe("Login page", () => {
     await expect(page.getByTestId("login-google")).toBeVisible();
   });
 
-  test("password visibility toggle switches the input type", async ({ page }) => {
+  test("password visibility toggle switches the input type", async ({
+    page,
+  }) => {
     await mockBackend(page);
     await gotoApp(page, "Login");
 
@@ -36,7 +38,9 @@ test.describe("Login page", () => {
     await expect(password).toHaveAttribute("type", "password");
   });
 
-  test("shows an error message when credentials are rejected", async ({ page }) => {
+  test("shows an error message when credentials are rejected", async ({
+    page,
+  }) => {
     await mockBackend(page, { loginError: "Invalid email or password" });
     await gotoApp(page, "Login");
 

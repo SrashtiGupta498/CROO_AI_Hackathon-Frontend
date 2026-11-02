@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,7 +15,6 @@ import {
   Share2,
   Volume2,
   VolumeX,
-  X,
   Film,
 } from "lucide-react";
 import { REELS, Reel } from "../constants";
@@ -43,7 +48,10 @@ function useInViewPlayback(
 }
 
 /* ─── Featured hero — the first reel of the current view, editorial layout ─── */
-const FeatureReel: React.FC<{ reel: Reel; onOpen: () => void }> = ({ reel, onOpen }) => {
+const FeatureReel: React.FC<{ reel: Reel; onOpen: () => void }> = ({
+  reel,
+  onOpen,
+}) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   useInViewPlayback(wrapRef, videoRef);
@@ -58,7 +66,10 @@ const FeatureReel: React.FC<{ reel: Reel; onOpen: () => void }> = ({ reel, onOpe
         onMouseEnter={() => videoRef.current?.play().catch(() => {})}
         onMouseLeave={() => {
           const v = videoRef.current;
-          if (v) { v.pause(); v.currentTime = 0; }
+          if (v) {
+            v.pause();
+            v.currentTime = 0;
+          }
         }}
       >
         <video
@@ -126,7 +137,11 @@ const FeatureReel: React.FC<{ reel: Reel; onOpen: () => void }> = ({ reel, onOpe
 };
 
 /* ─── A single card in the grid (autoplays on hover / when in view) ─── */
-const ReelCard: React.FC<{ reel: Reel; index: number; onOpen: () => void }> = ({ reel, index, onOpen }) => {
+const ReelCard: React.FC<{ reel: Reel; index: number; onOpen: () => void }> = ({
+  reel,
+  index,
+  onOpen,
+}) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const wrapRef = useRef<HTMLDivElement | null>(null);
   useInViewPlayback(wrapRef, videoRef);
@@ -140,7 +155,10 @@ const ReelCard: React.FC<{ reel: Reel; index: number; onOpen: () => void }> = ({
       onMouseEnter={() => videoRef.current?.play().catch(() => {})}
       onMouseLeave={() => {
         const v = videoRef.current;
-        if (v) { v.pause(); v.currentTime = 0; }
+        if (v) {
+          v.pause();
+          v.currentTime = 0;
+        }
       }}
     >
       <video
@@ -169,13 +187,24 @@ const ReelCard: React.FC<{ reel: Reel; index: number; onOpen: () => void }> = ({
       {/* caption */}
       <div className="absolute inset-x-0 bottom-0 p-4">
         <div className="mb-1.5 flex items-center gap-2">
-          <div className="flex h-5 w-5 items-center justify-center rounded-full bg-sage text-[9px] font-bold text-white">A</div>
-          <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/80">{reel.handle}</span>
+          <div className="flex h-5 w-5 items-center justify-center rounded-full bg-sage text-[9px] font-bold text-white">
+            A
+          </div>
+          <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-white/80">
+            {reel.handle}
+          </span>
         </div>
-        <p className="font-serif text-[0.95rem] italic leading-tight text-white">{reel.title}</p>
+        <p className="font-serif text-[0.95rem] italic leading-tight text-white">
+          {reel.title}
+        </p>
         <div className="mt-2 flex flex-wrap gap-1.5 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           {reel.tags.slice(0, 2).map((t) => (
-            <span key={t} className="text-[9px] font-bold lowercase text-white/70">#{t.replace(/\s+/g, "")}</span>
+            <span
+              key={t}
+              className="text-[9px] font-bold lowercase text-white/70"
+            >
+              #{t.replace(/\s+/g, "")}
+            </span>
           ))}
         </div>
       </div>
@@ -184,7 +213,11 @@ const ReelCard: React.FC<{ reel: Reel; index: number; onOpen: () => void }> = ({
 };
 
 /* ─── Immersive full-screen vertical player (TikTok / Reels style) ─── */
-const ReelViewer: React.FC<{ reels: Reel[]; startIndex: number; onClose: () => void }> = ({ reels, startIndex, onClose }) => {
+const ReelViewer: React.FC<{
+  reels: Reel[];
+  startIndex: number;
+  onClose: () => void;
+}> = ({ reels, startIndex, onClose }) => {
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const videoEls = useRef<(HTMLVideoElement | null)[]>([]);
   const [active, setActive] = useState(startIndex);
@@ -193,7 +226,8 @@ const ReelViewer: React.FC<{ reels: Reel[]; startIndex: number; onClose: () => v
 
   /* Jump to the tapped reel on mount. */
   useEffect(() => {
-    const el = scrollRef.current?.children[startIndex] as HTMLElement | undefined;
+    const el = scrollRef.current?.children[startIndex] as
+      HTMLElement | undefined;
     el?.scrollIntoView({ behavior: "auto" });
   }, [startIndex]);
 
@@ -227,8 +261,13 @@ const ReelViewer: React.FC<{ reels: Reel[]; startIndex: number; onClose: () => v
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowDown" || e.key === "ArrowUp") {
         e.preventDefault();
-        const next = Math.min(reels.length - 1, Math.max(0, active + (e.key === "ArrowDown" ? 1 : -1)));
-        (scrollRef.current?.children[next] as HTMLElement | undefined)?.scrollIntoView({ behavior: "smooth" });
+        const next = Math.min(
+          reels.length - 1,
+          Math.max(0, active + (e.key === "ArrowDown" ? 1 : -1)),
+        );
+        (
+          scrollRef.current?.children[next] as HTMLElement | undefined
+        )?.scrollIntoView({ behavior: "smooth" });
       }
     };
     window.addEventListener("keydown", onKey);
@@ -242,11 +281,17 @@ const ReelViewer: React.FC<{ reels: Reel[]; startIndex: number; onClose: () => v
   const togglePlay = (idx: number) => {
     const vid = videoEls.current[idx];
     if (!vid) return;
-    vid.paused ? vid.play().catch(() => {}) : vid.pause();
+    if (vid.paused) {
+      void vid.play().catch(() => {});
+    } else {
+      vid.pause();
+    }
   };
 
   const goTo = (idx: number) =>
-    (scrollRef.current?.children[idx] as HTMLElement | undefined)?.scrollIntoView({ behavior: "smooth" });
+    (
+      scrollRef.current?.children[idx] as HTMLElement | undefined
+    )?.scrollIntoView({ behavior: "smooth" });
 
   const pad = (n: number) => String(n + 1).padStart(2, "0");
 
@@ -254,9 +299,14 @@ const ReelViewer: React.FC<{ reels: Reel[]; startIndex: number; onClose: () => v
     <div className="fixed inset-0 z-[100] bg-ink/97 backdrop-blur-sm">
       {/* top bar */}
       <div className="absolute inset-x-0 top-0 z-20 flex items-center justify-between bg-gradient-to-b from-black/70 to-transparent px-5 py-4">
-        <button onClick={onClose} className="flex items-center gap-2 text-white/90 transition-colors hover:text-white">
+        <button
+          onClick={onClose}
+          className="flex items-center gap-2 text-white/90 transition-colors hover:text-white"
+        >
           <ArrowLeft size={20} />
-          <span className="text-xs font-bold uppercase tracking-widest">Close</span>
+          <span className="text-xs font-bold uppercase tracking-widest">
+            Close
+          </span>
         </button>
         <span className="font-serif text-sm italic tracking-wide text-white/80">
           <span className="text-white">{pad(active)}</span>
@@ -284,12 +334,21 @@ const ReelViewer: React.FC<{ reels: Reel[]; startIndex: number; onClose: () => v
         ))}
       </div>
 
-      <div ref={scrollRef} className="no-scrollbar h-full w-full snap-y snap-mandatory overflow-y-auto">
+      <div
+        ref={scrollRef}
+        className="no-scrollbar h-full w-full snap-y snap-mandatory overflow-y-auto"
+      >
         {reels.map((reel, idx) => (
-          <div key={reel.id} data-idx={idx} className="relative flex h-full w-full snap-start items-center justify-center">
+          <div
+            key={reel.id}
+            data-idx={idx}
+            className="relative flex h-full w-full snap-start items-center justify-center"
+          >
             <div className="relative mx-auto flex h-full w-full max-w-[440px] items-center justify-center">
               <video
-                ref={(el) => { videoEls.current[idx] = el; }}
+                ref={(el) => {
+                  videoEls.current[idx] = el;
+                }}
                 src={reel.src}
                 muted={muted}
                 loop
@@ -302,7 +361,9 @@ const ReelViewer: React.FC<{ reels: Reel[]; startIndex: number; onClose: () => v
               {/* right action rail */}
               <div className="absolute bottom-28 right-3 z-10 flex flex-col items-center gap-5">
                 <button
-                  onClick={() => setLiked((p) => ({ ...p, [reel.id]: !p[reel.id] }))}
+                  onClick={() =>
+                    setLiked((p) => ({ ...p, [reel.id]: !p[reel.id] }))
+                  }
                   className="flex flex-col items-center gap-1 text-white transition-transform active:scale-90"
                 >
                   <span
@@ -310,7 +371,10 @@ const ReelViewer: React.FC<{ reels: Reel[]; startIndex: number; onClose: () => v
                       liked[reel.id] ? "bg-clay/80" : "bg-white/15"
                     }`}
                   >
-                    <Heart size={20} className={liked[reel.id] ? "fill-current" : ""} />
+                    <Heart
+                      size={20}
+                      className={liked[reel.id] ? "fill-current" : ""}
+                    />
                   </span>
                   <span className="text-[10px] font-bold">{reel.likes}</span>
                 </button>
@@ -331,15 +395,26 @@ const ReelViewer: React.FC<{ reels: Reel[]; startIndex: number; onClose: () => v
               {/* caption */}
               <div className="absolute bottom-10 left-4 right-20 z-10 text-white">
                 <div className="mb-2 flex items-center gap-2">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white/40 bg-sage text-xs font-bold text-white">A</div>
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white/40 bg-sage text-xs font-bold text-white">
+                    A
+                  </div>
                   <span className="text-sm font-bold">{reel.author}</span>
                   <span className="text-xs text-white/60">{reel.handle}</span>
                 </div>
-                <p className="mb-2 font-serif text-lg italic leading-snug">{reel.title}</p>
-                <p className="text-sm leading-relaxed text-white/80">{reel.caption}</p>
+                <p className="mb-2 font-serif text-lg italic leading-snug">
+                  {reel.title}
+                </p>
+                <p className="text-sm leading-relaxed text-white/80">
+                  {reel.caption}
+                </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {reel.tags.map((t) => (
-                    <span key={t} className="text-[11px] font-bold lowercase text-white/70">#{t.replace(/\s+/g, "")}</span>
+                    <span
+                      key={t}
+                      className="text-[11px] font-bold lowercase text-white/70"
+                    >
+                      #{t.replace(/\s+/g, "")}
+                    </span>
                   ))}
                 </div>
               </div>
@@ -381,7 +456,10 @@ const Reels: React.FC = () => {
   }, [reels]);
 
   const visibleReels = useMemo(
-    () => (activeTag === "All" ? reels : reels.filter((r) => r.tags.includes(activeTag))),
+    () =>
+      activeTag === "All"
+        ? reels
+        : reels.filter((r) => r.tags.includes(activeTag)),
     [reels, activeTag],
   );
 
@@ -409,7 +487,10 @@ const Reels: React.FC = () => {
   return (
     <div className="relative min-h-screen bg-paper text-ink">
       {/* ambient orbs */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      <div
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+        aria-hidden
+      >
         <div className="reels-float-orb absolute -left-20 -top-24 h-[26rem] w-[26rem] rounded-full bg-sage/10 blur-[90px]" />
         <div className="reels-float-orb absolute -right-24 top-1/2 h-[28rem] w-[28rem] rounded-full bg-turmeric/15 blur-[100px]" />
       </div>
@@ -420,13 +501,16 @@ const Reels: React.FC = () => {
           onClick={() => navigate(-1)}
           className="group mb-8 flex items-center gap-2 text-sm font-bold text-ink/70 transition-colors hover:text-ink"
         >
-          <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
+          <ArrowLeft
+            size={16}
+            className="transition-transform group-hover:-translate-x-1"
+          />
           <span className="text-xs uppercase tracking-widest">Back</span>
         </button>
 
         <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <span className="reels-eyebrow flex items-center gap-2 text-sage">
+            <span className="reels-eyebrow items-center gap-2 text-sage">
               <Film size={13} />
               Aura &amp; Earth · Film Journal
             </span>
@@ -434,7 +518,8 @@ const Reels: React.FC = () => {
               Watch the Rituals
             </h1>
             <p className="mt-4 max-w-md leading-relaxed text-muted">
-              Bite-sized botanical moments — tap any reel to slip into the full-screen feed.
+              Bite-sized botanical moments — tap any reel to slip into the
+              full-screen feed.
             </p>
           </div>
           <span className="inline-flex items-center gap-2 self-start rounded-full border border-line bg-surface px-4 py-2 text-xs font-bold text-ink/70 shadow-card-sm sm:self-auto">
@@ -466,17 +551,26 @@ const Reels: React.FC = () => {
 
       {/* content */}
       <main className="relative z-10 mx-auto max-w-7xl px-6 pb-28">
-        {featured && <FeatureReel reel={featured} onOpen={() => openViewer(0)} />}
+        {featured && (
+          <FeatureReel reel={featured} onOpen={() => openViewer(0)} />
+        )}
 
         {rest.length > 0 && (
           <>
             <div className="mb-6 flex items-center gap-4">
-              <span className="text-xs font-bold uppercase tracking-[0.3em] text-ink/50">More reels</span>
+              <span className="text-xs font-bold uppercase tracking-[0.3em] text-ink/50">
+                More reels
+              </span>
               <span className="h-px flex-1 bg-line" />
             </div>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4 xl:grid-cols-5">
               {rest.map((reel, i) => (
-                <ReelCard key={reel.id} reel={reel} index={i} onOpen={() => openViewer(i + 1)} />
+                <ReelCard
+                  key={reel.id}
+                  reel={reel}
+                  index={i}
+                  onOpen={() => openViewer(i + 1)}
+                />
               ))}
             </div>
           </>
@@ -484,14 +578,22 @@ const Reels: React.FC = () => {
 
         {visibleReels.length === 0 && (
           <div className="py-24 text-center text-muted">
-            <p className="font-serif text-2xl italic text-ink">Nothing here yet</p>
-            <p className="mt-2 text-sm">No reels tagged “{activeTag}”. Try another filter.</p>
+            <p className="font-serif text-2xl italic text-ink">
+              Nothing here yet
+            </p>
+            <p className="mt-2 text-sm">
+              No reels tagged “{activeTag}”. Try another filter.
+            </p>
           </div>
         )}
       </main>
 
       {viewerAt !== null && (
-        <ReelViewer reels={visibleReels} startIndex={viewerAt} onClose={() => setViewerAt(null)} />
+        <ReelViewer
+          reels={visibleReels}
+          startIndex={viewerAt}
+          onClose={() => setViewerAt(null)}
+        />
       )}
     </div>
   );

@@ -35,7 +35,9 @@ const pickPoster = (post: any): string => {
         (s: any) => String(s?.type).toLowerCase() === "video" && s?.posterUrl,
       )?.posterUrl
     : undefined;
-  return fromSection || post?.thumbnail || post?.coverImage || post?.imageUrl || "";
+  return (
+    fromSection || post?.thumbnail || post?.coverImage || post?.imageUrl || ""
+  );
 };
 
 /* Map a backend Post (type: 'reel') into the frontend Reel shape. */

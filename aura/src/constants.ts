@@ -1,7 +1,15 @@
 import { Article, Ingredient } from "./types";
 import {
-  vid1, vid2, vid3, vid4, vid5,
-  reelPoster1, reelPoster2, reelPoster3, reelPoster4, reelPoster5,
+  vid1,
+  vid2,
+  vid3,
+  vid4,
+  vid5,
+  reelPoster1,
+  reelPoster2,
+  reelPoster3,
+  reelPoster4,
+  reelPoster5,
 } from "./assets/index";
 
 export type Reel = {

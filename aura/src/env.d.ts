@@ -5,6 +5,8 @@ interface ImportMetaEnv {
   readonly VITE_API_URL?: string;
   /** "true" re-enables the botanical chat assistant (hidden by default). */
   readonly VITE_ENABLE_CHAT?: string;
+  /** Google OAuth client ID for the sign-in button (public; the secret is backend-only). */
+  readonly VITE_GOOGLE_CLIENT_ID?: string;
   /** Vite built-ins. Normally from `vite/client`, which the `types` pin below excludes. */
   readonly DEV: boolean;
   readonly PROD: boolean;

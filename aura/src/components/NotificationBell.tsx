@@ -11,7 +11,6 @@ import {
 } from "../services/notification";
 import "./NotificationBell.css";
 
-
 import { ACCENT } from "../styles/brand";
 // Small relative-time formatter (no external dependency).
 const timeAgo = (iso?: string): string => {
@@ -137,7 +136,7 @@ const NotificationBell: React.FC = () => {
   return (
     <div ref={wrapRef} className="relative">
       <button
-        className="app-header-icon-btn relative"
+        className="app-header-icon-btn flex relative"
         title="Notifications"
         aria-label="Notifications"
         onClick={() => setOpen((o) => !o)}
@@ -190,11 +189,14 @@ const NotificationBell: React.FC = () => {
             {!loading && !error && items.length === 0 && (
               <div className="py-10 px-[18px] text-center text-[rgba(45,42,38,0.45)]">
                 <Inbox size={28} className="mx-auto mb-2.5" />
-                <p className="text-[13px] font-semibold m-0">You're all caught up</p>
+                <p className="text-[13px] font-semibold m-0">
+                  You're all caught up
+                </p>
               </div>
             )}
 
-            {!loading && !error &&
+            {!loading &&
+              !error &&
               items.map((n) => (
                 <button
                   key={n._id}
@@ -204,12 +206,12 @@ const NotificationBell: React.FC = () => {
                     background: n.isRead ? "white" : "rgba(61,91,79,0.07)",
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.background = "rgba(61,91,79,0.12)";
+                    (e.currentTarget as HTMLButtonElement).style.background =
+                      "rgba(61,91,79,0.12)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLButtonElement).style.background = n.isRead
-                      ? "white"
-                      : "rgba(61,91,79,0.07)";
+                    (e.currentTarget as HTMLButtonElement).style.background =
+                      n.isRead ? "white" : "rgba(61,91,79,0.07)";
                   }}
                 >
                   <span className="text-[18px] shrink-0 leading-[1.3]">

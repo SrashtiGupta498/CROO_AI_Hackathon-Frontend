@@ -1,0 +1,20 @@
+# Build and tooling output
+dist/
+playwright-report/
+test-results/
+coverage/
+
+# Generated or third-party content, not hand-written source
+scripts/article-restructure/output/
+data/
+public/
+src/assets/
+
+# Lockfiles
+package-lock.json
+
+# Tailwind 4's `@theme` block is not valid CSS to prettier's postcss parser,
+# which fails the whole file with a misleading "Unknown word" on a comment.
+# The file is hand-maintained and already consistent; skipping it is cheaper
+# than pinning a Tailwind-aware CSS parser.
+src/styles/theme.css

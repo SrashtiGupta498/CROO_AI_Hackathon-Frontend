@@ -15,7 +15,6 @@ import {
   Info,
   BookOpen,
   Loader2,
-  Tag,
   Droplet,
   Scissors,
   Heart,
@@ -43,7 +42,7 @@ import "./IngredientLibrary.css";
 import "./IngredientDetail.css";
 
 /* ---------------------------------------------------------------------------
- * API shape (GET /v1/posts/diy?type=INGREDIENT_REFERENCE)
+ * API shape (GET /v1/posts/diy?type=FACE_OIL and ?type=INGREDIENT_REFERENCE)
  * Each item is a "post" with sections[]; the real content lives in:
  *   - title                       -> ingredient name
  *   - sections[type=text/About]   -> description ("About" body)
@@ -112,7 +111,14 @@ interface Ingredient {
 
 // Section types that carry visuals rather than prose — pulled into the
 // gallery instead of rendered as an (empty) text card.
-const MEDIA_SECTION_TYPES = new Set(["image", "hero", "gallery", "images", "video", "gif"]);
+const MEDIA_SECTION_TYPES = new Set([
+  "image",
+  "hero",
+  "gallery",
+  "images",
+  "video",
+  "gif",
+]);
 
 // Map a raw tag / post type to a human-friendly category label.
 const CATEGORY_LABELS: Record<string, string> = {
@@ -124,17 +130,12 @@ const TYPE_CATEGORY: Record<string, string> = {
   INGREDIENT_REFERENCE: "Ingredient",
 };
 
-// Tags that are noise for display chips (generic / category tags).
-const HIDDEN_TAGS = new Set([
-  "ingredient",
-  "plant-based",
-  "oils-and-milks",
-]);
+// Post types that make up the library list. /posts/diy matches one exact
+// `type` per request, so this drives one request each (see the list fetch).
+const LIBRARY_POST_TYPES = ["FACE_OIL", "INGREDIENT_REFERENCE"] as const;
 
-const sectionBody = (
-  sections: ApiSection[] | undefined,
-  predicate: (s: ApiSection) => boolean,
-) => sections?.find(predicate)?.body?.trim() || "";
+// Tags that are noise for display chips (generic / category tags).
+const HIDDEN_TAGS = new Set(["ingredient", "plant-based", "oils-and-milks"]);
 
 /* ── Editorial-field parsers — every one operates on REAL section text
    already present in the post; none of them invent data. A parser that
@@ -188,7 +189,9 @@ const parseBullets = (body: string): string[] =>
 //   Preferable for:\n• Dry\n• Mature\n\nUse with caution:\n• Oily
 // — only the "Preferable for" list is a genuine "best for" claim.
 const parseBestFor = (body: string): string[] => {
-  const m = body.match(/preferable for:?\s*\n([\s\S]*?)(?:\n\s*\n|use with caution|$)/i);
+  const m = body.match(
+    /preferable for:?\s*\n([\s\S]*?)(?:\n\s*\n|use with caution|$)/i,
+  );
   return m ? parseBullets(m[1]) : [];
 };
 
@@ -226,15 +229,21 @@ const parseFaq = (body: string): { q: string; a: string }[] =>
 
 const normalizeIngredient = (item: ApiIngredient): Ingredient => {
   const rawSections = item.sections || [];
-  const aboutSection = rawSections.find((s) => s.title?.toLowerCase() === "about" || s.type === "text");
-  const about = toPlainText(aboutSection?.body) || toPlainText(item.ai?.summary);
-  const sourceSection = rawSections.find((s) => s.type === "source" || s.title?.toLowerCase() === "source");
+  const aboutSection = rawSections.find(
+    (s) => s.title?.toLowerCase() === "about" || s.type === "text",
+  );
+  const about =
+    toPlainText(aboutSection?.body) || toPlainText(item.ai?.summary);
+  const sourceSection = rawSections.find(
+    (s) => s.type === "source" || s.title?.toLowerCase() === "source",
+  );
   const source = toPlainText(sourceSection?.body);
 
   // Editorial fields — each parsed from a specific real section, by title.
   // A section that's successfully claimed here is excluded from the
   // generic leftover `sections` list below so it isn't rendered twice.
-  const findByTitle = (re: RegExp) => rawSections.find((s) => re.test((s.title || "").trim()));
+  const findByTitle = (re: RegExp) =>
+    rawSections.find((s) => re.test((s.title || "").trim()));
   const skinBenefits = findByTitle(/^skin benefits$/i);
   const hairBenefits = findByTitle(/^hair benefits$/i);
   const bodyBenefits = findByTitle(/^body benefits$/i);
@@ -243,7 +252,9 @@ const normalizeIngredient = (item: ApiIngredient): Ingredient => {
   const applySection = findByTitle(/how to apply/i);
   const bestForSection = findByTitle(/best skin types|best for/i);
   const comedoSection = findByTitle(/comedogenic/i);
-  const faqSection = rawSections.find((s) => s.type === "faq" || (s.title || "").toLowerCase() === "faq");
+  const faqSection = rawSections.find(
+    (s) => s.type === "faq" || (s.title || "").toLowerCase() === "faq",
+  );
 
   const benefits = [skinBenefits, hairBenefits, bodyBenefits]
     .filter(Boolean)
@@ -256,8 +267,12 @@ const normalizeIngredient = (item: ApiIngredient): Ingredient => {
         .map((s) => s.trim())
         .filter(Boolean)
     : [];
-  const bestFor = bestForSection ? parseBestFor(toPlainText(bestForSection.body)) : [];
-  const comedogenicScore = comedoSection ? parseComedogenicScore(comedoSection.body || "") : null;
+  const bestFor = bestForSection
+    ? parseBestFor(toPlainText(bestForSection.body))
+    : [];
+  const comedogenicScore = comedoSection
+    ? parseComedogenicScore(comedoSection.body || "")
+    : null;
   const faq = faqSection ? parseFaq(toPlainText(faqSection.body)) : [];
 
   const claimed = new Set<ApiSection>(
@@ -304,12 +319,30 @@ const normalizeIngredient = (item: ApiIngredient): Ingredient => {
     .forEach((s) => {
       const t = (s.type || "").toLowerCase();
       if (t === "video" && s.videoUrl) {
-        gallery.push({ kind: "video", url: toAbsoluteUrl(s.videoUrl), caption: s.caption });
+        gallery.push({
+          kind: "video",
+          url: toAbsoluteUrl(s.videoUrl),
+          caption: s.caption,
+        });
       } else if (t === "gif" && (s.videoUrl || s.image)) {
-        gallery.push({ kind: "gif", url: toAbsoluteUrl(s.videoUrl || s.image), caption: s.caption });
-      } else if (t === "image" || t === "hero" || t === "gallery" || t === "images") {
-        const urls = (s.images?.length ? s.images : s.image ? [s.image] : []).map(toAbsoluteUrl);
-        urls.forEach((u) => u && gallery.push({ kind: "image", url: u, caption: s.caption }));
+        gallery.push({
+          kind: "gif",
+          url: toAbsoluteUrl(s.videoUrl || s.image),
+          caption: s.caption,
+        });
+      } else if (
+        t === "image" ||
+        t === "hero" ||
+        t === "gallery" ||
+        t === "images"
+      ) {
+        const urls = (
+          s.images?.length ? s.images : s.image ? [s.image] : []
+        ).map(toAbsoluteUrl);
+        urls.forEach(
+          (u) =>
+            u && gallery.push({ kind: "image", url: u, caption: s.caption }),
+        );
       }
     });
   const dedupedGallery = gallery.filter((m) => m.url && m.url !== coverImage);
@@ -337,7 +370,10 @@ const normalizeIngredient = (item: ApiIngredient): Ingredient => {
     applySteps,
     bestFor,
     comedogenicScore,
-    quote: pickPullQuote(about, toPlainText(item.ai?.summary) || toPlainText(item.subtitle)),
+    quote: pickPullQuote(
+      about,
+      toPlainText(item.ai?.summary) || toPlainText(item.subtitle),
+    ),
     faq,
   };
 };
@@ -395,7 +431,8 @@ const SectionBody: React.FC<{ section: ApiSection }> = ({ section }) => {
   }
 
   const isSource =
-    section.type === "source" || (section.title || "").toLowerCase() === "source";
+    section.type === "source" ||
+    (section.title || "").toLowerCase() === "source";
   return (
     <p
       className={`leading-relaxed whitespace-pre-line ${
@@ -416,15 +453,22 @@ const SectionBody: React.FC<{ section: ApiSection }> = ({ section }) => {
  * borrowed from Explore's post-card treatment for consistency.
  * ------------------------------------------------------------------------- */
 
-const IngredientGallery: React.FC<{ name: string; items: MediaItem[] }> = ({ name, items }) => {
+const IngredientGallery: React.FC<{ name: string; items: MediaItem[] }> = ({
+  name,
+  items,
+}) => {
   const [lightbox, setLightbox] = useState<number | null>(null);
 
   useEffect(() => {
     if (lightbox === null) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setLightbox(null);
-      if (e.key === "ArrowRight") setLightbox((i) => (i === null ? i : (i + 1) % items.length));
-      if (e.key === "ArrowLeft") setLightbox((i) => (i === null ? i : (i - 1 + items.length) % items.length));
+      if (e.key === "ArrowRight")
+        setLightbox((i) => (i === null ? i : (i + 1) % items.length));
+      if (e.key === "ArrowLeft")
+        setLightbox((i) =>
+          i === null ? i : (i - 1 + items.length) % items.length,
+        );
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -475,7 +519,9 @@ const IngredientGallery: React.FC<{ name: string; items: MediaItem[] }> = ({ nam
               </button>
             )}
             {m.caption && (
-              <p className="mt-2 mb-1 text-xs text-neutral-500 italic leading-snug">{m.caption}</p>
+              <p className="mt-2 mb-1 text-xs text-neutral-500 italic leading-snug">
+                {m.caption}
+              </p>
             )}
           </div>
         ))}
@@ -502,7 +548,9 @@ const IngredientGallery: React.FC<{ name: string; items: MediaItem[] }> = ({ nam
             onClick={(e) => e.stopPropagation()}
           />
           {active.caption && (
-            <p className="mt-4 text-white/70 text-sm italic text-center max-w-lg px-6">{active.caption}</p>
+            <p className="mt-4 text-white/70 text-sm italic text-center max-w-lg px-6">
+              {active.caption}
+            </p>
           )}
         </div>
       )}
@@ -513,7 +561,10 @@ const IngredientGallery: React.FC<{ name: string; items: MediaItem[] }> = ({ nam
 /* ── Scroll-reveal wrapper — fades/slides a section in once, the first
    time it enters the viewport. Pure CSS transition + IntersectionObserver,
    no animation library. ─────────────────────────────────────────────── */
-const Reveal: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = "" }) => {
+const Reveal: React.FC<{ children: React.ReactNode; className?: string }> = ({
+  children,
+  className = "",
+}) => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   useEffect(() => {
@@ -532,7 +583,10 @@ const Reveal: React.FC<{ children: React.ReactNode; className?: string }> = ({ c
     return () => obs.disconnect();
   }, []);
   return (
-    <div ref={ref} className={`ing-ed-reveal ${visible ? "is-visible" : ""} ${className}`}>
+    <div
+      ref={ref}
+      className={`ing-ed-reveal ${visible ? "is-visible" : ""} ${className}`}
+    >
       {children}
     </div>
   );
@@ -542,9 +596,17 @@ const Reveal: React.FC<{ children: React.ReactNode; className?: string }> = ({ c
 // doesn't affect the (real) text it labels.
 const benefitIcon = (text: string) => {
   const t = text.toLowerCase();
-  if (t.includes("hydrat") || t.includes("moistur") || t.includes("lock")) return Droplet;
-  if (t.includes("hair") || t.includes("frizz") || t.includes("shine") || t.includes("curl")) return Scissors;
-  if (t.includes("soft") || t.includes("smooth") || t.includes("glow")) return Sparkles;
+  if (t.includes("hydrat") || t.includes("moistur") || t.includes("lock"))
+    return Droplet;
+  if (
+    t.includes("hair") ||
+    t.includes("frizz") ||
+    t.includes("shine") ||
+    t.includes("curl")
+  )
+    return Scissors;
+  if (t.includes("soft") || t.includes("smooth") || t.includes("glow"))
+    return Sparkles;
   if (t.includes("body") || t.includes("skin")) return Heart;
   return Leaf;
 };
@@ -553,14 +615,21 @@ const benefitIcon = (text: string) => {
    already loaded by the parent (no extra fetch). Real data only; renders
    nothing (not even the heading) when there's no other ingredient in the
    same category. ─────────────────────────────────────────────────────── */
-const RelatedIngredients: React.FC<{ current: Ingredient; all: Ingredient[] }> = ({ current, all }) => {
+const RelatedIngredients: React.FC<{
+  current: Ingredient;
+  all: Ingredient[];
+}> = ({ current, all }) => {
   const navigate = useNavigate();
-  const related = all.filter((i) => i.id !== current.id && i.category === current.category).slice(0, 6);
+  const related = all
+    .filter((i) => i.id !== current.id && i.category === current.category)
+    .slice(0, 6);
   if (!related.length) return null;
   return (
     <Reveal>
       <section className="max-w-5xl mx-auto px-6 py-16">
-        <p className="ing-ed-section-title mb-8 text-center">Related Ingredients</p>
+        <p className="ing-ed-section-title mb-8 text-center">
+          Related Ingredients
+        </p>
         <div className="flex gap-4 overflow-x-auto no-scrollbar pb-2">
           {related.map((ing) => (
             <button
@@ -568,8 +637,12 @@ const RelatedIngredients: React.FC<{ current: Ingredient; all: Ingredient[] }> =
               onClick={() => navigate(`/ingredients/${ing.id}`)}
               className="ing-ed-card ing-ed-card-lift flex-none w-[180px] text-left p-5"
             >
-              <p className="ing-ed-serif text-lg font-semibold mb-1">{ing.name}</p>
-              <p className="ing-ed-caption not-italic text-xs">{ing.category}</p>
+              <p className="ing-ed-serif text-lg font-semibold mb-1">
+                {ing.name}
+              </p>
+              <p className="ing-ed-caption not-italic text-xs">
+                {ing.category}
+              </p>
             </button>
           ))}
         </div>
@@ -581,7 +654,9 @@ const RelatedIngredients: React.FC<{ current: Ingredient; all: Ingredient[] }> =
 /* ── DIY recipes that actually use this ingredient — matched by real tag
    overlap against /posts/diy. Hidden entirely when nothing matches; this
    deliberately never shows fabricated placeholder recipes. ──────────── */
-const RelatedRecipes: React.FC<{ ingredient: Ingredient }> = ({ ingredient }) => {
+const RelatedRecipes: React.FC<{ ingredient: Ingredient }> = ({
+  ingredient,
+}) => {
   const navigate = useNavigate();
   const [recipes, setRecipes] = useState<any[] | null>(null);
 
@@ -595,7 +670,8 @@ const RelatedRecipes: React.FC<{ ingredient: Ingredient }> = ({ ingredient }) =>
         const tagSet = new Set(ingredient.tags.map((t) => t.toLowerCase()));
         const matches = items.filter((p) => {
           if (String(p._id) === String(ingredient.id)) return false;
-          if (p.type === "FACE_OIL" || p.type === "INGREDIENT_REFERENCE") return false;
+          if (p.type === "FACE_OIL" || p.type === "INGREDIENT_REFERENCE")
+            return false;
           const pTags: string[] = Array.isArray(p.tags) ? p.tags : [];
           return pTags.some((t) => tagSet.has(String(t).toLowerCase()));
         });
@@ -624,10 +700,20 @@ const RelatedRecipes: React.FC<{ ingredient: Ingredient }> = ({ ingredient }) =>
                 onClick={() => navigate(`/diy/${p._id}`)}
                 className="ing-ed-card ing-ed-card-lift ing-ed-img-zoom text-left overflow-hidden"
               >
-                {cover && <PostCover src={cover} alt={p.title} className="w-full h-48 object-cover" />}
+                {cover && (
+                  <PostCover
+                    src={cover}
+                    alt={p.title}
+                    className="w-full h-48 object-cover"
+                  />
+                )}
                 <div className="p-5">
-                  <p className="ing-ed-serif text-xl font-semibold mb-1">{p.title}</p>
-                  {p.subtitle && <p className="ing-ed-caption not-italic">{p.subtitle}</p>}
+                  <p className="ing-ed-serif text-xl font-semibold mb-1">
+                    {p.title}
+                  </p>
+                  {p.subtitle && (
+                    <p className="ing-ed-caption not-italic">{p.subtitle}</p>
+                  )}
                 </div>
               </button>
             );
@@ -711,7 +797,10 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
         const el = heroImgRef.current;
         if (!el) return;
         const rect = el.getBoundingClientRect();
-        const progress = Math.min(1, Math.max(0, 1 - rect.top / window.innerHeight));
+        const progress = Math.min(
+          1,
+          Math.max(0, 1 - rect.top / window.innerHeight),
+        );
         el.style.transform = `translateY(${progress * 22}px)`;
       });
     };
@@ -738,9 +827,7 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
     return (
       <main className="min-h-screen bg-paper flex flex-col items-center justify-center text-center px-6">
         <ShieldAlert className="text-[#b4413c] mb-4" size={36} />
-        <p className="text-ink font-bold mb-2">
-          Couldn’t load this ingredient
-        </p>
+        <p className="text-ink font-bold mb-2">Couldn’t load this ingredient</p>
         <p className="text-muted text-sm mb-8">{error}</p>
         <button
           onClick={onBack}
@@ -767,14 +854,21 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
     ingredient.gallery.find((m) => m.url !== heroPhoto);
   const galleryRest = ingredient.gallery.filter((m) => m.url !== bigMedia?.url);
 
-  const hasQuickFacts = ingredient.comedogenicScore !== null || ingredient.bestFor.length > 0;
-  const hasSciFacts = ingredient.comedogenicScore !== null || ingredient.category || ingredient.tags.length > 0;
+  const hasQuickFacts =
+    ingredient.comedogenicScore !== null || ingredient.bestFor.length > 0;
+  const hasSciFacts =
+    ingredient.comedogenicScore !== null ||
+    ingredient.category ||
+    ingredient.tags.length > 0;
 
   return (
     <main className="ing-ed min-h-screen">
       {/* ── Hero — editorial two-column: facts left, photograph right ── */}
       <section className="max-w-7xl mx-auto px-6 pt-16 pb-10 md:pt-24">
-        <button onClick={onBack} className="ing-ed-btn mb-10 inline-flex items-center gap-2 text-[var(--ie-muted)]">
+        <button
+          onClick={onBack}
+          className="ing-ed-btn mb-10 inline-flex items-center gap-2 text-[var(--ie-muted)]"
+        >
           <ArrowLeft size={14} /> Library
         </button>
 
@@ -783,15 +877,22 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
           <div>
             <div className="flex flex-wrap items-center gap-2 mb-7">
               <span className="ing-ed-chip">LIBRARY</span>
-              <span className="ing-ed-chip ing-ed-chip-sage">{ingredient.category}</span>
-              <span className="ing-ed-chip ing-ed-chip-sand">Natural Ingredient</span>
+              <span className="ing-ed-chip ing-ed-chip-sage">
+                {ingredient.category}
+              </span>
+              <span className="ing-ed-chip ing-ed-chip-sand">
+                Natural Ingredient
+              </span>
             </div>
 
             <h1 className="ing-ed-hero-title mb-4">{ingredient.name}</h1>
             <p className="ing-ed-eyebrow mb-6">Ingredient Reference</p>
 
             {(ingredient.quote || ingredient.summary) && (
-              <p className="ing-ed-body mb-9 max-w-md" style={{ color: "var(--ie-muted)" }}>
+              <p
+                className="ing-ed-body mb-9 max-w-md"
+                style={{ color: "var(--ie-muted)" }}
+              >
                 {ingredient.quote || ingredient.summary}
               </p>
             )}
@@ -800,7 +901,8 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
               <div className="flex flex-wrap gap-2.5">
                 {ingredient.comedogenicScore !== null && (
                   <span className="ing-ed-chip">
-                    <Gauge size={13} /> Comedogenic {ingredient.comedogenicScore}/5
+                    <Gauge size={13} /> Comedogenic{" "}
+                    {ingredient.comedogenicScore}/5
                   </span>
                 )}
                 {ingredient.bestFor.slice(0, 4).map((b) => (
@@ -813,15 +915,26 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
           </div>
 
           {/* Right — the large botanical photograph, with grain + parallax */}
-          <div ref={heroImgRef} className="ing-ed-grain ing-ed-img-zoom relative rounded-[28px] overflow-hidden shadow-[0_30px_60px_rgba(43,41,39,0.12)] aspect-[4/5]">
+          <div
+            ref={heroImgRef}
+            className="ing-ed-grain ing-ed-img-zoom relative rounded-[28px] overflow-hidden shadow-[0_30px_60px_rgba(43,41,39,0.12)] aspect-[4/5]"
+          >
             {heroPhoto ? (
               // Cover may be a photograph or a short clip; PostCover picks the
               // right element and loops video silently.
-              <PostCover src={heroPhoto} alt={ingredient.name} className="w-full h-full object-cover" />
+              <PostCover
+                src={heroPhoto}
+                alt={ingredient.name}
+                loading="eager"
+                className="w-full h-full object-cover"
+              />
             ) : (
               <div
                 className="w-full h-full flex items-center justify-center"
-                style={{ background: "linear-gradient(135deg, var(--ie-sage) 0%, var(--ie-sand) 100%)" }}
+                style={{
+                  background:
+                    "linear-gradient(135deg, var(--ie-sage) 0%, var(--ie-sand) 100%)",
+                }}
               >
                 <Leaf className="text-white/70" size={64} />
               </div>
@@ -835,7 +948,10 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
         <Reveal>
           <section className="max-w-2xl mx-auto px-6 py-16">
             <p className="ing-ed-section-title mb-6">About</p>
-            <p className="ing-ed-body first-letter:ing-ed-serif" style={{ whiteSpace: "pre-line" }}>
+            <p
+              className="ing-ed-body first-letter:ing-ed-serif"
+              style={{ whiteSpace: "pre-line" }}
+            >
               {ingredient.about}
             </p>
           </section>
@@ -848,7 +964,12 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
           <section className="max-w-5xl mx-auto px-6 pb-16">
             <div className="ing-ed-grain ing-ed-img-zoom rounded-[28px] overflow-hidden shadow-[0_24px_50px_rgba(43,41,39,0.1)]">
               {bigMedia.kind === "image" ? (
-                <img src={bigMedia.url} alt={bigMedia.caption || ingredient.name} className="w-full h-auto max-h-[70vh] object-cover" loading="lazy" />
+                <img
+                  src={bigMedia.url}
+                  alt={bigMedia.caption || ingredient.name}
+                  className="w-full h-auto max-h-[70vh] object-cover"
+                  loading="lazy"
+                />
               ) : (
                 // A full-bleed editorial moment, not a media player: it loops
                 // silently like the hero photograph it stands in for. Muted is
@@ -864,7 +985,11 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
                 />
               )}
             </div>
-            {bigMedia.caption && <p className="ing-ed-caption text-center mt-4">{bigMedia.caption}</p>}
+            {bigMedia.caption && (
+              <p className="ing-ed-caption text-center mt-4">
+                {bigMedia.caption}
+              </p>
+            )}
           </section>
         </Reveal>
       )}
@@ -878,8 +1003,15 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
               {ingredient.benefits.map((b, i) => {
                 const Icon = benefitIcon(b);
                 return (
-                  <div key={i} className="ing-ed-card ing-ed-card-lift p-7 flex items-start gap-4">
-                    <Icon size={20} style={{ color: "var(--ie-sage)" }} className="flex-none mt-0.5" />
+                  <div
+                    key={i}
+                    className="ing-ed-card ing-ed-card-lift p-7 flex items-start gap-4"
+                  >
+                    <Icon
+                      size={20}
+                      style={{ color: "var(--ie-sage)" }}
+                      className="flex-none mt-0.5"
+                    />
                     <p className="ing-ed-body text-[15px]">{b}</p>
                   </div>
                 );
@@ -928,7 +1060,10 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
                 </p>
                 <ul className="space-y-3">
                   {ingredient.pros.map((p, i) => (
-                    <li key={i} className="ing-ed-body text-[15px] flex items-start gap-2.5">
+                    <li
+                      key={i}
+                      className="ing-ed-body text-[15px] flex items-start gap-2.5"
+                    >
                       <span style={{ color: "var(--ie-sage)" }}>✓</span> {p}
                     </li>
                   ))}
@@ -942,7 +1077,10 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
                 </p>
                 <ul className="space-y-3">
                   {ingredient.cons.map((c, i) => (
-                    <li key={i} className="ing-ed-body text-[15px] flex items-start gap-2.5">
+                    <li
+                      key={i}
+                      className="ing-ed-body text-[15px] flex items-start gap-2.5"
+                    >
                       <span style={{ color: "#a9701f" }}>⚠</span> {c}
                     </li>
                   ))}
@@ -957,27 +1095,37 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
       {hasSciFacts && (
         <Reveal>
           <section className="max-w-5xl mx-auto px-6 py-16">
-            <p className="ing-ed-section-title mb-10 text-center">Reference Facts</p>
+            <p className="ing-ed-section-title mb-10 text-center">
+              Reference Facts
+            </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
               {ingredient.comedogenicScore !== null && (
                 <div className="ing-ed-card p-7 text-center">
-                  <p className="ing-ed-serif text-3xl font-semibold mb-1">{ingredient.comedogenicScore}/5</p>
+                  <p className="ing-ed-serif text-3xl font-semibold mb-1">
+                    {ingredient.comedogenicScore}/5
+                  </p>
                   <p className="ing-ed-eyebrow">Comedogenic</p>
                 </div>
               )}
               <div className="ing-ed-card p-7 text-center">
-                <p className="ing-ed-serif text-3xl font-semibold mb-1">{ingredient.category}</p>
+                <p className="ing-ed-serif text-3xl font-semibold mb-1">
+                  {ingredient.category}
+                </p>
                 <p className="ing-ed-eyebrow">Category</p>
               </div>
               {ingredient.bestFor.length > 0 && (
                 <div className="ing-ed-card p-7 text-center">
-                  <p className="ing-ed-serif text-3xl font-semibold mb-1">{ingredient.bestFor.length}</p>
+                  <p className="ing-ed-serif text-3xl font-semibold mb-1">
+                    {ingredient.bestFor.length}
+                  </p>
                   <p className="ing-ed-eyebrow">Best-For Skin Types</p>
                 </div>
               )}
               {ingredient.tags.length > 0 && (
                 <div className="ing-ed-card p-7 text-center">
-                  <p className="ing-ed-serif text-3xl font-semibold mb-1">{ingredient.tags.length}</p>
+                  <p className="ing-ed-serif text-3xl font-semibold mb-1">
+                    {ingredient.tags.length}
+                  </p>
                   <p className="ing-ed-eyebrow">Related Tags</p>
                 </div>
               )}
@@ -1014,10 +1162,16 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
             <div className="space-y-6">
               {ingredient.faq.map((f, i) => (
                 <div key={i} className="ing-ed-card p-7">
-                  <p className="font-semibold mb-2" style={{ color: "var(--ie-text)" }}>
+                  <p
+                    className="font-semibold mb-2"
+                    style={{ color: "var(--ie-text)" }}
+                  >
                     {f.q}
                   </p>
-                  <p className="ing-ed-body text-[15px]" style={{ color: "var(--ie-muted)" }}>
+                  <p
+                    className="ing-ed-body text-[15px]"
+                    style={{ color: "var(--ie-muted)" }}
+                  >
                     {f.a}
                   </p>
                 </div>
@@ -1034,13 +1188,21 @@ const IngredientDetail: React.FC<IngredientDetailProps> = ({
         <section className="max-w-2xl mx-auto px-6 py-8 space-y-6">
           {ingredient.sections.map((section, idx) => {
             const isDisclaimer =
-              section.type === "warning" || (section.title || "").trim().toLowerCase() === "disclaimer";
+              section.type === "warning" ||
+              (section.title || "").trim().toLowerCase() === "disclaimer";
             const Icon = sectionIcon(section.title || "");
             return (
               <div
                 key={`${section.title}-${idx}`}
                 className="ing-ed-card p-8"
-                style={isDisclaimer ? { borderColor: "rgba(169,112,31,0.3)", background: "rgba(215,194,165,0.12)" } : undefined}
+                style={
+                  isDisclaimer
+                    ? {
+                        borderColor: "rgba(169,112,31,0.3)",
+                        background: "rgba(215,194,165,0.12)",
+                      }
+                    : undefined
+                }
               >
                 <p className="ing-ed-section-title mb-4 flex items-center gap-2">
                   <Icon size={14} /> {section.title || "Note"}
@@ -1129,7 +1291,10 @@ const SideReelsRail: React.FC = () => {
             }}
             className="group relative aspect-[9/16] rounded-2xl overflow-hidden cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#DCE5DD]"
             onMouseEnter={(e) => {
-              e.currentTarget.querySelector("video")?.play().catch(() => {});
+              e.currentTarget
+                .querySelector("video")
+                ?.play()
+                .catch(() => {});
             }}
             onMouseLeave={(e) => {
               const v = e.currentTarget.querySelector("video");
@@ -1182,8 +1347,9 @@ function toCarouselPhoto(p: any): CarouselPhoto {
     id: pid,
     title: p.title || "From the Journal",
     img:
-      toAbsoluteUrl(p.thumbnailUrl || p.thumbnail || p.imageUrl || sectionImg) ||
-      `https://picsum.photos/seed/${pid}/600/750`,
+      toAbsoluteUrl(
+        p.thumbnailUrl || p.thumbnail || p.imageUrl || sectionImg,
+      ) || `https://picsum.photos/seed/${pid}/600/750`,
   };
 }
 
@@ -1257,10 +1423,7 @@ const SidePhotoCarousel: React.FC = () => {
   // Auto-advance every 4s.
   useEffect(() => {
     if (photos.length < 2) return;
-    const t = setInterval(
-      () => setIndex((i) => (i + 1) % photos.length),
-      4000,
-    );
+    const t = setInterval(() => setIndex((i) => (i + 1) % photos.length), 4000);
     return () => clearInterval(t);
   }, [photos.length]);
 
@@ -1365,25 +1528,43 @@ const IngredientLibrary: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    // GET http://localhost:3002/v1/posts/diy?type=FACE_OIL&limit=200&page=1
-    API.get("/posts/diy", { params: { type: "FACE_OIL", limit: 200, page: 1 } })
-      .then((res) => {
+    // The library is both post types; /posts/diy filters on a single exact
+    // `type`, so one request per type and merge. A type that fails is skipped
+    // rather than blanking the page - the error only shows if none loaded.
+    // GET /v1/posts/diy?type=FACE_OIL|INGREDIENT_REFERENCE&limit=200&page=1
+    Promise.all(
+      LIBRARY_POST_TYPES.map((type) =>
+        API.get("/posts/diy", { params: { type, limit: 200, page: 1 } })
+          .then((res) => {
+            const raw = res.data?.data ?? res.data;
+            const items: ApiIngredient[] = Array.isArray(raw)
+              ? raw
+              : raw?.posts || [];
+            return { items, error: null as any };
+          })
+          .catch((err: any) => ({ items: [] as ApiIngredient[], error: err })),
+      ),
+    )
+      .then((results) => {
         if (!active) return;
-        const raw = res.data?.data ?? res.data;
-        const items: ApiIngredient[] = Array.isArray(raw)
-          ? raw
-          : raw?.posts || [];
+        const failed = results.filter((r) => r.error);
+        if (failed.length === results.length) {
+          setError(
+            failed[0].error?.response?.data?.message ||
+              "Failed to load the ingredient library.",
+          );
+          return;
+        }
+        // Same post could in principle come back under both calls; keep one.
+        const byId = new Map<string, Ingredient>();
+        results
+          .flatMap((r) => r.items)
+          .map(normalizeIngredient)
+          .forEach((ing) => {
+            if (!byId.has(ing.id)) byId.set(ing.id, ing);
+          });
         setIngredients(
-          items
-            .map(normalizeIngredient)
-            .sort((a, b) => a.name.localeCompare(b.name)),
-        );
-      })
-      .catch((err: any) => {
-        if (!active) return;
-        setError(
-          err?.response?.data?.message ||
-            "Failed to load the ingredient library.",
+          [...byId.values()].sort((a, b) => a.name.localeCompare(b.name)),
         );
       })
       .finally(() => {
@@ -1427,7 +1608,10 @@ const IngredientLibrary: React.FC = () => {
   // result. Server-side paging would scope those filters to a single page.
   const PAGE_SIZE = 12;
   const [page, setPage] = useState(1);
-  const totalPages = Math.max(1, Math.ceil(filteredIngredients.length / PAGE_SIZE));
+  const totalPages = Math.max(
+    1,
+    Math.ceil(filteredIngredients.length / PAGE_SIZE),
+  );
   // Clamp so a shrinking filter (e.g. a new search) never lands on an empty page.
   const safePage = Math.min(page, totalPages);
   const pagedIngredients = filteredIngredients.slice(
@@ -1557,108 +1741,119 @@ const IngredientLibrary: React.FC = () => {
         )}
 
         {!loading && !error && filteredIngredients.length > 0 && (
-          <div className="grid lg:grid-cols-[minmax(0,1fr)_340px] gap-8 mb-24 items-start">
-          <div>
-          <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-[38px]">
-            {pagedIngredients.map((ing, idx) => (
-              <div
-                key={ing.id}
-                onClick={() => navigate(`/ingredients/${ing.id}`)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    navigate(`/ingredients/${ing.id}`);
-                  }
-                }}
-                className="ingredient-lib-ingredient-card bg-white rounded-[1.5rem] overflow-hidden border border-neutral-100 shadow-sm hover:shadow-xl transition-all duration-500 group flex flex-col cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#DCE5DD]"
-                style={{ animationDelay: `${idx * 0.1}s` }}
-              >
-                {/* Card header — the ingredient's own photograph where it has
+          <div className="mb-16">
+            <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-[38px]">
+                {pagedIngredients.map((ing, idx) => (
+                  <div
+                    key={ing.id}
+                    onClick={() => navigate(`/ingredients/${ing.id}`)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        navigate(`/ingredients/${ing.id}`);
+                      }
+                    }}
+                    className="ingredient-lib-ingredient-card bg-white rounded-[1.5rem] overflow-hidden border border-neutral-100 shadow-sm hover:shadow-xl transition-all duration-500 group flex flex-col cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#DCE5DD]"
+                    style={{ animationDelay: `${idx * 0.1}s` }}
+                  >
+                    {/* Card header — the ingredient's own photograph where it has
                     one. The monogram sits underneath rather than instead of
                     it, so it also covers a photo that fails to load. Many
                     ingredients genuinely have no image yet; those keep the
                     monogram rather than borrowing stock photography. */}
-                <div className="aspect-[4/3] overflow-hidden relative bg-gradient-to-br from-[#2D2A26] to-[#3D5B4F] flex items-center justify-center">
-                  <span className="ingredient-lib-card-img text-white/90 select-none font-serif text-[4.5rem] font-bold">
-                    {ing.name?.charAt(0)?.toUpperCase()}
-                  </span>
+                    <div className="aspect-[4/3] overflow-hidden relative bg-gradient-to-br from-[#2D2A26] to-[#3D5B4F] flex items-center justify-center">
+                      <span className="ingredient-lib-card-img text-white/90 select-none font-serif text-[4.5rem] font-bold">
+                        {ing.name?.charAt(0)?.toUpperCase()}
+                      </span>
 
-                  {ing.coverImage && (
-                    <>
-                      {/* A cover may be a photograph OR a short clip — the
+                      {ing.coverImage && (
+                        <>
+                          {/* A cover may be a photograph OR a short clip — the
                           editor's cover slot uploads through /upload/media,
                           which takes both. fallback={null} lets the monogram
                           behind show through if the file is gone. */}
-                      <PostCover
-                        src={ing.coverImage}
-                        alt={ing.name}
-                        fallback={null}
-                        className="ingredient-lib-card-img absolute inset-0 w-full h-full object-cover"
-                      />
-                      {/* Keeps the category chip legible over a bright cover. */}
-                      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/5 to-transparent pointer-events-none" />
-                    </>
-                  )}
+                          <PostCover
+                            src={ing.coverImage}
+                            alt={ing.name}
+                            fallback={null}
+                            className="ingredient-lib-card-img absolute inset-0 w-full h-full object-cover"
+                          />
+                          {/* Keeps the category chip legible over a bright cover. */}
+                          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/5 to-transparent pointer-events-none" />
+                        </>
+                      )}
 
-                  {!ing.coverImage && (
-                    <Leaf
-                      className="absolute bottom-5 right-5 text-white/20"
-                      size={40}
-                    />
-                  )}
-                  <div className="absolute top-6 left-6">
-                    <span className="px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-[9px] font-bold tracking-widest uppercase">
-                      {ing.category}
-                    </span>
-                  </div>
-                </div>
-                <div className="p-5 flex flex-col flex-1">
-                  <h3 className="text-xl font-bold text-[#2D2A26] mb-1 font-serif">
-                    {ing.name}
-                  </h3>
-                  <p className="ae-eyebrow mb-3">Ingredient Reference</p>
-
-                  {ing.about && (
-                    <p className="text-sm text-[var(--ae-muted)] leading-relaxed mb-4 line-clamp-3">
-                      {ing.about}
-                    </p>
-                  )}
-
-                  {ing.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mb-4">
-                      {ing.tags.slice(0, 3).map((tag) => (
-                        <span
-                          key={tag}
-                          className="px-3 py-1 rounded-full bg-[#DCE5DD]/15 text-[#3D5B4F] text-[10px] font-bold tracking-wide uppercase"
-                        >
-                          {tag.replace(/-/g, " ")}
+                      {!ing.coverImage && (
+                        <Leaf
+                          className="absolute bottom-5 right-5 text-white/20"
+                          size={40}
+                        />
+                      )}
+                      <div className="absolute top-6 left-6">
+                        <span className="px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white text-[9px] font-bold tracking-widest uppercase">
+                          {ing.category}
                         </span>
-                      ))}
+                      </div>
                     </div>
-                  )}
+                    <div className="p-5 flex flex-col flex-1">
+                      <h3 className="text-xl font-bold text-[#2D2A26] mb-1 font-serif">
+                        {ing.name}
+                      </h3>
+                      <p className="ae-eyebrow mb-3">Ingredient Reference</p>
 
-                  {ing.source && (
-                    <div className="mt-auto pt-4 border-t border-line flex items-center gap-2">
-                      <BookOpen size={13} className="text-[var(--ae-muted)] shrink-0" />
-                      <p className="text-xs text-[var(--ae-muted)] italic line-clamp-1">
-                        {ing.source}
-                      </p>
+                      {ing.about && (
+                        <p className="text-sm text-[var(--ae-muted)] leading-relaxed mb-4 line-clamp-3">
+                          {ing.about}
+                        </p>
+                      )}
+
+                      {ing.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {ing.tags.slice(0, 3).map((tag) => (
+                            <span
+                              key={tag}
+                              className="px-3 py-1 rounded-full bg-[#DCE5DD]/15 text-[#3D5B4F] text-[10px] font-bold tracking-wide uppercase"
+                            >
+                              {tag.replace(/-/g, " ")}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {ing.source && (
+                        <div className="mt-auto pt-4 border-t border-line flex items-center gap-2">
+                          <BookOpen
+                            size={13}
+                            className="text-[var(--ae-muted)] shrink-0"
+                          />
+                          <p className="text-xs text-[var(--ae-muted)] italic line-clamp-1">
+                            {ing.source}
+                          </p>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            <Pagination
+              page={safePage}
+              totalPages={totalPages}
+              onChange={goToPage}
+            />
           </div>
-          <Pagination page={safePage} totalPages={totalPages} onChange={goToPage} />
-          </div>
+        )}
 
-          {/* Side content: short reels + photo carousel */}
-          <aside className="space-y-8 lg:sticky lg:top-32">
+        {/* Short reels + photo carousel. A band under the grid, not a 340px
+            sticky rail beside it: pinned, it followed the reader down a much
+            longer masonry, and un-pinning it alone left its column empty for
+            the rest of the page. Full width the grid gets its third column
+            back on xl. */}
+        {!loading && !error && filteredIngredients.length > 0 && (
+          <div className="grid md:grid-cols-2 gap-8 mb-24 items-start">
             <SideReelsRail />
             <SidePhotoCarousel />
-          </aside>
           </div>
         )}
 

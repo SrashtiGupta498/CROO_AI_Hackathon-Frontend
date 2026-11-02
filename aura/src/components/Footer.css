@@ -6,8 +6,15 @@
    ============================================================ */
 
 @keyframes appFooterLeafFloat {
-  0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.06; }
-  50%       { transform: translateY(-18px) rotate(8deg); opacity: 0.1; }
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.06;
+  }
+  50% {
+    transform: translateY(-18px) rotate(8deg);
+    opacity: 0.1;
+  }
 }
 .app-footer-root {
   background: linear-gradient(160deg, #1e3329 0%, #162820 60%, #0f1f19 100%);
@@ -32,7 +39,7 @@
   color: var(--ae-sage-light);
 }
 .app-footer-link::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 50%;
@@ -56,7 +63,9 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.04);
   cursor: pointer;
-  transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out,
+  transition:
+    color 0.25s ease-in-out,
+    background-color 0.25s ease-in-out,
     border-color 0.25s ease-in-out;
   backdrop-filter: blur(8px);
 }
@@ -85,7 +94,9 @@
   font-size: 0.9rem;
   flex: 1;
   outline: none;
-  transition: border-color 0.25s, background 0.25s;
+  transition:
+    border-color 0.25s,
+    background 0.25s;
   font-family: inherit;
 }
 .app-footer-nl-input::placeholder {
@@ -107,7 +118,9 @@
   letter-spacing: 0.08em;
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color 0.25s ease-in-out, opacity 0.25s ease-in-out;
+  transition:
+    background-color 0.25s ease-in-out,
+    opacity 0.25s ease-in-out;
   font-family: inherit;
 }
 .app-footer-nl-btn:hover {
@@ -183,7 +196,9 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: border-color 0.25s ease, background 0.25s ease;
+  transition:
+    border-color 0.25s ease,
+    background 0.25s ease;
 }
 
 .app-footer-nl-field:focus-within {
@@ -233,5 +248,3 @@
   margin-bottom: 14px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
-
-

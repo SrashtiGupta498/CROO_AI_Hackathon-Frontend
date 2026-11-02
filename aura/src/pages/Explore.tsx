@@ -4,26 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { fetchAllPosts } from "../store/article/article.action";
 import { setPagination } from "../store/article/article.slice";
-import {
-  Img1,
-  Img2,
-  Img3,
-  Img4,
-  Img5,
-  Img6,
-  Img7,
-  Img8,
-  Img9,
-  Img10,
-  Img11,
-  Img12,
-} from "../assets/index";
 import { getPostCover } from "../services/uploadImage";
 import { PostCover } from "../components/PostCover";
 import { getCategoryName } from "../services/taxonomy";
 import { CONCERN_TAGS, filterPosts } from "../services/concernFilter";
 import "./Explore.css";
-
 
 const Explore: React.FC = () => {
   const navigate = useNavigate();
@@ -39,7 +24,7 @@ const Explore: React.FC = () => {
     page = 1,
     limit = 10,
   } = useSelector((state: RootState) => state.articles) ?? {};
-  
+
   // Seed the search box from ?q= so the header search (which navigates here)
   // actually filters the feed. Kept in sync when the param changes.
   const [searchParams] = useSearchParams();
@@ -101,21 +86,6 @@ const Explore: React.FC = () => {
     io.observe(el);
     return () => io.disconnect();
   }, [handleLoadMore, hasMore]);
-
-  const images = [
-    Img1,
-    Img2,
-    Img3,
-    Img4,
-    Img5,
-    Img6,
-    Img7,
-    Img8,
-    Img9,
-    Img10,
-    Img11,
-    Img12,
-  ];
 
   return (
     <main className="min-w-0 font-sans">
@@ -248,7 +218,10 @@ const Explore: React.FC = () => {
               >
                 <div className="relative aspect-[5/7] rounded-[1.5rem] overflow-hidden shadow-md hover:shadow-2xl transition-shadow duration-500">
                   <PostCover
-                    src={getPostCover(item) || `https://picsum.photos/seed/${item.id || item._id}/800/600`}
+                    src={
+                      getPostCover(item) ||
+                      `https://picsum.photos/seed/${item.id || item._id}/800/600`
+                    }
                     alt={item.title}
                     className="explore-card-img w-full h-full object-cover"
                   />

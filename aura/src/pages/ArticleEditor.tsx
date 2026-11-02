@@ -3,9 +3,16 @@ import "./ArticleEditor.css";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
-import { fetchCategories, fetchSubCategories } from "../store/categories/categories.action";
+import {
+  fetchCategories,
+  fetchSubCategories,
+} from "../store/categories/categories.action";
 import { GeminiService } from "../services/geminiService";
-import { uploadImageFiles, uploadMediaFile, toAbsoluteUrl } from "../services/uploadImage";
+import {
+  uploadImageFiles,
+  uploadMediaFile,
+  toAbsoluteUrl,
+} from "../services/uploadImage";
 import { API_BASE } from "../services/config";
 import { PostCover } from "../components/PostCover";
 import { useToast } from "../components/Toast";
@@ -28,6 +35,7 @@ import {
   ReelPicker,
 } from "../components/SectionBlockEditors";
 import { sanitizeHtml } from "../utils/sanitize";
+import { AuraMark } from "../components/Logo";
 
 // Read a category's id whether the backend returned `_id` or the slice's `id`.
 const catId = (c: any): string => String(c?._id || c?.id || "");
@@ -337,7 +345,7 @@ const isTextSectionType = (type: string | undefined) => {
 
 const inferStepsFromParagraphs = (paragraphs: string[]) => {
   const regex =
-    /^(?:\s*(?:\d+\s*|step\s*\d+\s*|first|then|next)\s*[:.\-]?\s*)(.+)/i;
+    /^(?:\s*(?:\d+\s*|step\s*\d+\s*|first|then|next)\s*[:.-]?\s*)(.+)/i;
   const parsed: { stepLabel: string; title: string; body: string }[] = [];
 
   paragraphs.forEach((paragraph) => {
@@ -363,6 +371,11 @@ const inferStepsFromParagraphs = (paragraphs: string[]) => {
   return parsed.slice(0, 3);
 };
 
+/* Unreferenced. `inferAiMetadataFromText` below is the path the editor
+   actually calls; this is its superseded sibling, kept because it is working
+   logic nobody has decided to retire. Delete it or wire it up — but do that
+   deliberately, not because a linter asked. */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const buildAiMetadataFromArticle = (
   article: Pick<Article, "title" | "subtitle" | "sections" | "ai">,
 ): ArticleAIMetadata => {
@@ -438,6 +451,11 @@ const getCoverSectionImages = (article: Article): string[] => {
   });
 };
 
+/* Unreferenced. `inferAiMetadataFromText` below is the path the editor
+   actually calls; this is its superseded sibling, kept because it is working
+   logic nobody has decided to retire. Delete it or wire it up — but do that
+   deliberately, not because a linter asked. */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const heuristicSplitContent = (rawText: string): ArticleAIMetadata => {
   const cleanText = rawText
     .replace(/<[^>]*>/g, "\n")
@@ -483,19 +501,44 @@ const TEXT_COLORS: { name: string; value: string }[] = [
 
 // Small inline glyphs used by the rich-text toolbar.
 const UnderlineGlyph = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+  >
     <path d="M6 4v6a6 6 0 0 0 12 0V4" />
     <line x1="4" y1="20" x2="20" y2="20" />
   </svg>
 );
 const StrikeGlyph = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+  >
     <line x1="4" y1="12" x2="20" y2="12" />
     <path d="M7 7a4 3 0 0 1 4-2h2a4 3 0 0 1 4 3M7 17a4 3 0 0 0 4 2h2a4 3 0 0 0 4-3" />
   </svg>
 );
 const OrderedListGlyph = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <line x1="10" y1="6" x2="20" y2="6" />
     <line x1="10" y1="12" x2="20" y2="12" />
     <line x1="10" y1="18" x2="20" y2="18" />
@@ -503,23 +546,61 @@ const OrderedListGlyph = () => (
   </svg>
 );
 const TextColorGlyph = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M6 18 11 6h2l5 12" />
     <line x1="8" y1="14" x2="16" y2="14" />
   </svg>
 );
 const AlignLeftGlyph = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <line x1="4" y1="6" x2="20" y2="6" /><line x1="4" y1="12" x2="14" y2="12" /><line x1="4" y1="18" x2="18" y2="18" />
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+  >
+    <line x1="4" y1="6" x2="20" y2="6" />
+    <line x1="4" y1="12" x2="14" y2="12" />
+    <line x1="4" y1="18" x2="18" y2="18" />
   </svg>
 );
 const AlignCenterGlyph = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-    <line x1="4" y1="6" x2="20" y2="6" /><line x1="7" y1="12" x2="17" y2="12" /><line x1="5" y1="18" x2="19" y2="18" />
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+  >
+    <line x1="4" y1="6" x2="20" y2="6" />
+    <line x1="7" y1="12" x2="17" y2="12" />
+    <line x1="5" y1="18" x2="19" y2="18" />
   </svg>
 );
 const ClearFormatGlyph = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M4 7V5h13v2M9.5 5 7 19M14 14l6 6M20 14l-6 6" />
   </svg>
 );
@@ -539,7 +620,9 @@ const RichTextEditor: React.FC<{
   variant?: "default" | "quote" | "callout";
 }> = ({ value, onChange, placeholder, variant = "default" }) => {
   const ref = useRef<HTMLDivElement>(null);
-  const [openPicker, setOpenPicker] = useState<null | "text" | "highlight">(null);
+  const [openPicker, setOpenPicker] = useState<null | "text" | "highlight">(
+    null,
+  );
 
   const sync = useCallback(() => {
     onChange(ref.current?.innerHTML || "");
@@ -570,7 +653,11 @@ const RichTextEditor: React.FC<{
         /* ignore */
       }
       // hiliteColor is the standard; fall back to backColor for older engines.
-      const ok = document.execCommand("hiliteColor", false, color || "transparent");
+      const ok = document.execCommand(
+        "hiliteColor",
+        false,
+        color || "transparent",
+      );
       if (!ok) document.execCommand("backColor", false, color || "transparent");
       sync();
       setOpenPicker(null);
@@ -617,9 +704,7 @@ const RichTextEditor: React.FC<{
     </button>
   );
 
-  const Divider = () => (
-    <span className="article-editor-rte-divider" />
-  );
+  const Divider = () => <span className="article-editor-rte-divider" />;
 
   return (
     <div className="article-editor-rte">
@@ -666,9 +751,7 @@ const RichTextEditor: React.FC<{
           <Btn
             title="Text colour"
             active={openPicker === "text"}
-            onClick={() =>
-              setOpenPicker(openPicker === "text" ? null : "text")
-            }
+            onClick={() => setOpenPicker(openPicker === "text" ? null : "text")}
           >
             <TextColorGlyph />
           </Btn>
@@ -774,9 +857,7 @@ const ColorPopover: React.FC<{
     onMouseDown={(e) => e.preventDefault()}
     className="article-editor-color-popover"
   >
-    <p className="article-editor-color-popover-label">
-      {label}
-    </p>
+    <p className="article-editor-color-popover-label">{label}</p>
     <div className="grid grid-cols-4 gap-[6px]">
       {colors.map((c) => (
         <button
@@ -788,9 +869,7 @@ const ColorPopover: React.FC<{
           style={{ background: c.value }}
         >
           {swatchStyle === "solid" ? (
-            <span className="article-editor-swatch-letter">
-              A
-            </span>
+            <span className="article-editor-swatch-letter">A</span>
           ) : null}
         </button>
       ))}
@@ -880,37 +959,30 @@ const LivePreview: React.FC<{ data: Article }> = ({ data }) => {
 
       {/* Subtitle */}
       {data.subtitle && (
-        <p className="article-editor-preview-subtitle">
-          {data.subtitle}
-        </p>
+        <p className="article-editor-preview-subtitle">{data.subtitle}</p>
       )}
 
       {/* Meta bar */}
       <div className="article-editor-preview-meta">
+        {/* This preview was the last copy of the retired shield glyph. It
+            stays a circle because here the brand stands in as the article's
+            author, next to UserAvatar's shape — but the mark is now the
+            real one. */}
         <div className="article-editor-preview-avatar">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="white"
-            strokeWidth="1.8"
-          >
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-          </svg>
+          <AuraMark size={18} />
         </div>
         <div>
-          <p className="article-editor-preview-brand">
-            Aura &amp; Earth
-          </p>
+          <p className="article-editor-preview-brand">Aura &amp; Earth</p>
           <p className="text-[11px] text-[rgba(45,42,38,0.4)]">
             Just now ·{" "}
             {Math.max(1, Math.ceil((data.sections?.length || 1) * 1.5))} min
             read
           </p>
         </div>
-        <div className="ml-auto flex gap-[8px]">
-          {["♥", "🔖", "↗"].map((e, i) => (
+        {/* Dead chips that mimic the real article actions — decorative, so
+            they stay out of the accessibility tree entirely. */}
+        <div className="ml-auto flex gap-[8px]" aria-hidden="true">
+          {["🤍", "🏷️", "↗"].map((e, i) => (
             <div key={i} className="article-editor-preview-action">
               {e}
             </div>
@@ -1006,11 +1078,7 @@ const LivePreview: React.FC<{ data: Article }> = ({ data }) => {
           {s.type === "image" &&
             s.images?.map((img, j) => (
               <div key={j} className="article-editor-preview-imagewrap">
-                <img
-                  src={toAbsoluteUrl(img)}
-                  alt=""
-                  className="w-full block"
-                />
+                <img src={toAbsoluteUrl(img)} alt="" className="w-full block" />
               </div>
             ))}
         </div>
@@ -1077,7 +1145,7 @@ export const ArticleEditor = ({
 
   const onSelectCategory = (id: string) => {
     // Changing the parent clears subcategories that no longer apply.
-    setData((prev) => ({ ...prev, categoryId: id, subCategories: [] } as any));
+    setData((prev) => ({ ...prev, categoryId: id, subCategories: [] }) as any);
   };
 
   const toggleSubCategory = (id: string) => {
@@ -1096,7 +1164,10 @@ export const ArticleEditor = ({
   const [showBlockPicker, setShowBlockPicker] = useState(false);
   const [savedFlash, setSavedFlash] = useState(false);
   // Result popup shown after pressing Publish/Save (success or failure).
-  const [saveResult, setSaveResult] = useState<{ ok: boolean; msg: string } | null>(null);
+  const [saveResult, setSaveResult] = useState<{
+    ok: boolean;
+    msg: string;
+  } | null>(null);
   const [showAutoStructureModal, setShowAutoStructureModal] = useState(false);
   const [autoStructureLoading, setAutoStructureLoading] = useState(false);
   const [autoStructureError, setAutoStructureError] = useState("");
@@ -1131,9 +1202,9 @@ export const ArticleEditor = ({
 
   /* ── Image uploads from the user's device ── */
   // Tracks which section index is currently uploading, to show a busy state.
-  const [uploadingSection, setUploadingSection] = useState<Record<number, boolean>>(
-    {},
-  );
+  const [uploadingSection, setUploadingSection] = useState<
+    Record<number, boolean>
+  >({});
   const [uploadingThumbnail, setUploadingThumbnail] = useState(false);
   const thumbnailInputRef = useRef<HTMLInputElement>(null);
 
@@ -1315,15 +1386,22 @@ export const ArticleEditor = ({
       }
       // Strip client-side ids the backend schema doesn't accept (Mongo owns _id)
       if (Array.isArray(payload.sections)) {
-        payload.sections = payload.sections.map(({ id, _id, ...section }: any) => section);
+        payload.sections = payload.sections.map(
+          ({ id, _id, ...section }: any) => section,
+        );
       }
       if (payload.seo && typeof payload.seo === "object") {
         const { id: _seoId, _id: _seoMongoId, ...seo } = payload.seo;
         payload.seo = seo;
       }
-      const currentUser = JSON.parse(localStorage.getItem("currentUser") || "null");
+      const currentUser = JSON.parse(
+        localStorage.getItem("currentUser") || "null",
+      );
       if (!currentUser?.AccessToken) {
-        setSaveResult({ ok: false, msg: "You're not logged in — please log in and try again." });
+        setSaveResult({
+          ok: false,
+          msg: "You're not logged in — please log in and try again.",
+        });
         return;
       }
       await axios.put(`${API_BASE}/posts/update/${id}`, payload, {
@@ -1363,7 +1441,10 @@ export const ArticleEditor = ({
           subtitle: data.subtitle,
           content: autoStructureInput,
         });
-        setData((prev) => ({ ...prev, ai: normalizeAIMetadata(parsed as any) }));
+        setData((prev) => ({
+          ...prev,
+          ai: normalizeAIMetadata(parsed as any),
+        }));
         setShowAutoStructureModal(false);
       } else {
         // Run heuristic offline splitter
@@ -1527,9 +1608,7 @@ export const ArticleEditor = ({
               </button>
             )}
             <div>
-              <h2 className="article-editor-topbar-title">
-                ✍️ Article Studio
-              </h2>
+              <h2 className="article-editor-topbar-title">✍️ Article Studio</h2>
               <p className="article-editor-topbar-sub">
                 {data.sections.length} block
                 {data.sections.length !== 1 ? "s" : ""} · Auto-saved
@@ -1575,9 +1654,7 @@ export const ArticleEditor = ({
           <div className="flex items-center gap-[10px] relative">
             {/* Saved flash */}
             {savedFlash && (
-              <span className="article-editor-saved-flash">
-                ✓ Saved!
-              </span>
+              <span className="article-editor-saved-flash">✓ Saved!</span>
             )}
 
             {/* Publish/Save result popup — clearly says updated or not */}
@@ -1608,9 +1685,7 @@ export const ArticleEditor = ({
                   >
                     {saveResult.ok ? "Post Updated" : "Update Failed"}
                   </h3>
-                  <p className="article-editor-result-msg">
-                    {saveResult.msg}
-                  </p>
+                  <p className="article-editor-result-msg">{saveResult.msg}</p>
                   <button
                     onClick={() => setSaveResult(null)}
                     className="article-editor-result-ok"
@@ -1701,13 +1776,16 @@ export const ArticleEditor = ({
                   <PostCover
                     src={toAbsoluteUrl(editorCoverImage)}
                     alt=""
+                    loading="eager"
                     className="w-full h-full object-cover"
                   />
                 ) : (
                   <div className="text-center">
                     <ImageIcon />
                     <p className="article-editor-cover-hint">
-                      {uploadingThumbnail ? "Uploading…" : "Add Cover Image or Video from device"}
+                      {uploadingThumbnail
+                        ? "Uploading…"
+                        : "Add Cover Image or Video from device"}
                     </p>
                   </div>
                 )}
@@ -1799,9 +1877,7 @@ export const ArticleEditor = ({
               {/* Category & subcategory assignment */}
               <div className="article-editor-taxonomy">
                 <div>
-                  <label className="article-editor-field-label">
-                    Category
-                  </label>
+                  <label className="article-editor-field-label">Category</label>
                   <select
                     value={selectedCategoryId}
                     onChange={(e) => onSelectCategory(e.target.value)}
@@ -1920,7 +1996,9 @@ export const ArticleEditor = ({
                         {s.image || (s.images && s.images[0]) ? (
                           <div className="relative rounded-[14px] overflow-hidden">
                             <img
-                              src={toAbsoluteUrl(s.image || (s.images && s.images[0]) || "")}
+                              src={toAbsoluteUrl(
+                                s.image || (s.images && s.images[0]) || "",
+                              )}
                               alt=""
                               className="w-full block max-h-[220px] object-cover"
                             />
@@ -1982,9 +2060,7 @@ export const ArticleEditor = ({
                     )}
                     {s.type === "callout" && (
                       <div className="flex gap-[10px] items-start">
-                        <span className="text-[20px] mt-[4px]">
-                          💡
-                        </span>
+                        <span className="text-[20px] mt-[4px]">💡</span>
                         <div className="flex-1">
                           <RichTextEditor
                             value={s.body || ""}
@@ -2016,7 +2092,9 @@ export const ArticleEditor = ({
                       s.type === "reel") && (
                       <input
                         value={s.title || ""}
-                        onChange={(e) => updateSection(i, "title", e.target.value)}
+                        onChange={(e) =>
+                          updateSection(i, "title", e.target.value)
+                        }
                         placeholder={`Heading (default: “${SECTION_LABELS[s.type]}”)`}
                         aria-label="Block heading"
                         className="sbe-input"
@@ -2041,8 +2119,10 @@ export const ArticleEditor = ({
                         reelId={s.reelId}
                         caption={s.caption}
                         onChange={(patch) => {
-                          if ("reelId" in patch) updateSection(i, "reelId", patch.reelId);
-                          if ("caption" in patch) updateSection(i, "caption", patch.caption);
+                          if ("reelId" in patch)
+                            updateSection(i, "reelId", patch.reelId);
+                          if ("caption" in patch)
+                            updateSection(i, "caption", patch.caption);
                         }}
                       />
                     )}
@@ -2195,9 +2275,7 @@ export const ArticleEditor = ({
                 </p>
 
                 {/* TL;DR */}
-                <label className="article-editor-ai-label">
-                  ⚡ TL;DR
-                </label>
+                <label className="article-editor-ai-label">⚡ TL;DR</label>
                 <textarea
                   value={data.ai?.summary || ""}
                   onChange={(e) => updateAi("summary", e.target.value)}
@@ -2452,8 +2530,7 @@ export const ArticleEditor = ({
                   }}
                   onMouseEnter={(e) => {
                     if (autoStructureEngine !== "ai")
-                      e.currentTarget.style.background =
-                        "rgba(61,91,79,0.1)";
+                      e.currentTarget.style.background = "rgba(61,91,79,0.1)";
                   }}
                   onMouseLeave={(e) => {
                     if (autoStructureEngine !== "ai")
@@ -2478,8 +2555,7 @@ export const ArticleEditor = ({
                   }}
                   onMouseEnter={(e) => {
                     if (autoStructureEngine !== "heuristic")
-                      e.currentTarget.style.background =
-                        "rgba(61,91,79,0.1)";
+                      e.currentTarget.style.background = "rgba(61,91,79,0.1)";
                   }}
                   onMouseLeave={(e) => {
                     if (autoStructureEngine !== "heuristic")

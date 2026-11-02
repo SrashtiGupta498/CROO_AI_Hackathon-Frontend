@@ -112,7 +112,10 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
         <div aria-live="polite" aria-atomic="false" className="contents">
           {toasts.map((t) => (
             <div key={t.id} className={`ae-toast ae-toast--${t.variant}`}>
-              <span className="material-icons-round ae-toast-icon" aria-hidden="true">
+              <span
+                className="material-icons-round ae-toast-icon"
+                aria-hidden="true"
+              >
                 {ICONS[t.variant]}
               </span>
               <p className="ae-toast-message">{t.message}</p>
@@ -122,7 +125,10 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({
                 aria-label="Dismiss notification"
                 className="ae-toast-dismiss"
               >
-                <span className="material-icons-round text-[18px]" aria-hidden="true">
+                <span
+                  className="material-icons-round text-[18px]"
+                  aria-hidden="true"
+                >
                   close
                 </span>
               </button>

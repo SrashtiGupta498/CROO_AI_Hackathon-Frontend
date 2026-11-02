@@ -44,7 +44,9 @@
 /* The grain is decoration; drop it where it would only cost bandwidth or
    fight with a user's contrast preference. */
 @media (prefers-contrast: more) {
-  .ingredient-lib-page { background-image: none; }
+  .ingredient-lib-page {
+    background-image: none;
+  }
 }
 
 .ingredient-lib-glass-header {

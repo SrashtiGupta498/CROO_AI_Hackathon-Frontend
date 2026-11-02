@@ -26,7 +26,7 @@ export interface ReportFeedbackPayload {
  */
 export async function submitReportFeedback(
   reportId: string,
-  payload: ReportFeedbackPayload
+  payload: ReportFeedbackPayload,
 ): Promise<void> {
   await API.post(`/skin/reports/${reportId}/feedback`, payload);
 }

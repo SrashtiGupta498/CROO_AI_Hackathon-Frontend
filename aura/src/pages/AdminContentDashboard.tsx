@@ -45,7 +45,11 @@ const AdminContentDashboard = () => {
       const title = toText(article.title).toLowerCase();
       const subtitle = toText(article.subtitle).toLowerCase();
       const category = toText(article.category?.name).toLowerCase();
-      return title.includes(query) || subtitle.includes(query) || category.includes(query);
+      return (
+        title.includes(query) ||
+        subtitle.includes(query) ||
+        category.includes(query)
+      );
     });
   }, [search, safePosts]);
 
@@ -92,18 +96,26 @@ const AdminContentDashboard = () => {
 
         <div className="ae-card divide-y divide-line">
           {loading ? (
-            <p className="p-8 text-sm text-[var(--ae-muted)]">Loading article list…</p>
+            <p className="p-8 text-sm text-[var(--ae-muted)]">
+              Loading article list…
+            </p>
           ) : filteredPosts.length === 0 ? (
-            <p className="p-8 text-sm text-[var(--ae-muted)]">No articles found.</p>
+            <p className="p-8 text-sm text-[var(--ae-muted)]">
+              No articles found.
+            </p>
           ) : (
             filteredPosts.map((article: DashboardArticle) => {
               const id = toText(article._id || article.id);
               const title = toText(article.title) || "Untitled article";
               const subtitle = toText(article.subtitle) || "No subtitle";
               const category = toText(article.category?.name) || "Ritual";
-              const cover = article.thumbnail || article.thumbnailUrl || article.imageUrl || "";
+              const cover =
+                article.thumbnail ||
+                article.thumbnailUrl ||
+                article.imageUrl ||
+                "";
               const updated = toText(article.updatedAt || article.createdAt);
-                const returnTo = "/admin/content-editor";
+              const returnTo = "/admin/content-editor";
 
               return (
                 <article
@@ -112,7 +124,11 @@ const AdminContentDashboard = () => {
                 >
                   <div className="w-full md:w-32 aspect-[4/3] rounded-[var(--ae-r-md)] overflow-hidden bg-paper-2 border border-line shrink-0">
                     {cover ? (
-                      <img src={cover} alt={title} className="w-full h-full object-cover" />
+                      <img
+                        src={cover}
+                        alt={title}
+                        className="w-full h-full object-cover"
+                      />
                     ) : (
                       <div className="w-full h-full grid place-items-center text-[var(--ae-muted)] text-[11px]">
                         No image
@@ -124,17 +140,23 @@ const AdminContentDashboard = () => {
                     <div className="flex items-center gap-2.5 flex-wrap">
                       <span className="ae-eyebrow">{category}</span>
                       {updated && (
-                        <span className="text-xs text-[var(--ae-muted)]">Updated {updated}</span>
+                        <span className="text-xs text-[var(--ae-muted)]">
+                          Updated {updated}
+                        </span>
                       )}
                     </div>
                     <h2 className="ae-h3 text-xl mt-1.5">{title}</h2>
-                    <p className="mt-1.5 text-sm text-[var(--ae-muted)] line-clamp-1">{subtitle}</p>
+                    <p className="mt-1.5 text-sm text-[var(--ae-muted)] line-clamp-1">
+                      {subtitle}
+                    </p>
 
                     <div className="mt-4 flex flex-wrap gap-2">
                       <button
                         onClick={() => {
                           if (!id) return;
-                          navigate(`/admin/article-editor/${id}?returnTo=${returnTo}`);
+                          navigate(
+                            `/admin/article-editor/${id}?returnTo=${returnTo}`,
+                          );
                         }}
                         className="ae-btn ae-btn-sm ae-btn-dark"
                         disabled={!id}
@@ -144,7 +166,9 @@ const AdminContentDashboard = () => {
                       <button
                         onClick={() => {
                           if (!id) return;
-                          navigate(`/admin/story-editor/${id}?returnTo=${returnTo}`);
+                          navigate(
+                            `/admin/story-editor/${id}?returnTo=${returnTo}`,
+                          );
                         }}
                         className="ae-btn ae-btn-sm ae-btn-outline"
                         disabled={!id}

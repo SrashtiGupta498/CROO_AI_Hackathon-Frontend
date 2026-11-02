@@ -35,9 +35,16 @@ const readAsDataUrl = (file: File): Promise<string> =>
     reader.readAsDataURL(file);
   });
 
-const isGifSrc = (src: string) => /^data:image\/gif/i.test(src) || /\.gif($|\?)/i.test(src);
+const isGifSrc = (src: string) =>
+  /^data:image\/gif/i.test(src) || /\.gif($|\?)/i.test(src);
 
-const MediaUploader: React.FC<MediaUploaderProps> = ({ value, onChange, label, height = 180, kind }) => {
+const MediaUploader: React.FC<MediaUploaderProps> = ({
+  value,
+  onChange,
+  label,
+  height = 180,
+  kind,
+}) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [note, setNote] = useState<string>("");
@@ -58,7 +65,9 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({ value, onChange, label, h
       try {
         const dataUrl = await readAsDataUrl(file);
         onChange(dataUrl);
-        setNote("Embedded locally (upload failed — will need re-upload before publish)");
+        setNote(
+          "Embedded locally (upload failed — will need re-upload before publish)",
+        );
       } catch {
         setNote(describeError(err, "Upload failed."));
       }
@@ -90,7 +99,11 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({ value, onChange, label, h
       >
         {value ? (
           showAsImage ? (
-            <img src={value} alt="gif preview" className="h-full w-full object-cover opacity-95" />
+            <img
+              src={value}
+              alt="gif preview"
+              className="h-full w-full object-cover opacity-95"
+            />
           ) : (
             <video
               src={value}
@@ -105,11 +118,19 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({ value, onChange, label, h
           )
         ) : (
           <div className="text-center text-sage">
-            <div className="mb-1.5 text-[28px]">{uploading ? "⏳" : kind === "gif" ? "🎞️" : "🎬"}</div>
-            <div className="text-[13px] font-bold">
-              {uploading ? "Uploading…" : kind === "gif" ? "Click to upload a GIF or MP4/WebM loop" : "Click to upload a video"}
+            <div className="mb-1.5 text-[28px]">
+              {uploading ? "⏳" : kind === "gif" ? "🎞️" : "🎬"}
             </div>
-            <div className="mt-0.5 text-[11px] text-[rgba(47,39,68,0.55)]">or paste a URL below · up to 50MB</div>
+            <div className="text-[13px] font-bold">
+              {uploading
+                ? "Uploading…"
+                : kind === "gif"
+                  ? "Click to upload a GIF or MP4/WebM loop"
+                  : "Click to upload a video"}
+            </div>
+            <div className="mt-0.5 text-[11px] text-[rgba(47,39,68,0.55)]">
+              or paste a URL below · up to 50MB
+            </div>
           </div>
         )}
 
@@ -128,21 +149,32 @@ const MediaUploader: React.FC<MediaUploaderProps> = ({ value, onChange, label, h
         )}
       </div>
 
-      <input ref={inputRef} type="file" accept={accept} onChange={onSelect} className="hidden" />
+      <input
+        ref={inputRef}
+        type="file"
+        accept={accept}
+        onChange={onSelect}
+        className="hidden"
+      />
 
       <input
         type="text"
         value={value && value.startsWith("data:") ? "" : value}
-        placeholder={kind === "gif" ? "https://…/clip.webm" : "https://…/clip.mp4"}
+        placeholder={
+          kind === "gif" ? "https://…/clip.webm" : "https://…/clip.mp4"
+        }
         onChange={(e) => onChange(e.target.value)}
         className="image-uploader-url-input"
       />
       {kind === "gif" && (
         <p className="mt-1.5 text-[11px] text-[rgba(47,39,68,0.55)]">
-          Prefer an MP4/WebM loop over a raw .gif — same look, a fraction of the size.
+          Prefer an MP4/WebM loop over a raw .gif — same look, a fraction of the
+          size.
         </p>
       )}
-      {note && <p className="mt-1.5 text-[11px] text-[rgba(47,39,68,0.55)]">{note}</p>}
+      {note && (
+        <p className="mt-1.5 text-[11px] text-[rgba(47,39,68,0.55)]">{note}</p>
+      )}
     </div>
   );
 };

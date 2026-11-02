@@ -8,7 +8,9 @@ export const fetchReels = createAsyncThunk(
     { rejectWithValue },
   ) => {
     try {
-      const response = await API.get(`/posts/reels?limit=${limit}&page=${page}`);
+      const response = await API.get(
+        `/posts/reels?limit=${limit}&page=${page}`,
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(

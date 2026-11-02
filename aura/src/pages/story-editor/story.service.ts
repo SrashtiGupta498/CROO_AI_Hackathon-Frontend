@@ -33,13 +33,17 @@ const getAuthorId = (): string => {
   }
 };
 
-const esc = (s = "") => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+const esc = (s = "") =>
+  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 /* Blocks the Post model has no native type for → rich HTML paragraph. */
 const blockToHtml = (b: StoryBlock): string => {
   switch (b.type) {
     case "checklist":
-      return `<ul>${b.items.filter(Boolean).map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`;
+      return `<ul>${b.items
+        .filter(Boolean)
+        .map((i) => `<li>${esc(i)}</li>`)
+        .join("")}</ul>`;
     case "comparison":
       return `<table class="post-compare"><thead><tr><th>${esc(b.leftTitle)}</th><th>${esc(
         b.rightTitle,
@@ -56,20 +60,32 @@ const toPostPayload = (story: Story) => {
   let order = 0;
   const push = (sec: any) => sections.push({ ...sec, order: order++ });
   const pushPara = (body: string, title?: string) => {
-    if ((body && body.trim()) || title) push({ type: "paragraph", ...(title ? { title } : {}), body: body || "" });
+    if ((body && body.trim()) || title)
+      push({
+        type: "paragraph",
+        ...(title ? { title } : {}),
+        body: body || "",
+      });
   };
 
   // Highlights (no native Post field) → leading paragraph
   const highlights = story.highlights.filter(Boolean);
   if (highlights.length) {
-    pushPara(`<ul>${highlights.map((h) => `<li>${esc(h)}</li>`).join("")}</ul>`, "Highlights");
+    pushPara(
+      `<ul>${highlights.map((h) => `<li>${esc(h)}</li>`).join("")}</ul>`,
+      "Highlights",
+    );
   }
 
   // Body blocks
   story.blocks.forEach((b) => {
     switch (b.type) {
       case "text":
-        push({ type: "paragraph", ...(b.heading ? { title: b.heading } : {}), body: b.content || "" });
+        push({
+          type: "paragraph",
+          ...(b.heading ? { title: b.heading } : {}),
+          body: b.content || "",
+        });
         break;
       case "image": {
         // A carousel travels as the `gallery` section type, a single plate as
@@ -81,7 +97,10 @@ const toPostPayload = (story: Story) => {
         ).filter(Boolean);
         if (slides.length) {
           push({
-            type: b.layout === "carousel" && slides.length > 1 ? "gallery" : "image",
+            type:
+              b.layout === "carousel" && slides.length > 1
+                ? "gallery"
+                : "image",
             images: slides,
             image: slides[0],
             ...(b.caption ? { caption: b.caption } : {}),
@@ -90,7 +109,12 @@ const toPostPayload = (story: Story) => {
         break;
       }
       case "video":
-        if (b.videoUrl) push({ type: "video", videoUrl: b.videoUrl, ...(b.caption ? { caption: b.caption } : {}) });
+        if (b.videoUrl)
+          push({
+            type: "video",
+            videoUrl: b.videoUrl,
+            ...(b.caption ? { caption: b.caption } : {}),
+          });
         break;
       case "gif": {
         const url = b.mediaUrl;
@@ -98,7 +122,8 @@ const toPostPayload = (story: Story) => {
         // A raw .gif plays natively as an <img>; anything else (the
         // recommended mp4/webm loop) goes through videoUrl and is rendered
         // autoplay/muted/loop to look like a GIF without the file weight.
-        const isRawGif = /\.gif($|\?)/i.test(url) || url.startsWith("data:image/gif");
+        const isRawGif =
+          /\.gif($|\?)/i.test(url) || url.startsWith("data:image/gif");
         push({
           type: "gif",
           ...(isRawGif ? { image: url } : { videoUrl: url }),
@@ -107,16 +132,32 @@ const toPostPayload = (story: Story) => {
         break;
       }
       case "quote":
-        push({ type: "quote", body: b.quote || "", ...(b.author ? { author: b.author } : {}) });
+        push({
+          type: "quote",
+          body: b.quote || "",
+          ...(b.author ? { author: b.author } : {}),
+        });
         break;
       case "tip":
-        push({ type: "paragraph", title: `💡 ${b.title}`, body: b.content || "" });
+        push({
+          type: "paragraph",
+          title: `💡 ${b.title}`,
+          body: b.content || "",
+        });
         break;
       case "warning":
-        push({ type: "paragraph", title: `⚠️ ${b.title}`, body: b.content || "" });
+        push({
+          type: "paragraph",
+          title: `⚠️ ${b.title}`,
+          body: b.content || "",
+        });
         break;
       case "callout":
-        push({ type: "paragraph", ...(b.title ? { title: b.title } : {}), body: b.content || "" });
+        push({
+          type: "paragraph",
+          ...(b.title ? { title: b.title } : {}),
+          body: b.content || "",
+        });
         break;
       default:
         pushPara(blockToHtml(b));
@@ -126,21 +167,31 @@ const toPostPayload = (story: Story) => {
   // Beauty insights → paragraph
   if (story.beautyInsights.length) {
     const items = story.beautyInsights
-      .map((i) => `<li><strong>${esc(i.title)}</strong> — ${esc(i.content)}</li>`)
+      .map(
+        (i) => `<li><strong>${esc(i.title)}</strong> — ${esc(i.content)}</li>`,
+      )
       .join("");
     pushPara(`<ul>${items}</ul>`, "Beauty Insights");
   }
 
   // FAQ → paragraph
   if (story.faq.length) {
-    const items = story.faq.map((f) => `<p><strong>${esc(f.question)}</strong><br/>${esc(f.answer)}</p>`).join("");
+    const items = story.faq
+      .map(
+        (f) =>
+          `<p><strong>${esc(f.question)}</strong><br/>${esc(f.answer)}</p>`,
+      )
+      .join("");
     pushPara(items, "FAQ");
   }
 
   // Sources → paragraph
   if (story.sources.length) {
     const items = story.sources
-      .map((s) => `<li><a href="${esc(s.url)}" target="_blank" rel="noreferrer">${esc(s.title || s.url)}</a></li>`)
+      .map(
+        (s) =>
+          `<li><a href="${esc(s.url)}" target="_blank" rel="noreferrer">${esc(s.title || s.url)}</a></li>`,
+      )
       .join("");
     pushPara(`<ul>${items}</ul>`, "Sources");
   }
@@ -148,14 +199,22 @@ const toPostPayload = (story: Story) => {
   // Disclaimer → native `warning` section (title "Disclaimer"), kept last so it
   // renders at the foot of the document / detail view. Scoped to FACE_OIL posts.
   if (story.contentType === "FACE_OIL" && story.disclaimer?.trim()) {
-    push({ type: "warning", title: "Disclaimer", body: story.disclaimer.trim() });
+    push({
+      type: "warning",
+      title: "Disclaimer",
+      body: story.disclaimer.trim(),
+    });
   }
 
   // A reel is a short-video post: prepend its video as the first section so the
   // Reels page (and Article view) can play it, and mark the post `type: "reel"`.
   const isReel = story.postType === "reel";
   if (isReel && story.videoUrl?.trim()) {
-    sections.unshift({ type: "video", videoUrl: story.videoUrl.trim(), order: 0 });
+    sections.unshift({
+      type: "video",
+      videoUrl: story.videoUrl.trim(),
+      order: 0,
+    });
     // Re-number so `order` stays 0-based and contiguous after the unshift.
     sections.forEach((s, i) => (s.order = i));
   }
@@ -169,7 +228,9 @@ const toPostPayload = (story: Story) => {
     sections,
     // Taxonomy — assign the post to a category + subcategories (mongo ids).
     categoryId: story.categoryId || undefined,
-    subCategories: story.subCategories?.length ? story.subCategories : undefined,
+    subCategories: story.subCategories?.length
+      ? story.subCategories
+      : undefined,
     tags: story.tags?.length ? story.tags : undefined,
     isPublished: story.status === "published",
     visibility: "public",
@@ -180,7 +241,11 @@ const toPostPayload = (story: Story) => {
     },
     seo: {
       title: story.seo.metaTitle || story.title || undefined,
-      description: story.seo.metaDescription || story.subtitle || story.quickAnswer || undefined,
+      description:
+        story.seo.metaDescription ||
+        story.subtitle ||
+        story.quickAnswer ||
+        undefined,
       slug: story.seo.slug || undefined,
     },
   };
@@ -201,7 +266,9 @@ const fromPost = (post: any): Story => {
   const disclaimerSection = (post.sections || []).find(
     (s: any) =>
       String(s?.type).toLowerCase() === "warning" ||
-      String(s?.title || "").trim().toLowerCase() === "disclaimer",
+      String(s?.title || "")
+        .trim()
+        .toLowerCase() === "disclaimer",
   );
   const disclaimer = disclaimerSection?.body || "";
 
@@ -211,14 +278,24 @@ const fromPost = (post: any): Story => {
     .sort((a: any, b: any) => (a.order ?? 0) - (b.order ?? 0))
     .map((s: any): StoryBlock | null => {
       const type = String(s.type || "").toLowerCase();
-      if (type === "image" || type === "hero" || type === "gallery" || type === "images") {
+      if (
+        type === "image" ||
+        type === "hero" ||
+        type === "gallery" ||
+        type === "images"
+      ) {
         const urls = (
-          Array.isArray(s.images) && s.images.length ? s.images : s.image ? [s.image] : []
+          Array.isArray(s.images) && s.images.length
+            ? s.images
+            : s.image
+              ? [s.image]
+              : []
         ).filter(Boolean);
         if (!urls.length) return null;
         // Multi-image gallery sections come back as a carousel; a lone image
         // (whatever the section was called) comes back as a single plate.
-        const carousel = urls.length > 1 && (type === "gallery" || type === "images");
+        const carousel =
+          urls.length > 1 && (type === "gallery" || type === "images");
         return {
           id: uid("blk"),
           type: "image",
@@ -229,16 +306,36 @@ const fromPost = (post: any): Story => {
         };
       }
       if (type === "quote") {
-        return { id: uid("blk"), type: "quote", quote: s.body || "", author: s.author || "" };
+        return {
+          id: uid("blk"),
+          type: "quote",
+          quote: s.body || "",
+          author: s.author || "",
+        };
       }
       if (type === "video" && s.videoUrl) {
-        return { id: uid("blk"), type: "video", videoUrl: s.videoUrl, caption: s.caption || "" };
+        return {
+          id: uid("blk"),
+          type: "video",
+          videoUrl: s.videoUrl,
+          caption: s.caption || "",
+        };
       }
       if (type === "gif" && (s.videoUrl || s.image)) {
-        return { id: uid("blk"), type: "gif", mediaUrl: s.videoUrl || s.image, caption: s.caption || "" };
+        return {
+          id: uid("blk"),
+          type: "gif",
+          mediaUrl: s.videoUrl || s.image,
+          caption: s.caption || "",
+        };
       }
       // text | paragraph | title | intro | highlight | conclusion → text block
-      return { id: uid("blk"), type: "text", heading: s.title || "", content: s.body || "" };
+      return {
+        id: uid("blk"),
+        type: "text",
+        heading: s.title || "",
+        content: s.body || "",
+      };
     })
     .filter(Boolean) as StoryBlock[];
 
@@ -246,7 +343,9 @@ const fromPost = (post: any): Story => {
   const cat: any = post.categoryId ?? post.category;
   const categoryId = (cat?._id || cat?.id || cat || "").toString();
   const subCategories: string[] = Array.isArray(post.subCategories)
-    ? post.subCategories.map((s: any) => (s?._id || s?.id || s || "").toString()).filter(Boolean)
+    ? post.subCategories
+        .map((s: any) => (s?._id || s?.id || s || "").toString())
+        .filter(Boolean)
     : [];
 
   return {
@@ -260,7 +359,8 @@ const fromPost = (post: any): Story => {
     videoUrl:
       (Array.isArray(post.sections)
         ? post.sections.find(
-            (s: any) => String(s?.type).toLowerCase() === "video" && s?.videoUrl,
+            (s: any) =>
+              String(s?.type).toLowerCase() === "video" && s?.videoUrl,
           )?.videoUrl
         : "") ||
       post.videoUrl ||
@@ -289,7 +389,8 @@ const fromPost = (post: any): Story => {
    (PayloadTooLargeError), and even a small one has no business living in
    Mongo per the "URLs/metadata only, never blobs" policy this app follows.
    Fail fast with a message that names what to re-upload. ─── */
-const isDataUrl = (s: unknown): s is string => typeof s === "string" && s.startsWith("data:");
+const isDataUrl = (s: unknown): s is string =>
+  typeof s === "string" && s.startsWith("data:");
 
 const assertNoEmbeddedMedia = (payload: any) => {
   const offenders: string[] = [];
@@ -297,7 +398,8 @@ const assertNoEmbeddedMedia = (payload: any) => {
   (payload.sections || []).forEach((s: any, i: number) => {
     const label = `block #${i + 1} (${s.type})`;
     if (isDataUrl(s.image) || isDataUrl(s.videoUrl)) offenders.push(label);
-    if (Array.isArray(s.images) && s.images.some(isDataUrl)) offenders.push(label);
+    if (Array.isArray(s.images) && s.images.some(isDataUrl))
+      offenders.push(label);
   });
   if (offenders.length) {
     throw new Error(

@@ -37,7 +37,10 @@ export const AuraMark: React.FC<{ size?: number; className?: string }> = ({
 
     {/* Earth — a single leaf, pointed at both tips (a vesica), sized to sit
         inside the inner ring with breathing room at 18px. */}
-    <path d="M16 23.6C11 20.1 11 13.1 16 8.6C21 13.1 21 20.1 16 23.6Z" strokeWidth="1.6" />
+    <path
+      d="M16 23.6C11 20.1 11 13.1 16 8.6C21 13.1 21 20.1 16 23.6Z"
+      strokeWidth="1.6"
+    />
 
     {/* Midrib + two side veins — the detail that keeps it from reading as a
         plain almond shape at display sizes. */}

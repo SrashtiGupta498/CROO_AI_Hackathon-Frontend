@@ -39,10 +39,17 @@ class ErrorBoundary extends React.Component<Props, State> {
     return { error };
   }
 
-  static getDerivedStateFromProps(props: Props, state: State): Partial<State> | null {
+  static getDerivedStateFromProps(
+    props: Props,
+    state: State,
+  ): Partial<State> | null {
     // A crash on /profile must not follow the user to /explore: once the reset
     // key moves on, drop the error and let the new subtree try to render.
-    if (state.error && state.errorKey !== undefined && state.errorKey !== props.resetKey) {
+    if (
+      state.error &&
+      state.errorKey !== undefined &&
+      state.errorKey !== props.resetKey
+    ) {
       return { error: null, errorKey: undefined };
     }
     if (state.error && state.errorKey === undefined) {
@@ -54,13 +61,18 @@ class ErrorBoundary extends React.Component<Props, State> {
   componentDidCatch(error: Error, info: React.ErrorInfo) {
     // No error-reporting service is wired up; the console is the record. Keep
     // the component stack — it is the only pointer to which subtree threw.
-    console.error("Render error caught by ErrorBoundary:", error, info.componentStack);
+    console.error(
+      "Render error caught by ErrorBoundary:",
+      error,
+      info.componentStack,
+    );
   }
 
   retry = () => this.setState({ error: null, errorKey: undefined });
 
   render() {
-    if (this.state.error) return this.props.fallback(this.state.error, this.retry);
+    if (this.state.error)
+      return this.props.fallback(this.state.error, this.retry);
     return this.props.children;
   }
 }
@@ -78,10 +90,10 @@ const ErrorDetail: React.FC<{ error: Error }> = ({ error }) =>
   ) : null;
 
 /** Page-level failure: chrome survives, so offer a retry and a way onward. */
-export const RouteErrorFallback: React.FC<{ error: Error; retry: () => void }> = ({
-  error,
-  retry,
-}) => {
+export const RouteErrorFallback: React.FC<{
+  error: Error;
+  retry: () => void;
+}> = ({ error, retry }) => {
   const navigate = useNavigate();
   return (
     <section
@@ -91,7 +103,8 @@ export const RouteErrorFallback: React.FC<{ error: Error; retry: () => void }> =
       <div className="text-center max-w-md">
         <p className="home-eyebrow mb-4">Something went wrong</p>
         <h1 className="font-serif text-[clamp(2.2rem,5vw,3.4rem)] leading-[1.02] tracking-[-0.03em] text-ink">
-          This page didn't <span className="italic text-sage">load properly.</span>
+          This page didn't{" "}
+          <span className="italic text-sage">load properly.</span>
         </h1>
         <p className="mt-5 text-muted leading-relaxed">
           Nothing you did caused this. Try again, or head somewhere else — the
@@ -101,7 +114,10 @@ export const RouteErrorFallback: React.FC<{ error: Error; retry: () => void }> =
           <button onClick={retry} className="ae-btn ae-btn-primary">
             Try again
           </button>
-          <button onClick={() => navigate("/")} className="ae-btn ae-btn-outline">
+          <button
+            onClick={() => navigate("/")}
+            className="ae-btn ae-btn-outline"
+          >
             Back home
           </button>
         </div>
@@ -149,7 +165,9 @@ export const RouteErrorBoundary: React.FC<{ children: React.ReactNode }> = ({
   return (
     <ErrorBoundary
       resetKey={pathname}
-      fallback={(error, retry) => <RouteErrorFallback error={error} retry={retry} />}
+      fallback={(error, retry) => (
+        <RouteErrorFallback error={error} retry={retry} />
+      )}
     >
       {children}
     </ErrorBoundary>

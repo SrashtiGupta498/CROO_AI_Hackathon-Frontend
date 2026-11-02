@@ -1,7 +1,11 @@
 // src/redux/category/category.slice.ts
 
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchCategories, fetchSubCategories, Category } from "./categories.action";
+import {
+  fetchCategories,
+  fetchSubCategories,
+  Category,
+} from "./categories.action";
 
 interface CategoryState {
   categories: Category[];

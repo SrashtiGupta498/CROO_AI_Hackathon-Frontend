@@ -31,22 +31,76 @@ test.describe("Profile — signed in", () => {
     await page.getByTestId("profile-tab-liked").click();
     await expect(page.getByText(/no liked posts yet/i)).toBeVisible();
 
-    await page.getByTestId("profile-tab-ingredients").click();
-    await expect(page.getByText(/no ingredients yet/i)).toBeVisible();
+    await page.getByTestId("profile-tab-articles").click();
+    await expect(page.getByText(/nothing saved yet/i)).toBeVisible();
 
-    await page.getByTestId("profile-tab-settings").click();
-    await expect(page.getByTestId("profile-settings-panel")).toBeVisible();
-    // Assert against the panel's own heading and a row that is actually in it.
-    // This used to look for /preferences/i, which only ever appears inside the
-    // edit MODAL ("Account & preferences") — not in the settings tab.
-    const panel = page.getByTestId("profile-settings-panel");
-    await expect(
-      panel.getByRole("heading", { name: /account settings/i }),
-    ).toBeVisible();
-    await expect(panel.getByText(/appearance theme/i)).toBeVisible();
+    // Saved and Liked are the only tabs left: the ingredients tab and the
+    // settings tab (whose every row was removed) are both gone, and nothing
+    // was left behind as an empty panel.
+    await expect(page.getByTestId("profile-tab-ingredients")).toHaveCount(0);
+    await expect(page.getByTestId("profile-tab-settings")).toHaveCount(0);
+    await expect(page.getByTestId("profile-settings-panel")).toHaveCount(0);
   });
 
-  test("saved tab shows an empty state when nothing is saved", async ({ page }) => {
+  test("the removed settings never render anywhere on the page", async ({
+    page,
+  }) => {
+    const gone = [
+      /appearance theme/i,
+      /language/i,
+      /timezone/i,
+      /newsletter/i,
+      /profile visibility/i,
+      /^comments$/i,
+      /^username$/i,
+      /cover image/i,
+    ];
+    const root = page.getByTestId("profile-page");
+    for (const re of gone) {
+      await expect(root.getByText(re)).toHaveCount(0);
+    }
+
+    // …including inside the edit modal.
+    await page.getByTestId("profile-edit-profile").click();
+    const modal = page.getByTestId("profile-edit-modal");
+    await expect(modal).toBeVisible();
+    for (const re of gone) {
+      await expect(modal.getByText(re)).toHaveCount(0);
+    }
+  });
+
+  /* Regression: GET /users/:id comes back wrapped as { status, message, data }.
+     The client used to look for `.data.user` / `.user` and, finding neither,
+     merged the ENVELOPE into the session user — so the page only ever showed
+     the stale localStorage copy and nothing the server actually held. Write a
+     stale session straight into storage, reload so the slice re-reads it, and
+     assert the server's values win. */
+  test("renders the server's profile, not the stale stored session", async ({
+    page,
+  }) => {
+    // Registered AFTER seedAuth's init script, so it runs after it and wins:
+    // seedAuth rewrites `currentUser` on every page load, which would otherwise
+    // put the fresh fixture back and make this test vacuous.
+    await page.addInitScript(() => {
+      const stale = JSON.parse(localStorage.getItem("currentUser") || "{}");
+      stale.FirstName = "Stale";
+      stale.LastName = "Session";
+      stale.Location = "Nowhere";
+      localStorage.setItem("currentUser", JSON.stringify(stale));
+    });
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await expect(page.getByTestId("profile-page")).toBeVisible();
+
+    // Sanity: the stale copy really was the starting point for this render.
+    await expect(page.getByTestId("profile-name")).toContainText("Test User");
+    await expect(page.getByTestId("profile-name")).not.toContainText("Stale");
+    await expect(page.getByText("London, UK")).toBeVisible();
+    await expect(page.getByText("Nowhere")).toHaveCount(0);
+  });
+
+  test("saved tab shows an empty state when nothing is saved", async ({
+    page,
+  }) => {
     await expect(page.getByText(/nothing saved yet/i)).toBeVisible();
   });
 
@@ -71,11 +125,12 @@ test.describe("Profile — signed in", () => {
     const modal = page.getByTestId("profile-edit-modal");
     await expect(modal).toBeVisible();
 
-    // Change a profile field (bio) and a settings field (username).
-    await modal.getByPlaceholder(/tell us a little about yourself/i).fill(
-      "Updated bio from e2e.",
-    );
-    await modal.getByPlaceholder("@yourhandle").fill("newhandle");
+    // Change a profile field (bio). There is no editable settings field left
+    // in the modal, so the settings write is now only about round-tripping
+    // what was already stored.
+    await modal
+      .getByPlaceholder(/tell us a little about yourself/i)
+      .fill("Updated bio from e2e.");
 
     await page.getByTestId("profile-save-settings").click();
 
@@ -83,13 +138,17 @@ test.describe("Profile — signed in", () => {
     await expect.poll(() => profilePatched).not.toBeNull();
     await expect.poll(() => settingsPatched).not.toBeNull();
     expect(profilePatched).toMatchObject({ Bio: "Updated bio from e2e." });
-    expect(settingsPatched).toMatchObject({ username: "newhandle" });
+    // The username/cover fields are no longer editable, but saving must not
+    // wipe what the account already had.
+    expect(settingsPatched).toMatchObject({ username: "testuser" });
 
     // Modal closes after the success flash.
     await expect(modal).toBeHidden({ timeout: 5000 });
   });
 
-  test("edit modal can be dismissed with the close button", async ({ page }) => {
+  test("edit modal can be dismissed with the close button", async ({
+    page,
+  }) => {
     await page.getByTestId("profile-edit-profile").click();
     const modal = page.getByTestId("profile-edit-modal");
     await expect(modal).toBeVisible();

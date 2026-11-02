@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { CONCERN_LABELS } from '../data/remedies';
+import { CONCERN_LABELS } from "../data/remedies";
 import {
   submitReportFeedback,
   type ConcernVerdict,
-} from '../services/skinFeedback';
+} from "../services/skinFeedback";
 
 /**
  * "Did we get this right?" — one verdict per concern the scan reported.
@@ -18,9 +18,9 @@ import {
  */
 
 const VERDICTS: { value: ConcernVerdict; label: string; icon: string }[] = [
-  { value: 'yes', label: 'Yes', icon: 'thumb_up' },
-  { value: 'no', label: 'No', icon: 'thumb_down' },
-  { value: 'unsure', label: "Can't tell", icon: 'help_outline' },
+  { value: "yes", label: "Yes", icon: "thumb_up" },
+  { value: "no", label: "No", icon: "thumb_down" },
+  { value: "unsure", label: "Can't tell", icon: "help_outline" },
 ];
 
 interface Props {
@@ -32,7 +32,7 @@ interface Props {
 
 export default function ConcernFeedback({ reportId, concerns }: Props) {
   const [verdicts, setVerdicts] = useState<Record<string, ConcernVerdict>>({});
-  const [note, setNote] = useState('');
+  const [note, setNote] = useState("");
   const [showNote, setShowNote] = useState(false);
   const [saving, setSaving] = useState(false);
   const [done, setDone] = useState(false);
@@ -56,7 +56,7 @@ export default function ConcernFeedback({ reportId, concerns }: Props) {
     } catch (e: any) {
       setError(
         e?.response?.data?.message ||
-          'Could not save your feedback. Please try again.'
+          "Could not save your feedback. Please try again.",
       );
     } finally {
       setSaving(false);
@@ -115,8 +115,8 @@ export default function ConcernFeedback({ reportId, concerns }: Props) {
                     }
                     className={`flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-full border transition-colors ${
                       active
-                        ? 'bg-primary text-white border-primary'
-                        : 'bg-transparent text-mocha/60 border-primary/20 hover:border-primary/50'
+                        ? "bg-primary text-white border-primary"
+                        : "bg-transparent text-mocha/60 border-primary/20 hover:border-primary/50"
                     }`}
                   >
                     <span className="material-icons-round text-[14px]">
@@ -167,10 +167,10 @@ export default function ConcernFeedback({ reportId, concerns }: Props) {
         className="mt-4 w-full rounded-full bg-primary text-white text-sm font-semibold py-2.5 disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
       >
         {saving
-          ? 'Sending…'
+          ? "Sending…"
           : answered
             ? `Send feedback (${answered}/${concerns.length})`
-            : 'Rate at least one to send'}
+            : "Rate at least one to send"}
       </button>
     </div>
   );

@@ -157,7 +157,9 @@ function toForm(file: File | Blob): FormData {
 }
 
 /** Quality gate + skin type + tone/redness/brightness metrics (no Gemini). */
-export async function analyzeSelfie(file: File | Blob): Promise<SelfieAnalysis> {
+export async function analyzeSelfie(
+  file: File | Blob,
+): Promise<SelfieAnalysis> {
   const res = await API.post("/skin/analyze/selfie", toForm(file), {
     timeout: 120_000, // first call loads the model
   });
@@ -171,7 +173,7 @@ export async function analyzeSelfie(file: File | Blob): Promise<SelfieAnalysis> 
  * comes back as a bare analysis — callers should check for `advice` before using it.
  */
 export async function analyzeWithAdvice(
-  file: File | Blob
+  file: File | Blob,
 ): Promise<AdviceResponse | SelfieAnalysis> {
   const res = await API.post("/skin/analyze", toForm(file), {
     timeout: 120_000, // model load + Gemini latency

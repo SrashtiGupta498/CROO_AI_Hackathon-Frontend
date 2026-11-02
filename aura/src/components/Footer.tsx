@@ -47,7 +47,16 @@ const SOCIALS = [
     name: "Instagram",
     href: "#",
     icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
         <circle cx="12" cy="12" r="4" />
         <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
@@ -155,7 +164,16 @@ const Footer: React.FC = () => {
           <div className="flex-none w-full md:w-auto">
             {subscribed ? (
               <div className="app-footer-nl-success">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="flex-shrink-0">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  className="flex-shrink-0"
+                >
                   <polyline points="20 6 9 17 4 12" />
                 </svg>
                 <p className="font-semibold text-[13px]">
@@ -172,7 +190,9 @@ const Footer: React.FC = () => {
                       setEmail(e.target.value);
                       if (error) setError(null);
                     }}
-                    onKeyDown={(e) => e.key === "Enter" && !loading && handleSubscribe()}
+                    onKeyDown={(e) =>
+                      e.key === "Enter" && !loading && handleSubscribe()
+                    }
                     placeholder="your@email.com"
                     disabled={loading}
                     className="app-footer-nl-input"
@@ -181,12 +201,16 @@ const Footer: React.FC = () => {
                     onClick={handleSubscribe}
                     disabled={loading}
                     className="app-footer-nl-btn"
-                    style={loading ? { opacity: 0.6, cursor: "wait" } : undefined}
+                    style={
+                      loading ? { opacity: 0.6, cursor: "wait" } : undefined
+                    }
                   >
                     {loading ? "…" : "Join"}
                   </button>
                 </div>
-                {error && <p className="text-[12px] text-[#ffb4a8] mt-2">{error}</p>}
+                {error && (
+                  <p className="text-[12px] text-[#ffb4a8] mt-2">{error}</p>
+                )}
               </>
             )}
           </div>
@@ -218,7 +242,12 @@ const Footer: React.FC = () => {
             </p>
             <div className="flex items-center gap-3">
               {SOCIALS.map((s) => (
-                <a key={s.name} href={s.href} aria-label={s.name} className="app-footer-social-btn">
+                <a
+                  key={s.name}
+                  href={s.href}
+                  aria-label={s.name}
+                  className="app-footer-social-btn"
+                >
                   {s.icon}
                 </a>
               ))}
@@ -232,7 +261,10 @@ const Footer: React.FC = () => {
               <ul className="space-y-2.5">
                 {links.map((link) => (
                   <li key={link.label}>
-                    <span className="app-footer-link" onClick={() => navigate(link.path)}>
+                    <span
+                      className="app-footer-link"
+                      onClick={() => navigate(link.path)}
+                    >
                       {link.label}
                     </span>
                   </li>
@@ -253,19 +285,20 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-6 md:px-12 py-5">
         <div className="flex flex-col md:flex-row items-center justify-between gap-3">
           <p className="text-[11px] text-[rgba(255,255,255,0.3)] tracking-[0.06em]">
-            © {new Date().getFullYear()} Aura &amp; Earth · Crafted with Intention
+            © {new Date().getFullYear()} Aura &amp; Earth · Crafted with
+            Intention
           </p>
 
           <div className="flex items-center gap-5">
             {["Privacy", "Terms", "Cookies"].map((item, i, arr) => (
               <React.Fragment key={item}>
-                <span
-                  className="cursor-pointer transition-colors duration-200 text-[11px] text-[rgba(255,255,255,0.3)] tracking-[0.05em] hover:text-[rgba(154,212,183,0.85)]"
-                >
+                <span className="cursor-pointer transition-colors duration-200 text-[11px] text-[rgba(255,255,255,0.3)] tracking-[0.05em] hover:text-[rgba(154,212,183,0.85)]">
                   {item}
                 </span>
                 {i < arr.length - 1 && (
-                  <span className="text-[rgba(255,255,255,0.1)] text-[10px]">·</span>
+                  <span className="text-[rgba(255,255,255,0.1)] text-[10px]">
+                    ·
+                  </span>
                 )}
               </React.Fragment>
             ))}
@@ -275,7 +308,15 @@ const Footer: React.FC = () => {
               title="Back to top"
               aria-label="Back to top"
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+              >
                 <path d="M12 19V5M5 12l7-7 7 7" />
               </svg>
             </button>

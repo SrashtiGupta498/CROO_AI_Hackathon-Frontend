@@ -1,10 +1,28 @@
-import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import API from "../services/api";
+import { useToast } from "../components/Toast";
 import {
-  DayState, Section, Notes, loadDay, loadSet, dateKey, uid,
-  STORAGE, STREAK_STORE, HABIT_STORE, defaultSections, emptyNotes,
+  DayState,
+  Section,
+  Notes,
+  loadDay,
+  loadSet,
+  dateKey,
+  uid,
+  STORAGE,
+  STREAK_STORE,
+  HABIT_STORE,
+  defaultSections,
+  emptyNotes,
 } from "../pages/daily/shared";
 
 /* ============================================================================
@@ -21,7 +39,10 @@ interface DailyCtx {
   completedDays: Set<string>;
   habits: Record<string, boolean>;
   toggleHabit: (key: string) => void;
-  total: number; done: number; pct: number; streak: number;
+  total: number;
+  done: number;
+  pct: number;
+  streak: number;
   confetti: boolean;
   toggleTask: (sec: string, id: string) => void;
   addTask: (sec: string, label: string) => void;
@@ -42,17 +63,27 @@ export const useDaily = () => {
   return v;
 };
 
-export const DailyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const DailyProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [today] = useState(() => new Date());
   const tKey = dateKey(today);
 
   const [day, setDay] = useState<DayState>(() => loadDay(tKey));
-  const [completedDays, setCompletedDays] = useState<Set<string>>(() => loadSet(STREAK_STORE));
+  const [completedDays, setCompletedDays] = useState<Set<string>>(() =>
+    loadSet(STREAK_STORE),
+  );
   const [habits, setHabits] = useState<Record<string, boolean>>(() => {
-    try { return JSON.parse(localStorage.getItem(HABIT_STORE) || "{}"); } catch { return {}; }
+    try {
+      return JSON.parse(localStorage.getItem(HABIT_STORE) || "{}");
+    } catch {
+      return {};
+    }
   });
   const [confetti, setConfetti] = useState(false);
   const prevComplete = useRef(false);
+  const toast = useToast();
+  const saveErrorShown = useRef(false);
 
   // ── Backend sync ───────────────────────────────────────────────────────────
   // localStorage stays as an instant offline cache; when logged in we also
@@ -62,15 +93,43 @@ export const DailyProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const dayRef = useRef(day);
   const habitsRef = useRef(habits);
-  const hydratedRef = useRef(false);                 // gate saves until first load done
+  const hydratedRef = useRef(false); // gate saves until first load done
   const saveTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
-  useEffect(() => { dayRef.current = day; }, [day]);
-  useEffect(() => { habitsRef.current = habits; }, [habits]);
+  useEffect(() => {
+    dayRef.current = day;
+  }, [day]);
+  useEffect(() => {
+    habitsRef.current = habits;
+  }, [habits]);
 
   // window we pull on mount: ~5 weeks back covers the habit grid + a real streak
   const rangeFrom = useMemo(() => {
-    const d = new Date(today); d.setDate(d.getDate() - 34); return dateKey(d);
+    const d = new Date(today);
+    d.setDate(d.getDate() - 34);
+    return dateKey(d);
   }, [today]);
+
+  /**
+   * Exactly the four fields `Notes` declares, and nothing else.
+   *
+   * Spreading the server's notes object straight into state used to carry its
+   * Mongo subdocument `_id` along with it, and `persist` then PUT it back. The
+   * API's ValidationPipe runs with `forbidNonWhitelisted`, so it answered 400
+   * ("notes.property _id should not exist") — and because the entry is
+   * re-read from the server on every load, the rejection repeated for ever:
+   * once a day had a saved note, no habit tick, planner edit or note change on
+   * that day ever reached the server again.
+   *
+   * Picking the fields the way `routines` already picks its task fields makes
+   * the payload structurally unable to carry anything the API has not been
+   * told about — including whatever a stale localStorage copy still holds.
+   */
+  const pickNotes = (n: any): Notes => ({
+    mood: n?.mood ?? "",
+    skin: n?.skin ?? "",
+    hair: n?.hair ?? "",
+    text: n?.text ?? "",
+  });
 
   const mapEntryToDay = (e: any): DayState => ({
     sections: (e.routines || []).map((s: any) => ({
@@ -78,9 +137,13 @@ export const DailyProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       title: s.title || "Untitled",
       icon: s.icon || "auto_awesome",
       color: (s.color || "custom") as Section["color"],
-      tasks: (s.tasks || []).map((t: any) => ({ id: t.id || uid(), label: t.label || "", done: !!t.done })),
+      tasks: (s.tasks || []).map((t: any) => ({
+        id: t.id || uid(),
+        label: t.label || "",
+        done: !!t.done,
+      })),
     })),
-    notes: { ...emptyNotes(), ...(e.notes || {}) },
+    notes: pickNotes(e.notes),
   });
 
   const pickHabits = (map: Record<string, boolean>, dk: string) => {
@@ -95,12 +158,37 @@ export const DailyProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const payload: any = { habits: pickHabits(habitsRef.current, dk) };
     if (dk === tKey) {
       payload.routines = dayRef.current.sections.map((s) => ({
-        title: s.title, icon: s.icon, color: s.color,
+        title: s.title,
+        icon: s.icon,
+        color: s.color,
         tasks: s.tasks.map((t) => ({ id: t.id, label: t.label, done: t.done })),
       }));
-      payload.notes = dayRef.current.notes;
+      payload.notes = pickNotes(dayRef.current.notes);
     }
-    try { await API.put(`/daily/${dk}`, payload); } catch { /* offline → localStorage keeps it */ }
+    try {
+      await API.put(`/daily/${dk}`, payload);
+    } catch (err: any) {
+      // Offline is the expected failure and localStorage already covers it, so
+      // it stays quiet. A response, though, means the server looked at this
+      // payload and refused it: the day's edits are NOT saved anywhere but this
+      // browser, and swallowing that is how the `_id` rejection above went
+      // unnoticed. Say it once — autosave runs every 800ms and must not
+      // produce a toast per keystroke.
+      const status = err?.response?.status;
+      // 401 is not a save problem and must not be reported as one. The API
+      // interceptor owns that case: it refreshes once, and if that fails it
+      // clears the session and sends you to /#/Login. Toasting "isn't saving
+      // to your account" on top of that names the wrong cause — you were
+      // signed out. Note the backend stores ONE token per user, so signing in
+      // anywhere else ends this session and lands here.
+      if (status && status !== 401) {
+        console.error(`Daily save rejected (${status})`, err?.response?.data);
+        if (!saveErrorShown.current) {
+          saveErrorShown.current = true;
+          toast.error("Your journal isn't saving to your account right now.");
+        }
+      }
+    }
   };
 
   const scheduleSave = (dk: string) => {
@@ -111,7 +199,10 @@ export const DailyProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   // Hydrate from the API once we know the user.
   useEffect(() => {
-    if (!userId) { hydratedRef.current = true; return; }
+    if (!userId) {
+      hydratedRef.current = true;
+      return;
+    }
     let cancelled = false;
     (async () => {
       try {
@@ -120,29 +211,46 @@ export const DailyProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (cancelled) return;
         const todayEntry = list.find((e) => e.date === tKey);
         if (todayEntry) setDay(mapEntryToDay(todayEntry));
-        setCompletedDays(new Set(list.filter((e) => e.completed).map((e) => e.date)));
+        setCompletedDays(
+          new Set(list.filter((e) => e.completed).map((e) => e.date)),
+        );
         const merged = Object.assign({}, ...list.map((e) => e.habits || {}));
         setHabits((prev) => ({ ...prev, ...merged }));
-      } catch { /* not logged in / offline → localStorage fallback */ }
-      finally { hydratedRef.current = true; }
+      } catch {
+        /* not logged in / offline → localStorage fallback */
+      } finally {
+        hydratedRef.current = true;
+      }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [userId, rangeFrom, tKey]);
 
   const { total, done, pct } = useMemo(() => {
     const all = day.sections.flatMap((s) => s.tasks);
     const d = all.filter((t) => t.done).length;
-    return { total: all.length, done: d, pct: all.length ? Math.round((d / all.length) * 100) : 0 };
+    return {
+      total: all.length,
+      done: d,
+      pct: all.length ? Math.round((d / all.length) * 100) : 0,
+    };
   }, [day]);
 
-  useEffect(() => { localStorage.setItem(STORAGE(tKey), JSON.stringify(day)); scheduleSave(tKey); }, [day, tKey]);
-  useEffect(() => { localStorage.setItem(HABIT_STORE, JSON.stringify(habits)); }, [habits]);
+  useEffect(() => {
+    localStorage.setItem(STORAGE(tKey), JSON.stringify(day));
+    scheduleSave(tKey);
+  }, [day, tKey]);
+  useEffect(() => {
+    localStorage.setItem(HABIT_STORE, JSON.stringify(habits));
+  }, [habits]);
 
   useEffect(() => {
     const complete = total > 0 && done === total;
     setCompletedDays((prev) => {
       const next = new Set(prev);
-      if (complete) next.add(tKey); else next.delete(tKey);
+      if (complete) next.add(tKey);
+      else next.delete(tKey);
       localStorage.setItem(STREAK_STORE, JSON.stringify([...next]));
       return next;
     });
@@ -159,40 +267,130 @@ export const DailyProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     let count = 0;
     const cur = new Date(today);
     if (!completedDays.has(dateKey(cur))) cur.setDate(cur.getDate() - 1);
-    while (completedDays.has(dateKey(cur))) { count++; cur.setDate(cur.getDate() - 1); }
+    while (completedDays.has(dateKey(cur))) {
+      count++;
+      cur.setDate(cur.getDate() - 1);
+    }
     return count;
   }, [completedDays, today]);
 
-  const mutate = (fn: (s: Section[]) => Section[]) => setDay((d) => ({ ...d, sections: fn(d.sections) }));
+  const mutate = (fn: (s: Section[]) => Section[]) =>
+    setDay((d) => ({ ...d, sections: fn(d.sections) }));
 
   const value: DailyCtx = {
-    today, tKey, day, completedDays, habits, total, done, pct, streak, confetti,
-    setNotes: (patch) => setDay((d) => ({ ...d, notes: { ...d.notes, ...patch } })),
-    toggleHabit: (key) => { setHabits((p) => ({ ...p, [key]: !p[key] })); scheduleSave(key.split(":")[0]); },
-    toggleTask: (sec, id) => mutate((secs) => secs.map((s) => s.id === sec
-      ? { ...s, tasks: s.tasks.map((t) => t.id === id ? { ...t, done: !t.done } : t) } : s)),
-    addTask: (sec, label) => { if (label.trim()) mutate((secs) => secs.map((s) => s.id === sec
-      ? { ...s, tasks: [...s.tasks, { id: uid(), label: label.trim(), done: false }] } : s)); },
-    editTask: (sec, id, label) => { if (label.trim()) mutate((secs) => secs.map((s) => s.id === sec
-      ? { ...s, tasks: s.tasks.map((t) => t.id === id ? { ...t, label: label.trim() } : t) } : s)); },
-    deleteTask: (sec, id) => mutate((secs) => secs.map((s) => s.id === sec
-      ? { ...s, tasks: s.tasks.filter((t) => t.id !== id) } : s)),
-    deleteSection: (sec) => mutate((secs) => secs.filter((s) => s.id !== sec)),
-    addSection: () => mutate((secs) => [...secs, { id: uid(), title: "New Ritual", icon: "auto_awesome", color: "custom", tasks: [] }]),
-    renameSection: (sec, title) => mutate((secs) => secs.map((s) => s.id === sec ? { ...s, title: title.trim() || "Untitled" } : s)),
-    reorderTask: (sec, from, to) => { if (from === to) return; mutate((secs) => secs.map((s) => {
-      if (s.id !== sec) return s;
-      const tasks = [...s.tasks];
-      const [m] = tasks.splice(from, 1);
-      tasks.splice(to, 0, m);
-      return { ...s, tasks };
-    })); },
-    copyYesterday: () => {
-      const y = new Date(today); y.setDate(y.getDate() - 1);
-      const prev = loadDay(dateKey(y));
-      setDay((d) => ({ ...d, sections: prev.sections.map((s) => ({ ...s, id: uid(), tasks: s.tasks.map((t) => ({ ...t, id: uid(), done: false })) })) }));
+    today,
+    tKey,
+    day,
+    completedDays,
+    habits,
+    total,
+    done,
+    pct,
+    streak,
+    confetti,
+    setNotes: (patch) =>
+      setDay((d) => ({ ...d, notes: { ...d.notes, ...patch } })),
+    toggleHabit: (key) => {
+      setHabits((p) => ({ ...p, [key]: !p[key] }));
+      scheduleSave(key.split(":")[0]);
     },
-    resetDay: () => setDay({ sections: defaultSections(), notes: emptyNotes() }),
+    toggleTask: (sec, id) =>
+      mutate((secs) =>
+        secs.map((s) =>
+          s.id === sec
+            ? {
+                ...s,
+                tasks: s.tasks.map((t) =>
+                  t.id === id ? { ...t, done: !t.done } : t,
+                ),
+              }
+            : s,
+        ),
+      ),
+    addTask: (sec, label) => {
+      if (label.trim())
+        mutate((secs) =>
+          secs.map((s) =>
+            s.id === sec
+              ? {
+                  ...s,
+                  tasks: [
+                    ...s.tasks,
+                    { id: uid(), label: label.trim(), done: false },
+                  ],
+                }
+              : s,
+          ),
+        );
+    },
+    editTask: (sec, id, label) => {
+      if (label.trim())
+        mutate((secs) =>
+          secs.map((s) =>
+            s.id === sec
+              ? {
+                  ...s,
+                  tasks: s.tasks.map((t) =>
+                    t.id === id ? { ...t, label: label.trim() } : t,
+                  ),
+                }
+              : s,
+          ),
+        );
+    },
+    deleteTask: (sec, id) =>
+      mutate((secs) =>
+        secs.map((s) =>
+          s.id === sec
+            ? { ...s, tasks: s.tasks.filter((t) => t.id !== id) }
+            : s,
+        ),
+      ),
+    deleteSection: (sec) => mutate((secs) => secs.filter((s) => s.id !== sec)),
+    addSection: () =>
+      mutate((secs) => [
+        ...secs,
+        {
+          id: uid(),
+          title: "New Ritual",
+          icon: "auto_awesome",
+          color: "custom",
+          tasks: [],
+        },
+      ]),
+    renameSection: (sec, title) =>
+      mutate((secs) =>
+        secs.map((s) =>
+          s.id === sec ? { ...s, title: title.trim() || "Untitled" } : s,
+        ),
+      ),
+    reorderTask: (sec, from, to) => {
+      if (from === to) return;
+      mutate((secs) =>
+        secs.map((s) => {
+          if (s.id !== sec) return s;
+          const tasks = [...s.tasks];
+          const [m] = tasks.splice(from, 1);
+          tasks.splice(to, 0, m);
+          return { ...s, tasks };
+        }),
+      );
+    },
+    copyYesterday: () => {
+      const y = new Date(today);
+      y.setDate(y.getDate() - 1);
+      const prev = loadDay(dateKey(y));
+      setDay((d) => ({
+        ...d,
+        sections: prev.sections.map((s) => ({
+          ...s,
+          id: uid(),
+          tasks: s.tasks.map((t) => ({ ...t, id: uid(), done: false })),
+        })),
+      }));
+    },
+    resetDay: () =>
+      setDay({ sections: defaultSections(), notes: emptyNotes() }),
   };
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

@@ -14,25 +14,32 @@ import { sanitizeHtml } from "../../utils/sanitize";
 /* How an image block lays out on the page. "carousel" maps to the `gallery`
    section type on save — both are already valid SECTION_TYPES, so this needs
    no schema change. */
-const IMAGE_LAYOUTS: { id: "single" | "carousel"; label: string; hint: string }[] = [
+const IMAGE_LAYOUTS: {
+  id: "single" | "carousel";
+  label: string;
+  hint: string;
+}[] = [
   { id: "single", label: "Single image", hint: "One full-width photo" },
-  { id: "carousel", label: "Carousel", hint: "Several photos in a swipeable strip" },
+  {
+    id: "carousel",
+    label: "Carousel",
+    hint: "Several photos in a swipeable strip",
+  },
 ];
 
 const Label: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <label className="block-editor-label">
-    {children}
-  </label>
+  <label className="block-editor-label">{children}</label>
 );
 
 /* ─── Compact rich-text editor (contentEditable) ─── */
-const RICH_TOOLS: { cmd: string; val?: string; label: string; tip: string }[] = [
-  { cmd: "bold", label: "B", tip: "Bold" },
-  { cmd: "italic", label: "i", tip: "Italic" },
-  { cmd: "formatBlock", val: "H3", label: "H", tip: "Heading" },
-  { cmd: "insertUnorderedList", label: "•", tip: "Bullet list" },
-  { cmd: "createLink", label: "🔗", tip: "Link" },
-];
+const RICH_TOOLS: { cmd: string; val?: string; label: string; tip: string }[] =
+  [
+    { cmd: "bold", label: "B", tip: "Bold" },
+    { cmd: "italic", label: "i", tip: "Italic" },
+    { cmd: "formatBlock", val: "H3", label: "H", tip: "Heading" },
+    { cmd: "insertUnorderedList", label: "•", tip: "Bullet list" },
+    { cmd: "createLink", label: "🔗", tip: "Link" },
+  ];
 
 export const RichText: React.FC<{
   value: string;
@@ -85,12 +92,12 @@ export const RichText: React.FC<{
 };
 
 /* ─── Block controls (move / duplicate / delete) ─── */
-const ControlBtn: React.FC<{ onClick: () => void; title: string; disabled?: boolean; children: React.ReactNode }> = ({
-  onClick,
-  title,
-  disabled,
-  children,
-}) => (
+const ControlBtn: React.FC<{
+  onClick: () => void;
+  title: string;
+  disabled?: boolean;
+  children: React.ReactNode;
+}> = ({ onClick, title, disabled, children }) => (
   <button
     type="button"
     onClick={onClick}
@@ -136,7 +143,11 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
               onChange={(e) => onChange({ heading: e.target.value })}
             />
             <Label>Content</Label>
-            <RichText value={block.content} onChange={(html) => onChange({ content: html })} placeholder="Write your paragraph…" />
+            <RichText
+              value={block.content}
+              onChange={(html) => onChange({ content: html })}
+              placeholder="Write your paragraph…"
+            />
           </>
         );
 
@@ -203,14 +214,18 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
                   <div key={i} className="mb-2.5">
                     <ImageUploader
                       value={url}
-                      onChange={(u) => setSlides(slides.map((s, j) => (j === i ? u : s)))}
+                      onChange={(u) =>
+                        setSlides(slides.map((s, j) => (j === i ? u : s)))
+                      }
                       label={`Slide ${i + 1}`}
                       height={140}
                     />
                     {slides.length > 1 && (
                       <button
                         type="button"
-                        onClick={() => setSlides(slides.filter((_, j) => j !== i))}
+                        onClick={() =>
+                          setSlides(slides.filter((_, j) => j !== i))
+                        }
                         className="mt-1 text-[11px] font-bold uppercase tracking-wider"
                         style={{ color: T.muted }}
                       >
@@ -223,12 +238,17 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
                   type="button"
                   onClick={() => setSlides([...slides, ""])}
                   className="story-form-subcat-btn"
-                  style={{ border: `1px dashed ${T.border}`, background: "white", color: T.dark }}
+                  style={{
+                    border: `1px dashed ${T.border}`,
+                    background: "white",
+                    color: T.dark,
+                  }}
                 >
                   + Add slide
                 </button>
                 <p className="mt-1.5 mb-0 text-[11px] text-[rgba(47,39,68,0.55)]">
-                  A carousel needs two or more slides — with one it saves as a single image.
+                  A carousel needs two or more slides — with one it saves as a
+                  single image.
                 </p>
               </>
             )}
@@ -248,7 +268,13 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
       case "video":
         return (
           <>
-            <MediaUploader value={block.videoUrl} onChange={(url) => onChange({ videoUrl: url })} label="Video" height={180} kind="video" />
+            <MediaUploader
+              value={block.videoUrl}
+              onChange={(url) => onChange({ videoUrl: url })}
+              label="Video"
+              height={180}
+              kind="video"
+            />
             <div className="mt-2.5" />
             <Label>Caption (optional)</Label>
             <input
@@ -263,7 +289,13 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
       case "gif":
         return (
           <>
-            <MediaUploader value={block.mediaUrl} onChange={(url) => onChange({ mediaUrl: url })} label="GIF" height={180} kind="gif" />
+            <MediaUploader
+              value={block.mediaUrl}
+              onChange={(url) => onChange({ mediaUrl: url })}
+              label="GIF"
+              height={180}
+              kind="gif"
+            />
             <div className="mt-2.5" />
             <Label>Caption (optional)</Label>
             <input
@@ -308,7 +340,11 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
               onChange={(e) => onChange({ title: e.target.value })}
             />
             <Label>Content</Label>
-            <RichText value={block.content} onChange={(html) => onChange({ content: html })} placeholder={def.description} />
+            <RichText
+              value={block.content}
+              onChange={(html) => onChange({ content: html })}
+              placeholder={def.description}
+            />
           </>
         );
 
@@ -324,11 +360,21 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
                     className="block-editor-field"
                     value={item}
                     placeholder={`Item ${i + 1}`}
-                    onChange={(e) => onChange({ items: block.items.map((it, idx) => (idx === i ? e.target.value : it)) })}
+                    onChange={(e) =>
+                      onChange({
+                        items: block.items.map((it, idx) =>
+                          idx === i ? e.target.value : it,
+                        ),
+                      })
+                    }
                   />
                   <ControlBtn
                     title="Remove item"
-                    onClick={() => onChange({ items: block.items.filter((_, idx) => idx !== i) })}
+                    onClick={() =>
+                      onChange({
+                        items: block.items.filter((_, idx) => idx !== i),
+                      })
+                    }
                   >
                     ✕
                   </ControlBtn>
@@ -391,14 +437,34 @@ const BlockEditor: React.FC<BlockEditorProps> = ({
       <div className="mb-3.5 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-[16px]">{def.icon}</span>
-          <span className="text-[13px] font-extrabold text-ink">{def.label}</span>
-          <span className="text-[11px] text-[rgba(47,39,68,0.35)]">#{index + 1}</span>
+          <span className="text-[13px] font-extrabold text-ink">
+            {def.label}
+          </span>
+          <span className="text-[11px] text-[rgba(47,39,68,0.35)]">
+            #{index + 1}
+          </span>
         </div>
         <div className="flex gap-1.5">
-          <ControlBtn title="Move up" disabled={index === 0} onClick={() => onMove(-1)}>↑</ControlBtn>
-          <ControlBtn title="Move down" disabled={index === total - 1} onClick={() => onMove(1)}>↓</ControlBtn>
-          <ControlBtn title="Duplicate" onClick={onDuplicate}>⧉</ControlBtn>
-          <ControlBtn title="Delete block" onClick={onRemove}>🗑</ControlBtn>
+          <ControlBtn
+            title="Move up"
+            disabled={index === 0}
+            onClick={() => onMove(-1)}
+          >
+            ↑
+          </ControlBtn>
+          <ControlBtn
+            title="Move down"
+            disabled={index === total - 1}
+            onClick={() => onMove(1)}
+          >
+            ↓
+          </ControlBtn>
+          <ControlBtn title="Duplicate" onClick={onDuplicate}>
+            ⧉
+          </ControlBtn>
+          <ControlBtn title="Delete block" onClick={onRemove}>
+            🗑
+          </ControlBtn>
         </div>
       </div>
       {renderBody()}

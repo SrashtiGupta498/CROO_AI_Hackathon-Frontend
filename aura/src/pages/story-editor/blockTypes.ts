@@ -2,12 +2,7 @@
    Block constants, config, factories & small pure helpers.
    ════════════════════════════════════════════════════════════ */
 
-import {
-  Story,
-  StoryBlock,
-  BlockType,
-  BeautyInsight,
-} from "./story.types";
+import { Story, StoryBlock, BlockType, BeautyInsight } from "./story.types";
 import { INK, SAGE, PAPER, SURFACE } from "../../styles/brand";
 
 /* ─── Editor visual theme — derived from the brand palette so the
@@ -39,23 +34,72 @@ export interface BlockDefinition {
 }
 
 export const BLOCK_DEFINITIONS: BlockDefinition[] = [
-  { type: "text", label: "Text", description: "Paragraph with an optional heading", icon: "📝" },
-  { type: "image", label: "Image", description: "Photo with a caption", icon: "🖼️" },
-  { type: "video", label: "Video", description: "Click-to-play video clip", icon: "🎬" },
-  { type: "gif", label: "GIF", description: "Looping muted clip — upload a GIF, we treat it like one", icon: "🎞️" },
-  { type: "quote", label: "Quote", description: "Standout blockquote", icon: "❝" },
+  {
+    type: "text",
+    label: "Text",
+    description: "Paragraph with an optional heading",
+    icon: "📝",
+  },
+  {
+    type: "image",
+    label: "Image",
+    description: "Photo with a caption",
+    icon: "🖼️",
+  },
+  {
+    type: "video",
+    label: "Video",
+    description: "Click-to-play video clip",
+    icon: "🎬",
+  },
+  {
+    type: "gif",
+    label: "GIF",
+    description: "Looping muted clip — upload a GIF, we treat it like one",
+    icon: "🎞️",
+  },
+  {
+    type: "quote",
+    label: "Quote",
+    description: "Standout blockquote",
+    icon: "❝",
+  },
   { type: "tip", label: "Tip", description: "Helpful pro tip", icon: "💡" },
-  { type: "warning", label: "Warning", description: "Caution / patch-test note", icon: "⚠️" },
-  { type: "checklist", label: "Checklist", description: "List of steps or items", icon: "✅" },
-  { type: "callout", label: "Callout", description: "Highlighted info box", icon: "📣" },
-  { type: "comparison", label: "Comparison", description: "Side-by-side compare", icon: "⚖️" },
+  {
+    type: "warning",
+    label: "Warning",
+    description: "Caution / patch-test note",
+    icon: "⚠️",
+  },
+  {
+    type: "checklist",
+    label: "Checklist",
+    description: "List of steps or items",
+    icon: "✅",
+  },
+  {
+    type: "callout",
+    label: "Callout",
+    description: "Highlighted info box",
+    icon: "📣",
+  },
+  {
+    type: "comparison",
+    label: "Comparison",
+    description: "Side-by-side compare",
+    icon: "⚖️",
+  },
 ];
 
 export const blockDef = (type: string): BlockDefinition =>
   BLOCK_DEFINITIONS.find((b) => b.type === type) ?? BLOCK_DEFINITIONS[0];
 
 /* ─── Beauty-insight type options ─── */
-export const INSIGHT_TYPES: { value: BeautyInsight["type"]; label: string; icon: string }[] = [
+export const INSIGHT_TYPES: {
+  value: BeautyInsight["type"];
+  label: string;
+  icon: string;
+}[] = [
   { value: "ingredient", label: "Ingredient", icon: "🌿" },
   { value: "myth", label: "Myth", icon: "🚫" },
   { value: "fact", label: "Fact", icon: "✔️" },
@@ -109,7 +153,14 @@ export function createEmptyBlock(type: BlockType): StoryBlock {
     case "callout":
       return { id, type, title: "", content: "" };
     case "comparison":
-      return { id, type, leftTitle: "", leftContent: "", rightTitle: "", rightContent: "" };
+      return {
+        id,
+        type,
+        leftTitle: "",
+        leftContent: "",
+        rightTitle: "",
+        rightContent: "",
+      };
     default:
       return { id, type: "text", content: "" } as StoryBlock;
   }
@@ -151,7 +202,10 @@ export const slugify = (s: string): string =>
     .replace(/-+/g, "-");
 
 export const stripHtml = (html: string): string =>
-  (html || "").replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  (html || "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 /* Extract plain text from a block for word-count purposes. */
 export const blockPlainText = (b: StoryBlock): string => {

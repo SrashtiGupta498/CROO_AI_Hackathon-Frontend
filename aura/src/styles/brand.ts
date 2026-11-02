@@ -15,10 +15,11 @@ export const INK_SOFT = "#3D5B4F";
 export const SAGE = "#3D5B4F";
 export const SAGE_DARK = "#4B695A";
 export const SAGE_LIGHT = "#DCE5DD";
-export const HERB = "#71816F";       /* olive — fills & borders, not small text */
-export const TURMERIC = "#C6A66B";   /* champagne — tiny hints, never shiny     */
-export const CLAY = "#c67d63";       /* skin & personalization accent       */
-export const SYNTHETIC = "#8a94a6";  /* chemical / synthetic actives — muted, low priority */
+export const HERB = "#71816F"; /* olive — fills & borders, not small text */
+export const TURMERIC = "#C6A66B"; /* champagne — tiny hints, never shiny     */
+export const CLAY = "#c67d63"; /* skin & personalization accent       */
+export const SYNTHETIC =
+  "#8a94a6"; /* chemical / synthetic actives — muted, low priority */
 export const PAPER = "#FCFAF7";
 export const PAPER_2 = "#F6F2EC";
 export const SURFACE = "#ffffff";

@@ -26,10 +26,16 @@ const toDate = (v: DateInput): Date | null => {
 /** Date only, in IST. Default e.g. "4 Aug 2026". Returns "—" for empty/invalid. */
 export function formatDate(
   v: DateInput,
-  opts: Intl.DateTimeFormatOptions = { year: "numeric", month: "short", day: "numeric" },
+  opts: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  },
 ): string {
   const d = toDate(v);
-  return d ? d.toLocaleDateString(APP_LOCALE, { timeZone: APP_TIME_ZONE, ...opts }) : "—";
+  return d
+    ? d.toLocaleDateString(APP_LOCALE, { timeZone: APP_TIME_ZONE, ...opts })
+    : "—";
 }
 
 /** Date + time, in IST. Default e.g. "4 Aug 2026, 06:30 pm". "—" if invalid. */
@@ -44,7 +50,9 @@ export function formatDateTime(
   },
 ): string {
   const d = toDate(v);
-  return d ? d.toLocaleString(APP_LOCALE, { timeZone: APP_TIME_ZONE, ...opts }) : "—";
+  return d
+    ? d.toLocaleString(APP_LOCALE, { timeZone: APP_TIME_ZONE, ...opts })
+    : "—";
 }
 
 /** Today's date key "YYYY-MM-DD" in IST — for day-bucketing so "today" always

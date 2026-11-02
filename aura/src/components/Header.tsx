@@ -6,6 +6,7 @@ import { logoutUser } from "../store/user/user.action";
 import { logout } from "../store/user/user.slice";
 import NotificationBell from "./NotificationBell";
 import Logo from "./Logo";
+import { userInitials as initials } from "./UserAvatar";
 import "./Header.css";
 
 import { DARK } from "../styles/brand";
@@ -41,48 +42,89 @@ const NAV_ITEMS = [
 
 /* ─── Icons ────────────────────────────────────────────── */
 const SearchIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+  >
     <circle cx="11" cy="11" r="7" />
     <path d="m21 21-4.35-4.35" />
   </svg>
 );
 const HeartIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
   </svg>
 );
 const UserIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+  >
     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
     <circle cx="12" cy="7" r="4" />
   </svg>
 );
 const MenuIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+  <svg
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+  >
     <line x1="3" y1="6" x2="21" y2="6" />
     <line x1="3" y1="12" x2="21" y2="12" />
     <line x1="3" y1="18" x2="21" y2="18" />
   </svg>
 );
 const CloseIcon = () => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+  <svg
+    width="22"
+    height="22"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+  >
     <line x1="18" y1="6" x2="6" y2="18" />
     <line x1="6" y1="6" x2="18" y2="18" />
   </svg>
 );
 const ChevronDown = () => (
-  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+  <svg
+    width="12"
+    height="12"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+  >
     <polyline points="6 9 12 15 18 9" />
   </svg>
 );
-
-/* First letter of the first and last name, e.g. "Priya Venkat" -> "PV".
-   Falls back to whatever single letter exists so the badge is never empty. */
-const initials = (first?: string, last?: string) =>
-  [first, last]
-    .map((n) => (n || "").trim().charAt(0).toUpperCase())
-    .filter(Boolean)
-    .join("") || "A";
 
 /* ─── Component ─────────────────────────────────────── */
 const Header: React.FC = () => {
@@ -179,7 +221,6 @@ const Header: React.FC = () => {
     menuTimerRef.current = setTimeout(() => setActiveMenu(null), 180);
   };
 
-
   return (
     <>
       {/* The "QUICK ACCESS" strip that used to sit here was removed: four of
@@ -227,16 +268,24 @@ const Header: React.FC = () => {
                   onClick={() => navigate(item.path)}
                   className={`app-header-nav-link ${location.pathname === item.path ? "active" : ""}`}
                   style={{
-                    color: location.pathname === item.path ? DARK : "rgba(45,42,38,0.6)",
+                    color:
+                      location.pathname === item.path
+                        ? DARK
+                        : "rgba(45,42,38,0.6)",
                   }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = DARK; }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLButtonElement).style.color = DARK;
+                  }}
                   onMouseLeave={(e) => {
                     if (location.pathname !== item.path)
-                      (e.currentTarget as HTMLButtonElement).style.color = "rgba(45,42,38,0.6)";
+                      (e.currentTarget as HTMLButtonElement).style.color =
+                        "rgba(45,42,38,0.6)";
                   }}
                 >
                   {item.label}
-                  {item.badge && <span className="app-header-badge">{item.badge}</span>}
+                  {item.badge && (
+                    <span className="app-header-badge">{item.badge}</span>
+                  )}
                   {item.mega && <ChevronDown />}
                 </button>
 
@@ -244,52 +293,75 @@ const Header: React.FC = () => {
                 {item.mega && activeMenu === item.label && (
                   <div
                     className="app-header-mega-menu"
-                    onMouseEnter={() => { if (menuTimerRef.current) clearTimeout(menuTimerRef.current); setActiveMenu(item.label); }}
+                    onMouseEnter={() => {
+                      if (menuTimerRef.current)
+                        clearTimeout(menuTimerRef.current);
+                      setActiveMenu(item.label);
+                    }}
                     onMouseLeave={handleMenuLeave}
                   >
                     {item.mega.map((col) => {
-                      const headingPath = (col as { headingPath?: string }).headingPath;
+                      const headingPath = (col as { headingPath?: string })
+                        .headingPath;
                       return (
-                      <div key={col.heading}>
-                        {headingPath ? (
-                          <button
-                            onClick={() => { navigate(headingPath); setActiveMenu(null); }}
-                            className="group/heading app-header-mega-heading app-header-mega-heading-btn"
-                          >
-                            {col.heading}
-                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="transition-transform duration-200 group-hover/heading:translate-x-0.5">
-                              <path d="M5 12h14M12 5l7 7-7 7" />
-                            </svg>
-                          </button>
-                        ) : (
-                          <p className="app-header-mega-heading">
-                            {col.heading}
-                          </p>
-                        )}
-                        <ul className="list-none p-0 m-0 flex flex-col gap-[3px]">
-                          {col.links.map((link, li) => (
-                            <li key={`${col.heading}-${li}`}>
-                              <button
-                                onClick={() => { navigate(link.path); setActiveMenu(null); }}
-                                className="app-header-mega-link"
-                                onMouseEnter={(e) => {
-                                  const el = e.currentTarget as HTMLButtonElement;
-                                  el.style.background = "rgba(61,91,79,0.09)";
-                                  el.style.color = DARK;
-                                }}
-                                onMouseLeave={(e) => {
-                                  const el = e.currentTarget as HTMLButtonElement;
-                                  el.style.background = "none";
-                                  el.style.color = "rgba(45,42,38,0.7)";
-                                }}
+                        <div key={col.heading}>
+                          {headingPath ? (
+                            <button
+                              onClick={() => {
+                                navigate(headingPath);
+                                setActiveMenu(null);
+                              }}
+                              className="group/heading app-header-mega-heading app-header-mega-heading-btn"
+                            >
+                              {col.heading}
+                              <svg
+                                width="10"
+                                height="10"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="3"
+                                className="transition-transform duration-200 group-hover/heading:translate-x-0.5"
                               >
-                                <span className="text-sage text-[8px] mt-px">●</span>
-                                {link.label}
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                                <path d="M5 12h14M12 5l7 7-7 7" />
+                              </svg>
+                            </button>
+                          ) : (
+                            <p className="app-header-mega-heading">
+                              {col.heading}
+                            </p>
+                          )}
+                          <ul className="list-none p-0 m-0 flex flex-col gap-[3px]">
+                            {col.links.map((link, li) => (
+                              <li key={`${col.heading}-${li}`}>
+                                <button
+                                  onClick={() => {
+                                    navigate(link.path);
+                                    setActiveMenu(null);
+                                  }}
+                                  className="app-header-mega-link"
+                                  onMouseEnter={(e) => {
+                                    const el =
+                                      e.currentTarget as HTMLButtonElement;
+                                    el.style.background = "rgba(61,91,79,0.09)";
+                                    el.style.color = DARK;
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    const el =
+                                      e.currentTarget as HTMLButtonElement;
+                                    el.style.background = "none";
+                                    el.style.color = "rgba(45,42,38,0.7)";
+                                  }}
+                                >
+                                  <span className="text-sage text-[8px] mt-px">
+                                    ●
+                                  </span>
+                                  {link.label}
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       );
                     })}
 
@@ -298,17 +370,27 @@ const Header: React.FC = () => {
                       <span className="text-[11px] text-[rgba(45,42,38,0.4)] font-semibold">
                         ✨ Trending:
                       </span>
-                      {["Rosehip Oil", "Vitamin C serum", "Aloe toner"].map((tag) => (
-                        <button
-                          key={tag}
-                          onClick={() => navigate("/articles")}
-                          className="app-header-trending-tag"
-                          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(61,91,79,0.2)"; }}
-                          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "rgba(61,91,79,0.1)"; }}
-                        >
-                          {tag}
-                        </button>
-                      ))}
+                      {["Rosehip Oil", "Vitamin C serum", "Aloe toner"].map(
+                        (tag) => (
+                          <button
+                            key={tag}
+                            onClick={() => navigate("/articles")}
+                            className="app-header-trending-tag"
+                            onMouseEnter={(e) => {
+                              (
+                                e.currentTarget as HTMLButtonElement
+                              ).style.background = "rgba(61,91,79,0.2)";
+                            }}
+                            onMouseLeave={(e) => {
+                              (
+                                e.currentTarget as HTMLButtonElement
+                              ).style.background = "rgba(61,91,79,0.1)";
+                            }}
+                          >
+                            {tag}
+                          </button>
+                        ),
+                      )}
                     </div>
                   </div>
                 )}
@@ -318,17 +400,18 @@ const Header: React.FC = () => {
 
           {/* ── Right: Actions ───────────────── */}
           <div className="flex items-center gap-1 justify-self-end col-start-3">
-
-            {/* Search */}
-            <button className="app-header-icon-btn" onClick={() => setSearchOpen(true)} title="Search" aria-label="Search">
-              <SearchIcon />
-            </button>
-
             {/* Notifications (logged-in only) */}
             {currentUser && <NotificationBell />}
 
             {/* Liked posts */}
-            <button className="app-header-icon-btn hidden sm:flex" title="Liked Posts" aria-label="Liked posts" onClick={() => navigate(currentUser ? "/profile?tab=liked" : "/Login")}>
+            <button
+              className="app-header-icon-btn hidden sm:flex"
+              title="Liked Posts"
+              aria-label="Liked posts"
+              onClick={() =>
+                navigate(currentUser ? "/profile?tab=liked" : "/Login")
+              }
+            >
               <HeartIcon />
             </button>
 
@@ -368,7 +451,11 @@ const Header: React.FC = () => {
                     the name truncates. */}
                 <span className="flex-none grid place-items-center w-7 h-7 rounded-full overflow-hidden bg-[#3D5B4F] text-[#FCFAF7] text-[11px] font-bold leading-none">
                   {currentUser.ProfilePicture ? (
-                    <img src={currentUser.ProfilePicture} alt="" className="w-full h-full object-cover" />
+                    <img
+                      src={currentUser.ProfilePicture}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
                   ) : (
                     initials(currentUser.FirstName, currentUser.LastName)
                   )}
@@ -397,7 +484,15 @@ const Header: React.FC = () => {
                   el.style.boxShadow = "0 6px 20px rgba(61,91,79,0.35)";
                 }}
               >
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                >
                   <path d="M12 5v14M5 12h14" />
                 </svg>
                 Join Free
@@ -406,8 +501,12 @@ const Header: React.FC = () => {
 
             {/* Hamburger */}
             <button
-              className="app-header-icon-btn lg:hidden ml-1"
+              className="app-header-icon-btn flex lg:hidden ml-1"
               onClick={() => setMobileOpen(true)}
+              aria-label="Open menu"
+              aria-expanded={mobileOpen}
+              aria-controls="app-header-drawer"
+              title="Menu"
             >
               <MenuIcon />
             </button>
@@ -419,7 +518,9 @@ const Header: React.FC = () => {
       {searchOpen && (
         <div
           className="app-header-search-overlay"
-          onClick={(e) => { if (e.target === e.currentTarget) setSearchOpen(false); }}
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setSearchOpen(false);
+          }}
         >
           <div className="app-header-search-drop w-full">
             {/* Input */}
@@ -459,8 +560,14 @@ const Header: React.FC = () => {
               </p>
               <div className="flex flex-wrap gap-2">
                 {[
-                  "Rosehip oil", "Morning glow", "Aloe vera", "DIY face mask",
-                  "Anti-aging routine", "Skin barrier", "Niacinamide", "Natural toner",
+                  "Rosehip oil",
+                  "Morning glow",
+                  "Aloe vera",
+                  "DIY face mask",
+                  "Anti-aging routine",
+                  "Skin barrier",
+                  "Niacinamide",
+                  "Natural toner",
                 ].map((term) => (
                   <button
                     key={term}
@@ -484,18 +591,32 @@ const Header: React.FC = () => {
 
               <div className="mt-5 flex gap-3">
                 <button
-                  onClick={() => { navigate("/ai"); setSearchOpen(false); }}
+                  onClick={() => {
+                    navigate("/ai");
+                    setSearchOpen(false);
+                  }}
                   className="app-header-search-cta-ai"
                 >
-                  <p className="text-[12px] font-bold text-sage">✨ Try AI Skin Guide</p>
-                  <p className="text-[11px] text-[rgba(45,42,38,0.5)] mt-[3px]">Get personalized recommendations</p>
+                  <p className="text-[12px] font-bold text-sage">
+                    ✨ Try AI Skin Guide
+                  </p>
+                  <p className="text-[11px] text-[rgba(45,42,38,0.5)] mt-[3px]">
+                    Get personalized recommendations
+                  </p>
                 </button>
                 <button
-                  onClick={() => { navigate("/diy"); setSearchOpen(false); }}
+                  onClick={() => {
+                    navigate("/diy");
+                    setSearchOpen(false);
+                  }}
                   className="app-header-search-cta-diy"
                 >
-                  <p className="text-[12px] font-bold text-ink">🌿 DIY Creator</p>
-                  <p className="text-[11px] text-[rgba(45,42,38,0.5)] mt-[3px]">Build your own ritual</p>
+                  <p className="text-[12px] font-bold text-ink">
+                    🌿 DIY Creator
+                  </p>
+                  <p className="text-[11px] text-[rgba(45,42,38,0.5)] mt-[3px]">
+                    Build your own ritual
+                  </p>
                 </button>
               </div>
             </div>
@@ -512,13 +633,15 @@ const Header: React.FC = () => {
             onClick={() => setMobileOpen(false)}
           />
           {/* Drawer */}
-          <div className="app-header-drawer">
+          <div className="app-header-drawer" id="app-header-drawer">
             {/* Drawer Header */}
             <div className="app-header-drawer-head">
               <Logo tone="dark" size="sm" />
               <button
                 onClick={() => setMobileOpen(false)}
                 className="text-[rgba(255,255,255,0.7)] bg-transparent border-none cursor-pointer"
+                aria-label="Close menu"
+                title="Close menu"
               >
                 <CloseIcon />
               </button>
@@ -528,7 +651,10 @@ const Header: React.FC = () => {
             <div className="p-4 border-b border-[rgba(0,0,0,0.06)]">
               <div
                 className="flex items-center gap-2.5 bg-[rgba(61,91,79,0.07)] rounded-xl py-2.5 px-3.5"
-                onClick={() => { setMobileOpen(false); setSearchOpen(true); }}
+                onClick={() => {
+                  setMobileOpen(false);
+                  setSearchOpen(true);
+                }}
               >
                 <SearchIcon />
                 <span className="text-[13px] text-[rgba(45,42,38,0.45)] font-medium">
@@ -545,7 +671,9 @@ const Header: React.FC = () => {
                     className="app-header-mobile-link"
                     onClick={() => {
                       if (item.mega) {
-                        setMobileExpanded(mobileExpanded === item.label ? null : item.label);
+                        setMobileExpanded(
+                          mobileExpanded === item.label ? null : item.label,
+                        );
                       } else {
                         navigate(item.path);
                         setMobileOpen(false);
@@ -554,10 +682,20 @@ const Header: React.FC = () => {
                   >
                     <span>
                       {item.label}
-                      {item.badge && <span className="app-header-badge">{item.badge}</span>}
+                      {item.badge && (
+                        <span className="app-header-badge">{item.badge}</span>
+                      )}
                     </span>
                     {item.mega && (
-                      <span className="app-header-mobile-chevron" style={{ transform: mobileExpanded === item.label ? "rotate(180deg)" : "rotate(0)" }}>
+                      <span
+                        className="app-header-mobile-chevron"
+                        style={{
+                          transform:
+                            mobileExpanded === item.label
+                              ? "rotate(180deg)"
+                              : "rotate(0)",
+                        }}
+                      >
                         <ChevronDown />
                       </span>
                     )}
@@ -565,16 +703,21 @@ const Header: React.FC = () => {
 
                   {item.mega && mobileExpanded === item.label && (
                     <div className="pt-1.5 pb-3 flex flex-col">
-                      {item.mega.flatMap((col) => col.links).map((link, li) => (
-                        <button
-                          key={`${link.label}-${li}`}
-                          className="app-header-mobile-sublink"
-                          onClick={() => { navigate(link.path); setMobileOpen(false); }}
-                        >
-                          <span className="text-sage mr-2 text-[8px]">●</span>
-                          {link.label}
-                        </button>
-                      ))}
+                      {item.mega
+                        .flatMap((col) => col.links)
+                        .map((link, li) => (
+                          <button
+                            key={`${link.label}-${li}`}
+                            className="app-header-mobile-sublink"
+                            onClick={() => {
+                              navigate(link.path);
+                              setMobileOpen(false);
+                            }}
+                          >
+                            <span className="text-sage mr-2 text-[8px]">●</span>
+                            {link.label}
+                          </button>
+                        ))}
                     </div>
                   )}
                 </div>
@@ -585,7 +728,10 @@ const Header: React.FC = () => {
             <div className="py-5 px-6 border-t border-[rgba(0,0,0,0.06)] flex flex-col gap-2.5">
               {currentUser ? (
                 <button
-                  onClick={() => { navigate("/profile"); setMobileOpen(false); }}
+                  onClick={() => {
+                    navigate("/profile");
+                    setMobileOpen(false);
+                  }}
                   className="app-header-drawer-profile"
                 >
                   <span className="app-header-drawer-profile-avatar">
@@ -599,7 +745,9 @@ const Header: React.FC = () => {
                     )}
                   </span>
                   <span className="app-header-drawer-profile-meta">
-                    <span className="app-header-drawer-profile-role">Aura Member</span>
+                    <span className="app-header-drawer-profile-role">
+                      Aura Member
+                    </span>
                     <span className="app-header-drawer-profile-name">
                       {currentUser.FirstName} {currentUser.LastName}
                     </span>
@@ -611,7 +759,16 @@ const Header: React.FC = () => {
                   onClick={handleLogout}
                   className="app-header-drawer-logout"
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
                     <polyline points="16 17 21 12 16 7" />
                     <line x1="21" y1="12" x2="9" y2="12" />
@@ -621,13 +778,19 @@ const Header: React.FC = () => {
               ) : (
                 <>
                   <button
-                    onClick={() => { navigate("/Signup"); setMobileOpen(false); }}
+                    onClick={() => {
+                      navigate("/Signup");
+                      setMobileOpen(false);
+                    }}
                     className="app-header-drawer-join"
                   >
                     Join Free — Subscribe
                   </button>
                   <button
-                    onClick={() => { navigate("/Login"); setMobileOpen(false); }}
+                    onClick={() => {
+                      navigate("/Login");
+                      setMobileOpen(false);
+                    }}
                     className="app-header-drawer-signin"
                   >
                     Sign In

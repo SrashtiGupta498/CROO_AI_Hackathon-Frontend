@@ -19,7 +19,10 @@ const ForgotPassword: React.FC = () => {
       await API.post("/auth/forgot-password", { Email: email.trim() });
       setSent(true);
     } catch (err: any) {
-      setError(err?.response?.data?.message || "Something went wrong. Please try again.");
+      setError(
+        err?.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -30,7 +33,10 @@ const ForgotPassword: React.FC = () => {
       <div className="forgot-glow absolute inset-0 opacity-10" />
 
       <div className="forgot-card relative w-full max-w-md rounded-[2.5rem] p-8 md:p-10">
-        <button onClick={() => navigate("/Login")} className="text-white/40 hover:text-white/70 text-xs font-bold uppercase tracking-widest mb-8 transition-colors">
+        <button
+          onClick={() => navigate("/Login")}
+          className="text-white/40 hover:text-white/70 text-xs font-bold uppercase tracking-widest mb-8 transition-colors"
+        >
           ← Back to sign in
         </button>
 
@@ -40,7 +46,8 @@ const ForgotPassword: React.FC = () => {
               Forgot your password?
             </h1>
             <p className="text-white/50 text-sm leading-relaxed mb-8">
-              Enter the email tied to your account and we'll send you a link to reset it.
+              Enter the email tied to your account and we'll send you a link to
+              reset it.
             </p>
 
             {error && (
@@ -50,7 +57,9 @@ const ForgotPassword: React.FC = () => {
             )}
 
             <form onSubmit={submit}>
-              <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-sage-light mb-2">Email address</label>
+              <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-sage-light mb-2">
+                Email address
+              </label>
               <input
                 type="email"
                 required
@@ -77,9 +86,14 @@ const ForgotPassword: React.FC = () => {
               Check your inbox
             </h1>
             <p className="text-white/50 text-sm leading-relaxed mb-8">
-              If an account exists for <span className="text-sage-light font-semibold">{email}</span>, a reset link is on its way. The link expires in 30 minutes.
+              If an account exists for{" "}
+              <span className="text-sage-light font-semibold">{email}</span>, a
+              reset link is on its way. The link expires in 30 minutes.
             </p>
-            <button onClick={() => navigate("/Login")} className="forgot-btn w-full py-4 rounded-2xl text-white font-bold text-sm tracking-widest uppercase transition-all hover:-translate-y-0.5">
+            <button
+              onClick={() => navigate("/Login")}
+              className="forgot-btn w-full py-4 rounded-2xl text-white font-bold text-sm tracking-widest uppercase transition-all hover:-translate-y-0.5"
+            >
               Back to sign in
             </button>
           </div>

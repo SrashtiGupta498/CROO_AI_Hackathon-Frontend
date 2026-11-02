@@ -47,13 +47,15 @@ const About: React.FC = () => {
           <h1 className="about-title">
             Where botanical wisdom
             <br />
-            <span className="about-title-accent">meets modern skin science.</span>
+            <span className="about-title-accent">
+              meets modern skin science.
+            </span>
           </h1>
           <p className="about-lede">
-            Aura &amp; Earth is a curated journal for people who believe skincare
-            should be intentional, natural, and rooted in real understanding —
-            not marketing. We translate centuries of botanical tradition into
-            rituals you can actually trust.
+            Aura &amp; Earth is a curated journal for people who believe
+            skincare should be intentional, natural, and rooted in real
+            understanding — not marketing. We translate centuries of botanical
+            tradition into rituals you can actually trust.
           </p>
         </div>
       </section>
@@ -107,10 +109,16 @@ const About: React.FC = () => {
             for you — grounded in the same philosophy you just read about.
           </p>
           <div className="about-cta-actions">
-            <button className="about-cta-btn about-cta-btn--primary" onClick={() => navigate("/ai")}>
+            <button
+              className="about-cta-btn about-cta-btn--primary"
+              onClick={() => navigate("/ai")}
+            >
               Start AI Analysis
             </button>
-            <button className="about-cta-btn about-cta-btn--ghost" onClick={() => navigate("/explore")}>
+            <button
+              className="about-cta-btn about-cta-btn--ghost"
+              onClick={() => navigate("/explore")}
+            >
               Explore Rituals
             </button>
           </div>

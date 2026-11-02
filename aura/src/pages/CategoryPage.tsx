@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
-import { fetchCategories, fetchSubCategories } from "../store/categories/categories.action";
+import {
+  fetchCategories,
+  fetchSubCategories,
+} from "../store/categories/categories.action";
 import { fetchPostsByCategory } from "../store/article/article.action";
 import { getPostCover } from "../services/uploadImage";
 import { getCategoryName } from "../services/taxonomy";
@@ -29,11 +32,11 @@ const SkeletonCard = () => (
 );
 
 /* ─── Article card ─── */
-const ArticleCard: React.FC<{ post: any; onClick: () => void; index: number }> = ({
-  post,
-  onClick,
-  index,
-}) => (
+const ArticleCard: React.FC<{
+  post: any;
+  onClick: () => void;
+  index: number;
+}> = ({ post, onClick, index }) => (
   <div
     onClick={onClick}
     className="group bg-white rounded-3xl overflow-hidden cursor-pointer category-page-card"
@@ -57,7 +60,8 @@ const ArticleCard: React.FC<{ post: any; onClick: () => void; index: number }> =
           alt={post.title}
           className="w-full h-full object-cover category-page-card-img"
           onMouseEnter={(e) =>
-            ((e.currentTarget as HTMLImageElement).style.transform = "scale(1.07)")
+            ((e.currentTarget as HTMLImageElement).style.transform =
+              "scale(1.07)")
           }
           onMouseLeave={(e) =>
             ((e.currentTarget as HTMLImageElement).style.transform = "scale(1)")
@@ -137,11 +141,13 @@ const CategoryPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
-  const { categories, loading: catLoading, subByParent } = useSelector(
-    (state: RootState) => state.category
-  );
+  const {
+    categories,
+    loading: catLoading,
+    subByParent,
+  } = useSelector((state: RootState) => state.category);
   const { posts, loading: postsLoading } = useSelector(
-    (state: RootState) => state.articles
+    (state: RootState) => state.articles,
   );
 
   const [activeFilter, setActiveFilter] = useState<string>("All");
@@ -351,14 +357,19 @@ const CategoryPage = () => {
       {subCategories.length > 0 && (
         <div className="bg-white border-b border-[rgba(0,0,0,0.06)] sticky top-[68px] z-40">
           <div className="max-w-7xl mx-auto px-6 md:px-10">
-            <div
-              className="flex gap-3 overflow-x-auto no-scrollbar py-4"
-            >
+            <div className="flex gap-3 overflow-x-auto no-scrollbar py-4">
               <button
                 className={`category-page-pill-btn ${activeFilter === "All" ? "active" : "inactive"} category-page-pill-anim`}
                 onClick={() => {
                   setActiveFilter("All");
-                  if (id) dispatch(fetchPostsByCategory({ categoryId: id, limit: 50, page: 1 }));
+                  if (id)
+                    dispatch(
+                      fetchPostsByCategory({
+                        categoryId: id,
+                        limit: 50,
+                        page: 1,
+                      }),
+                    );
                 }}
               >
                 All
@@ -372,7 +383,11 @@ const CategoryPage = () => {
                   onClick={() => {
                     setActiveFilter(sub.id);
                     dispatch(
-                      fetchPostsByCategory({ categoryId: sub.id, limit: 50, page: 1 })
+                      fetchPostsByCategory({
+                        categoryId: sub.id,
+                        limit: 50,
+                        page: 1,
+                      }),
                     );
                   }}
                 >
@@ -388,7 +403,6 @@ const CategoryPage = () => {
           CONTENT AREA
       ───────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-6 md:px-10 py-12">
-
         {/* Loading skeletons */}
         {isLoading && (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
@@ -499,12 +513,14 @@ const CategoryPage = () => {
               onClick={() => navigate("/explore")}
               className="category-page-cta-primary"
               onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-2px)";
+                (e.currentTarget as HTMLButtonElement).style.transform =
+                  "translateY(-2px)";
                 (e.currentTarget as HTMLButtonElement).style.boxShadow =
                   "0 12px 32px rgba(61,91,79,0.6)";
               }}
               onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
+                (e.currentTarget as HTMLButtonElement).style.transform =
+                  "translateY(0)";
                 (e.currentTarget as HTMLButtonElement).style.boxShadow =
                   "0 8px 24px rgba(61,91,79,0.5)";
               }}

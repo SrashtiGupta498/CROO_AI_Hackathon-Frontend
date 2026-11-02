@@ -43,7 +43,10 @@ export interface UserSummary {
 }
 
 /** Admin: every user's reports (paginated) + user/report counts. */
-export async function fetchAllReports(page = 1, limit = 20): Promise<AllReports> {
+export async function fetchAllReports(
+  page = 1,
+  limit = 20,
+): Promise<AllReports> {
   const res = await API.get("/skin/reports/all", { params: { page, limit } });
   return res.data?.data ?? res.data;
 }
@@ -91,6 +94,6 @@ export function downloadAllReportsPdf(): Promise<void> {
 export function downloadUserReportsPdf(userId: string): Promise<void> {
   return downloadPdf(
     `/skin/reports/user/${userId}/pdf`,
-    `skin-reports-${userId}.pdf`
+    `skin-reports-${userId}.pdf`,
   );
 }

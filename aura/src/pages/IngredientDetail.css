@@ -1,13 +1,15 @@
 .ing-ed {
-  --ie-bg: #F8F6F2;
-  --ie-card: #FCFBF9;
-  --ie-text: #2B2927;
-  --ie-muted: #7B746C;
-  --ie-border: #E7E2DA;
-  --ie-sage: #75856B;
-  --ie-sand: #D7C2A5;
-  --ie-font-serif: "Cormorant Garamond", "Fraunces", "Iowan Old Style", Georgia, serif;
-  --ie-font-sans: "Inter", "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --ie-bg: #f8f6f2;
+  --ie-card: #fcfbf9;
+  --ie-text: #2b2927;
+  --ie-muted: #7b746c;
+  --ie-border: #e7e2da;
+  --ie-sage: #75856b;
+  --ie-sand: #d7c2a5;
+  --ie-font-serif:
+    "Cormorant Garamond", "Fraunces", "Iowan Old Style", Georgia, serif;
+  --ie-font-sans:
+    "Inter", "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
   background: var(--ie-bg);
   color: var(--ie-text);
   font-family: var(--ie-font-sans);

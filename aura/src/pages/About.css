@@ -1,9 +1,9 @@
 /* ─── About page — brand aesthetic (sage/forest on warm cream) ─── */
 .about-root {
-  --about-ink: #2D2A26;
-  --about-sage: #3D5B4F;
-  --about-sage-dark: #4B695A;
-  --about-cream: #F6F2EC; /* = --ae-paper-2 */
+  --about-ink: #2d2a26;
+  --about-sage: #3d5b4f;
+  --about-sage-dark: #4b695a;
+  --about-cream: #f6f2ec; /* = --ae-paper-2 */
   background: var(--about-cream);
   color: var(--about-ink);
   font-family: var(--ae-font-sans);
@@ -230,7 +230,9 @@
   font-weight: 700;
   cursor: pointer;
   border: none;
-  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    background-color 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
 }
 .about-cta-btn--primary:hover {
   background: var(--about-sage-dark);

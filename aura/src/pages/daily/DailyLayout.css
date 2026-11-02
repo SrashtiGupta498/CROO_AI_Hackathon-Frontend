@@ -8,27 +8,47 @@
    ============================================================ */
 
 @keyframes daily-layout-pop {
-  0% { transform: scale(.6); opacity: 0; }
-  60% { transform: scale(1.15); }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes daily-layout-float-up {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes daily-layout-confetti-fall {
-  0% { transform: translateY(-10vh) rotate(0); opacity: 1; }
-  100% { transform: translateY(100vh) rotate(540deg); opacity: 0; }
+  0% {
+    transform: translateY(-10vh) rotate(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(540deg);
+    opacity: 0;
+  }
 }
 
 .daily-layout-card {
-  animation: daily-layout-float-up .5s cubic-bezier(.22,1,.36,1) both;
+  animation: daily-layout-float-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .daily-layout-heart {
-  animation: daily-layout-pop .35s cubic-bezier(.22,1,.36,1);
+  animation: daily-layout-pop 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .daily-layout-confetti-piece {

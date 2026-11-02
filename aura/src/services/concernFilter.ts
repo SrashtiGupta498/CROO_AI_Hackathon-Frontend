@@ -18,23 +18,64 @@ export const CONCERN_TAGS: ConcernTag[] = [
   { label: "All", match: [] },
   {
     label: "Acne",
-    match: ["acne", "pimple", "breakout", "blackhead", "whitehead", "blemish", "zit"],
+    match: [
+      "acne",
+      "pimple",
+      "breakout",
+      "blackhead",
+      "whitehead",
+      "blemish",
+      "zit",
+    ],
   },
   {
     label: "Dry Skin",
-    match: ["dry skin", "dryness", "flaky", "flaking", "dehydrated", "moistur", "hydrat"],
+    match: [
+      "dry skin",
+      "dryness",
+      "flaky",
+      "flaking",
+      "dehydrated",
+      "moistur",
+      "hydrat",
+    ],
   },
   {
     label: "Aging",
-    match: ["aging", "ageing", "wrinkle", "fine line", "firmness", "collagen", "elasticity"],
+    match: [
+      "aging",
+      "ageing",
+      "wrinkle",
+      "fine line",
+      "firmness",
+      "collagen",
+      "elasticity",
+    ],
   },
   {
     label: "Sensitivity",
-    match: ["sensitiv", "irritat", "redness", "rosacea", "soothe", "soothing", "calming", "barrier"],
+    match: [
+      "sensitiv",
+      "irritat",
+      "redness",
+      "rosacea",
+      "soothe",
+      "soothing",
+      "calming",
+      "barrier",
+    ],
   },
   {
     label: "Pigmentation",
-    match: ["pigment", "dark spot", "melasma", "hyperpigment", "brighten", "even tone", "sun spot"],
+    match: [
+      "pigment",
+      "dark spot",
+      "melasma",
+      "hyperpigment",
+      "brighten",
+      "even tone",
+      "sun spot",
+    ],
   },
   {
     label: "Hair Fall",
@@ -42,7 +83,15 @@ export const CONCERN_TAGS: ConcernTag[] = [
   },
   {
     label: "Detox",
-    match: ["detox", "cleanse", "clarify", "purify", "toxin", "clay", "charcoal"],
+    match: [
+      "detox",
+      "cleanse",
+      "clarify",
+      "purify",
+      "toxin",
+      "clay",
+      "charcoal",
+    ],
   },
 ];
 
@@ -50,7 +99,9 @@ export const CONCERN_TAGS: ConcernTag[] = [
 export function postHaystack(post: any): string {
   const sections = Array.isArray(post?.sections)
     ? post.sections
-        .map((s: any) => `${s?.heading ?? ""} ${s?.title ?? ""} ${s?.text ?? ""}`)
+        .map(
+          (s: any) => `${s?.heading ?? ""} ${s?.title ?? ""} ${s?.text ?? ""}`,
+        )
         .join(" ")
     : "";
   const tags = Array.isArray(post?.tags) ? post.tags.join(" ") : post?.tags;

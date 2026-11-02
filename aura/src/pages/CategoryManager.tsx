@@ -63,7 +63,10 @@ const CategoryForm = ({
   onCancel?: () => void;
 }) => {
   const toast = useToast();
-  const [form, setForm] = useState<CategoryInput>({ ...emptyForm(), ...initial });
+  const [form, setForm] = useState<CategoryInput>({
+    ...emptyForm(),
+    ...initial,
+  });
   const [slugTouched, setSlugTouched] = useState(Boolean(initial?.slug));
   const [uploadingCover, setUploadingCover] = useState(false);
 
@@ -196,7 +199,11 @@ const CategoryForm = ({
           {busy ? "Saving…" : submitLabel}
         </button>
         {onCancel && (
-          <button onClick={onCancel} disabled={busy} className="ae-btn ae-btn-sm ae-btn-outline">
+          <button
+            onClick={onCancel}
+            disabled={busy}
+            className="ae-btn ae-btn-sm ae-btn-outline"
+          >
             Cancel
           </button>
         )}
@@ -239,7 +246,9 @@ const CategoryManager = () => {
     try {
       const res = await dispatch(action);
       if (res.meta.requestStatus === "rejected") {
-        setError(typeof res.payload === "string" ? res.payload : "Action failed");
+        setError(
+          typeof res.payload === "string" ? res.payload : "Action failed",
+        );
         return false;
       }
       after?.();
@@ -315,7 +324,11 @@ const CategoryManager = () => {
         {/* Create new top-level category */}
         <div className="ae-card p-6 md:p-8 mb-12">
           <h2 className="ae-h3 text-xl mb-6">New category</h2>
-          <CategoryForm submitLabel="Create category" busy={busy} onSubmit={handleCreate} />
+          <CategoryForm
+            submitLabel="Create category"
+            busy={busy}
+            onSubmit={handleCreate}
+          />
         </div>
 
         {/* Existing categories */}
@@ -330,9 +343,13 @@ const CategoryManager = () => {
 
         <div className="ae-card divide-y divide-line">
           {loading ? (
-            <p className="p-8 text-sm text-[var(--ae-muted)]">Loading categories…</p>
+            <p className="p-8 text-sm text-[var(--ae-muted)]">
+              Loading categories…
+            </p>
           ) : list.length === 0 ? (
-            <p className="p-8 text-sm text-[var(--ae-muted)]">No categories yet.</p>
+            <p className="p-8 text-sm text-[var(--ae-muted)]">
+              No categories yet.
+            </p>
           ) : (
             list.map((cat) => {
               const id = getId(cat);
@@ -362,7 +379,9 @@ const CategoryManager = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2.5 flex-wrap">
                           <h3 className="ae-h3 text-lg">{cat.name}</h3>
-                          <span className="text-xs text-[var(--ae-muted)]">/{cat.slug}</span>
+                          <span className="text-xs text-[var(--ae-muted)]">
+                            /{cat.slug}
+                          </span>
                           {cat.isFeatured && (
                             <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-sage border border-sage/30 px-2 py-0.5 rounded-full">
                               Featured
@@ -406,9 +425,13 @@ const CategoryManager = () => {
                   {isExpanded && !isEditing && (
                     <div className="mt-6 pl-4 border-l-2 border-sage/20">
                       {subLoading?.[id] ? (
-                        <p className="text-sm text-[var(--ae-muted)]">Loading subcategories…</p>
+                        <p className="text-sm text-[var(--ae-muted)]">
+                          Loading subcategories…
+                        </p>
                       ) : subs.length === 0 ? (
-                        <p className="text-sm text-[var(--ae-muted)]">No subcategories yet.</p>
+                        <p className="text-sm text-[var(--ae-muted)]">
+                          No subcategories yet.
+                        </p>
                       ) : (
                         <ul className="flex flex-col">
                           {subs.map((sub) => {

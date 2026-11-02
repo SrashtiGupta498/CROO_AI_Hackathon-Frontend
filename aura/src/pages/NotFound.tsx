@@ -15,10 +15,16 @@ const NotFound: React.FC = () => {
           back to something nourishing.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <button onClick={() => navigate("/")} className="ae-btn ae-btn-primary">
+          <button
+            onClick={() => navigate("/")}
+            className="ae-btn ae-btn-primary"
+          >
             Back home
           </button>
-          <button onClick={() => navigate("/explore")} className="ae-btn ae-btn-outline">
+          <button
+            onClick={() => navigate("/explore")}
+            className="ae-btn ae-btn-outline"
+          >
             Explore remedies
           </button>
         </div>
