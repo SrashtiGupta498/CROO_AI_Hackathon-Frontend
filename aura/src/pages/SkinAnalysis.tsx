@@ -202,11 +202,17 @@ const TONE_LABELS: Record<string, string> = {
 
 const ISSUE_HINTS: Record<string, string> = {
   "no face detected": "Make sure your face is fully in frame.",
+  "eyes not visible": "Look at the camera with eyes open; tilt glasses to avoid glare.",
   "face too small": "Move closer to the camera.",
   "image too blurry": "Hold steady and retake in good light.",
   "too dark": "Find brighter, even lighting.",
-  "too bright": "Avoid direct light on your face.",
+  "over-exposed": "Avoid direct light on your face.",
 };
+
+// ml-service appends measurements, e.g. "face too small (150px < 200)", so
+// match on the prefix rather than the whole string.
+const issueHint = (issue: string): string | undefined =>
+  Object.entries(ISSUE_HINTS).find(([k]) => issue.startsWith(k))?.[1];
 
 const SEVERITY_STYLE: Record<string, string> = {
   mild: "bg-turmeric/15 text-ink",
@@ -1360,7 +1366,7 @@ const SkinAnalysis: React.FC = () => {
                     <span className="text-primary">•</span>
                     <span>
                       <span className="capitalize font-medium">{issue}</span>
-                      {ISSUE_HINTS[issue] ? ` — ${ISSUE_HINTS[issue]}` : ""}
+                      {issueHint(issue) ? ` — ${issueHint(issue)}` : ""}
                     </span>
                   </li>
                 ))}
